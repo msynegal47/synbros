@@ -2350,7 +2350,7 @@
         </div>
       </div>
 
-      <div class="player-card card-madden" onclick="openPlayer('madden')" id="card-madden">
+      <div class="player-card card-madden" onclick="openPlayer('madden')" id="card-madden" style="display:none">
         <div class="card-number">6</div>
         <div class="card-inner">
           <div class="card-name">Madden</div>
@@ -2851,7 +2851,7 @@ async function renderLandingCards() {
     const today = getTodayStr();
 
     let completedToday = 0;
-    ['caysen','emmitt','madden'].forEach(id => {
+    ['caysen','emmitt'].forEach(id => {
       const comp = allComp.filter(c => c.player === id);
       const juggles = allJuggles.filter(j => j.player === id);
       const streak = calcStreak(comp);
@@ -4126,7 +4126,7 @@ function renderParentDashboard() {
   const content = document.getElementById('parent-content');
 
   // Per-player summaries
-  const playerCards = Object.entries(PLAYERS).map(([id, p]) => {
+  const playerCards = Object.entries(PLAYERS).filter(([id]) => id !== 'madden').map(([id, p]) => {
     const completedDates = new Set(dbCompletions.filter(c => c.player === id).map(c => c.date));
     const jugglePR = dbJuggles.filter(j => j.player === id).reduce((m, j) => Math.max(m, j.count), 0);
     // Deduplicate by date before summing 1v1s
@@ -4230,7 +4230,7 @@ function renderParentDashboard() {
           html += '<div style="flex:1;min-width:120px;background:' + (isToday ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)') + ';border:1px solid ' + (isToday ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)') + ';border-radius:10px;padding:12px;">';
           html += '<div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:3px;color:' + (isToday ? '#fff' : '#5a7090') + ';text-transform:uppercase;margin-bottom:8px;">' + days[d.getDay()] + (isToday ? ' · TODAY' : '') + '</div>';
           if (sched) {
-            ['caysen','emmitt','madden'].forEach(pid => {
+            ['caysen','emmitt'].forEach(pid => {
               if (!sched[pid]) return;
               const p = PLAYERS[pid];
               html += '<div style="font-size:11px;color:' + p.accent + ';font-family:Barlow Condensed,sans-serif;font-weight:700;letter-spacing:1px;margin-bottom:2px;">' + p.name + '</div>';
@@ -4276,7 +4276,7 @@ function renderParentDashboard() {
       return `
         <div style="margin-bottom:24px;">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;color:var(--muted);margin-bottom:10px;">${month.name}</div>
-          ${Object.entries(PLAYERS).map(([id, p]) => {
+          ${Object.entries(PLAYERS).filter(([id]) => id !== 'madden').map(([id, p]) => {
             const completedDates = new Set(dbCompletions.filter(c => c.player === id).map(c => c.date));
             const todayStr = getTodayStr();
             return `
@@ -4316,9 +4316,9 @@ function renderParentDashboard() {
 
     <div class="parent-section-title">Juggle PR Race</div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:32px;">
-      ${Object.entries(PLAYERS).map(([id, p]) => {
+      ${Object.entries(PLAYERS).filter(([id]) => id !== 'madden').map(([id, p]) => {
         const pr = dbJuggles.filter(j => j.player === id).reduce((m,j) => Math.max(m, j.count), 0);
-        const maxPR = Math.max(...Object.entries(PLAYERS).map(([pid]) =>
+        const maxPR = Math.max(...Object.entries(PLAYERS).filter(([pid]) => pid !== 'madden').map(([pid]) =>
           dbJuggles.filter(j => j.player === pid).reduce((m,j) => Math.max(m, j.count), 0)
         ), 1);
         return `
@@ -6489,7 +6489,7 @@ function debugWeekData(weekNum) {
   const weekDates = new Set(getWeekDays(week));
   console.log('Week', weekNum, ':', week.start, '—', week.end);
   console.log('Days in week:', [...weekDates]);
-  ['caysen','emmitt','madden'].forEach(id => {
+  ['caysen','emmitt'].forEach(id => {
     const comp = dbCompletions.filter(c => c.player === id && weekDates.has(c.date));
     const _dbd = {}; comp.forEach(c=>{const t=(c.v1_wins||0)+(c.v1_losses||0);if(!_dbd[c.date]||t>((_dbd[c.date].v1_wins||0)+(_dbd[c.date].v1_losses||0)))_dbd[c.date]=c;});
     const wins = Object.values(_dbd).reduce((s,r)=>s+(r.v1_wins||0),0);
@@ -6987,72 +6987,63 @@ function showToast(msg) {
 // ── Action libraries by position ──
 const FILM_ACTIONS = {
   striker: [
-    'Near-Post Run','Far-Post Run','Hold-Up Play','Pressing Trigger',
-    'Shot on Goal','Header','Off-Ball Run','1v1 Duel','Combination Play','Lay-Off Pass'
+    'Run Toward Goal','Run Away from Defender','Hold the Ball Up',
+    'Shot on Goal','Header','Dribble Past Defender','Pass to Teammate','Dummy Run'
   ],
   winger: [
-    'Wide Run','Underlapping Run','Overlapping Run','Cutting Inside',
-    'Cross','Wide Press','1v1 Dribble','Tracking Back','Switching Flanks','Set Piece Delivery'
+    'Run Down the Line','Cut Inside','Cross into the Box',
+    'Dribble Past Defender','Chase Back to Defend','Pass to Teammate','Receive the Ball Wide','Dummy Run'
   ],
   midfielder: [
-    'Third-Man Combination','Switch of Play','Press Trigger','Cover Shadow',
-    'Receiving Under Pressure','Carry Forward','Set Piece Delivery','Interception','Breaking Lines','Dropping Deep'
+    'Pass Forward','Switch the Ball','Carry the Ball Forward',
+    'Win the Ball Back','Receive Under Pressure','Make a Run','Block a Pass','Support a Teammate'
   ],
   defender: [
-    'Cover Shadow','Block / Tackle','Aerial Duel','Stepping Out to Press',
-    'Recovery Run','Marking Run','Playing Out from Back','Cutting Passing Lane','Switching Sides','Set Piece Defending'
+    'Make a Tackle','Head the Ball','Chase the Attacker',
+    'Block a Shot','Pass Out from the Back','Stay Goal-Side','Win a Duel','Clear the Ball'
   ]
 };
 
-// Follow-up fields per action type (quick-select options + optional free text)
+// Follow-up fields per action type — simplified for ages 8-9
 const FILM_FOLLOWUPS = {
   // STRIKER
-  'Near-Post Run':       { qs: [{ q:'Run shape', opts:['Diagonal','Straight','Curved'] }, { q:'Ball received?', opts:['Yes','No','Delayed'] }, { q:'Space created by', opts:['My movement','Teammate run','Defender error'] }] },
-  'Far-Post Run':        { qs: [{ q:'Run shape', opts:['Diagonal','Looping','Late'] }, { q:'Ball received?', opts:['Yes','No','Overrun'] }, { q:'Who played ball', opts:['Winger','Fullback','Midfielder'] }] },
-  'Hold-Up Play':        { qs: [{ q:'Result', opts:['Turned & played on','Held & won foul','Lost possession'] }, { q:'Pressure from', opts:['One defender','Two defenders','No pressure'] }] },
-  'Pressing Trigger':    { qs: [{ q:'Press outcome', opts:['Won possession','Forced long ball','Broken by opponent','Teammate covered'] }, { q:'Was it coordinated?', opts:['Yes — team pressed','No — pressed alone'] }] },
-  'Shot on Goal':        { qs: [{ q:'Shot type', opts:['Right foot','Left foot','Header','Volley'] }, { q:'Result', opts:['Goal','On target','Off target','Blocked'] }, { q:'How created', opts:['Run in behind','Cut inside','Set play','1v1 won'] }] },
-  'Header':              { qs: [{ q:'Header type', opts:['Attacking','Defensive','Flick-on'] }, { q:'Result', opts:['On target','Off target','Cleared','Won duel'] }] },
-  'Off-Ball Run':        { qs: [{ q:'Run type', opts:['In behind','Checking away','Bending run','Decoy'] }, { q:'Did it create space?', opts:['Yes — for me','Yes — for teammate','Not this time'] }] },
-  '1v1 Duel':            { qs: [{ q:'Outcome', opts:['Won — kept possession','Won — beat defender','Lost possession','Foul won'] }, { q:'Move used', opts:['Speed','Change of direction','Skill move','Shielded'] }] },
-  'Combination Play':    { qs: [{ q:'Combo type', opts:['1-2 wall pass','Third-man','Overlap','Underlap'] }, { q:'Result', opts:['Created chance','Maintained possession','Lost ball'] }] },
-  'Lay-Off Pass':        { qs: [{ q:'Pass direction', opts:['Back to feet','Square','One-touch turn','First-time flick'] }, { q:'Outcome', opts:['Successful','Intercepted','Too heavy'] }] },
+  'Run Toward Goal':        { qs: [{ q:'Did you get the ball?', opts:['Yes','No','Not yet'] }, { q:'What kind of run?', opts:['In behind the defender','Across the goal','Short to feet'] }] },
+  'Run Away from Defender': { qs: [{ q:'Did it create space?', opts:['Yes — for me','Yes — for a teammate','Not this time'] }, { q:'Where did you run?', opts:['Into space behind','Sideways','Toward the ball'] }] },
+  'Hold the Ball Up':       { qs: [{ q:'What happened next?', opts:['Passed to teammate','Turned and went','Lost the ball','Won a foul'] }, { q:'How much pressure?', opts:['One defender','Two defenders','Not much pressure'] }] },
+  'Shot on Goal':           { qs: [{ q:'Which foot?', opts:['Right foot','Left foot','Header'] }, { q:'What happened?', opts:['Goal!','Saved','Off target','Blocked'] }, { q:'How did you get the shot?', opts:['Run in behind','Cut inside','Ball came to me','Won a 1v1'] }] },
+  'Header':                 { qs: [{ q:'What happened?', opts:['Goal!','On target','Off target','Won the header'] }, { q:'Was it attacking or defending?', opts:['Attacking','Defending'] }] },
+  'Dribble Past Defender':  { qs: [{ q:'Did you get past them?', opts:['Yes — scored or assisted','Yes — kept going','No — lost the ball','Won a foul'] }, { q:'How did you beat them?', opts:['Speed','Change of direction','Skill move','They backed off'] }] },
+  'Pass to Teammate':       { qs: [{ q:'Was the pass good?', opts:['Yes — they kept it','Yes — created a chance','It was off','Intercepted'] }, { q:'What kind of pass?', opts:['Short pass','Long pass','Through ball','One-touch'] }] },
+  'Dummy Run':              { qs: [{ q:'Did it work?', opts:['Yes — created space for teammate','Yes — I got the ball after','Not really'] }] },
   // WINGER
-  'Wide Run':            { qs: [{ q:'Run type', opts:['In behind','Short to feet','Deep channel'] }, { q:'Ball received?', opts:['Yes','No — overplayed','No — switch needed'] }] },
-  'Underlapping Run':    { qs: [{ q:'Space found?', opts:['Yes — got in','Blocked by cover','Teammate took it'] }, { q:'Who ran wide to create?', opts:['Fullback','Striker','No one'] }] },
-  'Overlapping Run':     { qs: [{ q:'Run supported by?', opts:['Fullback overlapping','Striker holding','Midfielder carrying'] }, { q:'Outcome', opts:['Cross delivered','Cut back','Possession kept','Lost ball'] }] },
-  'Cutting Inside':      { qs: [{ q:'Which foot', opts:['Right — natural','Left — strong foot cut'] }, { q:'Result', opts:['Shot','Pass','Foul won','Lost ball'] }, { q:'Defender beaten?', opts:['Yes','No — crowded out'] }] },
-  'Cross':               { qs: [{ q:'Cross type', opts:['Early / whipped','Driven low','Looping','Cut-back'] }, { q:'Delivery outcome', opts:['Headed chance','Shot chance','Cleared','Wasted'] }] },
-  'Wide Press':          { qs: [{ q:'Press outcome', opts:['Forced long ball','Won the ball','Triggered team press','Beaten by pass'] }, { q:'Support from', opts:['Midfielder covered','Striker tucked','No support'] }] },
-  '1v1 Dribble':         { qs: [{ q:'Outcome', opts:['Beat defender','Won foul','Moved inside','Lost ball'] }, { q:'Move used', opts:['Pace','Feint','Skill move','Change of direction'] }] },
-  'Tracking Back':       { qs: [{ q:'Did you win it back?', opts:['Yes — tackled','Yes — intercepted','No — just contained','No — beaten again'] }] },
-  'Switching Flanks':    { qs: [{ q:'Why switch?', opts:['Space on far side','Overloaded my side','Coach instruction'] }, { q:'Result', opts:['Created chance','Possession maintained','Ball lost'] }] },
+  'Run Down the Line':      { qs: [{ q:'Did you get the ball?', opts:['Yes','No — ball not played','No — defender cut it off'] }, { q:'What happened next?', opts:['Got behind the defense','Cross delivered','Held the ball up','Lost it'] }] },
+  'Cut Inside':             { qs: [{ q:'Which way did you cut?', opts:['Right foot — shot','Left foot — shot','Passed after cutting'] }, { q:'Did you beat the defender?', opts:['Yes','Partially','No'] }] },
+  'Cross into the Box':     { qs: [{ q:'What happened to the cross?', opts:['Teammate shot','Teammate headed it','Cleared away','Out of reach'] }, { q:'What kind of cross?', opts:['Early cross','Driven low','High and looping','Cut-back'] }] },
+  'Chase Back to Defend':   { qs: [{ q:'Did you stop them?', opts:['Yes — won the ball','Yes — slowed them down','No — they got past'] }] },
+  'Receive the Ball Wide':  { qs: [{ q:'What did you do next?', opts:['Dribbled forward','Crossed it','Cut inside','Passed back'] }, { q:'Was there pressure on you?', opts:['Yes — tight on me','Some pressure','Lots of space'] }] },
   // MIDFIELDER
-  'Third-Man Combination': { qs: [{ q:'Combo worked?', opts:['Yes — penetrated','Partially — won space','No — disrupted'] }, { q:'Who was the third man?', opts:['Striker','Winger','Other midfielder'] }] },
-  'Switch of Play':      { qs: [{ q:'Pass type', opts:['Long diagonal','Short switch','Driven pass'] }, { q:'Outcome', opts:['Found teammate free','Intercepted','Too heavy / light'] }] },
-  'Cover Shadow':        { qs: [{ q:'Did it cut the pass?', opts:['Yes — forced backward','Yes — forced sideways','No — they found a way through'] }] },
-  'Receiving Under Pressure': { qs: [{ q:'Result', opts:['Turned & played on','Held & recycled','Lost possession','Won foul'] }, { q:'Pressure from', opts:['One player','Two players','Long ball pressure'] }] },
-  'Carry Forward':       { qs: [{ q:'Carry result', opts:['Played through line','Drew defender — passed','Shot','Lost ball'] }, { q:'Distance', opts:['Short burst','Long carry','Half-field'] }] },
-  'Interception':        { qs: [{ q:'How intercepted', opts:['Read the pass','Pressed into error','Blocked passing lane'] }, { q:'What next', opts:['Launched attack','Cleared to safety','Lost ball after'] }] },
-  'Breaking Lines':      { qs: [{ q:'How', opts:['Dribble through','Pass into feet','Run in behind'] }, { q:'Created?', opts:['Clear chance','Half-chance','Maintained pressure'] }] },
-  'Dropping Deep':       { qs: [{ q:'Why drop?', opts:['To receive under less pressure','Create space for others','Support the defense'] }, { q:'Outcome', opts:['Received & turned','Received & recycled','Ball not played to me'] }] },
+  'Pass Forward':           { qs: [{ q:'Did it reach the teammate?', opts:['Yes — they kept it','Yes — created a chance','Intercepted','Too heavy or light'] }, { q:'What kind of pass?', opts:['Short pass','Through ball','Long pass','One-touch'] }] },
+  'Switch the Ball':        { qs: [{ q:'Did it find the player?', opts:['Yes — teammate was free','Yes — but under pressure','Intercepted','Out of bounds'] }] },
+  'Carry the Ball Forward': { qs: [{ q:'What happened?', opts:['Passed to a teammate','Got a shot off','Lost the ball','Won a foul'] }, { q:'How far?', opts:['Short carry','Medium carry','Long run'] }] },
+  'Win the Ball Back':      { qs: [{ q:'How did you win it?', opts:['Tackle','Blocked a pass','Forced a mistake'] }, { q:'What happened next?', opts:['Team kept possession','Launched an attack','Lost it again'] }] },
+  'Receive Under Pressure': { qs: [{ q:'What did you do?', opts:['Turned and played on','Held it and passed back','Lost the ball','Won a foul'] }, { q:'How much pressure?', opts:['One player on me','Two players on me','Not much pressure'] }] },
+  'Make a Run':             { qs: [{ q:'Did you get the ball?', opts:['Yes','No — not played to me'] }, { q:'Where did you run?', opts:['Into space in front','In behind the defense','To the side','Toward the ball'] }] },
+  'Block a Pass':           { qs: [{ q:'Did you block it?', opts:['Yes — won the ball','Yes — went out of play','No — got through'] }] },
+  'Support a Teammate':     { qs: [{ q:'How did you support?', opts:['Gave them a pass option','Ran to make space','Covered behind them','Told them where to go'] }] },
   // DEFENDER
-  'Block / Tackle':      { qs: [{ q:'Type', opts:['Standing tackle','Sliding tackle','Block / deflection'] }, { q:'Outcome', opts:['Won cleanly','Foul given','Cleared to safety','Deflection — corner/throw'] }] },
-  'Aerial Duel':         { qs: [{ q:'Duel won?', opts:['Yes — headed clear','Yes — flick on','No — lost header'] }, { q:'Position on ball', opts:['First to it','Late — last minute'] }] },
-  'Stepping Out to Press': { qs: [{ q:'Press outcome', opts:['Won ball','Forced backward','Left space behind','Covered by partner'] }, { q:'Was it right call?', opts:['Yes — caught them','Risky — got away with it','No — too aggressive'] }] },
-  'Recovery Run':        { qs: [{ q:'Did you recover?', opts:['Yes — made tackle','Yes — contained','No — foul given','No — chance conceded'] }, { q:'Distance covered', opts:['Short sprint','Full sprint'] }] },
-  'Marking Run':         { qs: [{ q:'Run tracked?', opts:['Yes — stayed goal-side','Yes — man-marked tight','Lost them briefly','Lost them completely'] }] },
-  'Playing Out from Back': { qs: [{ q:'Pass type', opts:['Short to feet','Carried out','Long switch'] }, { q:'Outcome', opts:['Clean buildup','Pressed — recycled','Pressed — lost it'] }] },
-  'Cutting Passing Lane': { qs: [{ q:'Lane blocked?', opts:['Yes — forced different pass','Partially','No — they found the pass'] }] },
-  'Switching Sides':     { qs: [{ q:'Reason', opts:['Ball went wide','Covering overlapping run','Shifting to block space'] }] },
-  'Set Piece Defending': { qs: [{ q:'Type', opts:['Corner — zonal','Corner — man-mark','Free kick wall','Throw-in'] }, { q:'Outcome', opts:['Cleared','Conceded','Retained possession after'] }] },
-  // SHARED
-  'Set Piece Delivery':  { qs: [{ q:'Set piece type', opts:['Corner','Free kick','Throw-in'] }, { q:'Delivery', opts:['In-swinger','Out-swinger','Driven low','Short'] }, { q:'Outcome', opts:['Shot on target','Headed chance','Cleared','Goal'] }] },
-  'default':             { qs: [{ q:'Outcome', opts:['Successful','Unsuccessful','Partially successful'] }] }
+  'Make a Tackle':          { qs: [{ q:'Did you win it?', opts:['Yes — clean tackle','Yes — but foul given','No — got dribbled past'] }, { q:'What happened after?', opts:['Team kept possession','Cleared it away','Lost it again'] }] },
+  'Head the Ball':          { qs: [{ q:'Attacking or defending?', opts:['Defending — cleared it','Defending — lost the header','Attacking — on target','Attacking — off target'] }] },
+  'Chase the Attacker':     { qs: [{ q:'Did you stop them?', opts:['Yes — won the ball','Yes — slowed them down','No — they scored or crossed'] }, { q:'How?', opts:['Tackled from behind','Got goal-side','Forced them wide','Foul given'] }] },
+  'Block a Shot':           { qs: [{ q:'Did you block it?', opts:['Yes — blocked completely','Deflected it','No — went in or on target'] }] },
+  'Pass Out from the Back': { qs: [{ q:'Was the pass good?', opts:['Yes — clean buildup','Under pressure but kept it','Lost it — pressed high'] }] },
+  'Stay Goal-Side':         { qs: [{ q:'Did you keep goal-side?', opts:['Yes — blocked the run','Yes — won the ball','Lost them for a moment','Lost them completely'] }] },
+  'Win a Duel':             { qs: [{ q:'Did you win it?', opts:['Yes — got the ball','Yes — cleared it','No — they kept it'] }, { q:'How?', opts:['Physical strength','Good positioning','Speed','Tackled'] }] },
+  'Clear the Ball':         { qs: [{ q:'Where did you clear it?', opts:['Far up the field','Out of bounds — safe','To a teammate','Only a short clear'] }, { q:'Was there pressure?', opts:['Yes — had to clear fast','Some pressure','Plenty of time'] }] },
+  'default':                { qs: [{ q:'What happened?', opts:['Went well','Went okay','Didn\'t work out'] }] }
 };
 
 // Own-session additional followup for reflection
-const OWN_SESSION_EXTRA = { q: 'What were you trying to create?', freeText: true };
+const OWN_SESSION_EXTRA = { q: 'What were you thinking in that moment?', freeText: true };
 
 // Pre/post rating questions
 const FILM_PRE_QUESTIONS_PRO = [
@@ -7087,6 +7078,7 @@ let filmState = {
   actions: [],
   reflections: {},
   addingAction: false,
+  submitted: false,
   currentAction: { minute: '', type: '', followups: {}, freeText: '' }
 };
 
@@ -7655,6 +7647,10 @@ function filmCanSubmit() {
 }
 
 async function filmSubmitSession() {
+  // Prevent double-submit
+  if (filmState.submitted) return;
+  filmState.submitted = true;
+
   const today = getTodayStr();
   const payload = {
     player: filmState.player,
@@ -7670,27 +7666,37 @@ async function filmSubmitSession() {
     action_count: filmState.actions.length
   };
 
-  const result = await sbFetch('film_sessions', {
-    method: 'POST',
-    body: JSON.stringify(payload)
-  });
+  // Upsert — if same player+date+teams already exists, update it instead of inserting
+  const existing = allFilmSessions.find(s =>
+    s.player === payload.player &&
+    s.date === payload.date &&
+    s.teams === payload.teams
+  );
 
-  if (result) {
+  let result;
+  if (existing) {
+    result = await sbFetch('film_sessions?id=eq.' + existing.id, {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    });
+  } else {
+    result = await sbFetch('film_sessions', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  }
+
+  if (result !== null) {
     showToast('🎬 Session saved!');
     await loadFilmSessions();
-    closeFilmView();
-    // Show confirmation
-    const content = document.getElementById('film-content');
-    if (content) {
-      content.innerHTML = `
-        <div style="text-align:center;padding:60px 20px;">
-          <div style="font-size:48px;margin-bottom:16px;">🎬</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:#a78bfa;margin-bottom:8px;">SESSION SAVED</div>
-          <div style="font-size:14px;color:var(--muted);">Great work. Every session builds the player.</div>
-        </div>
-      `;
-    }
+    // Navigate to landing and show confirmation
+    document.getElementById('film-view').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+    renderFilmLandingCount();
+    renderLandingCards();
+    showToast('🎬 Session saved!');
   } else {
+    filmState.submitted = false;
     showToast('⚠ Save failed — check connection');
   }
 }
