@@ -1963,6 +1963,166 @@
   .film-delta-before,.film-delta-after { font-size:18px; }
   .film-delta-arrow { font-size:12px;color:var(--muted); }
 
+  /* ══ JUGGLE PRIZE BOARD ══ */
+  .prize-board {
+    width:100%;max-width:860px;margin-top:12px;
+    background:linear-gradient(135deg,rgba(250,204,21,0.06),rgba(250,204,21,0.02));
+    border:1px solid rgba(250,204,21,0.25);border-radius:18px;padding:20px 22px;
+    opacity:0;animation:fadeUp 0.6s 0.7s forwards;
+  }
+  .prize-board-header {
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
+  }
+  .prize-board-title {
+    font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#facc15;
+  }
+  .prize-board-month {
+    font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;
+    color:var(--muted);text-transform:uppercase;
+  }
+  .prize-rows { display:flex;flex-direction:column;gap:12px; }
+  .prize-row {
+    display:flex;align-items:center;gap:12px;
+    background:rgba(255,255,255,0.02);border-radius:12px;padding:12px 14px;
+    border:1px solid rgba(255,255,255,0.05);
+  }
+  .prize-row.leader { border-color:rgba(250,204,21,0.2);background:rgba(250,204,21,0.04); }
+  .prize-rank {
+    font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(255,255,255,0.15);
+    min-width:28px;line-height:1;
+  }
+  .prize-row.leader .prize-rank { color:rgba(250,204,21,0.5); }
+  .prize-player-info { flex:1;min-width:0; }
+  .prize-player-name {
+    font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-bottom:4px;
+  }
+  .prize-sparkline { display:flex;align-items:flex-end;gap:2px;height:20px; }
+  .prize-spark-bar {
+    width:5px;border-radius:2px 2px 0 0;min-height:2px;transition:height 0.3s;
+    opacity:0.6;flex-shrink:0;
+  }
+  .prize-right { text-align:right;flex-shrink:0; }
+  .prize-amount {
+    font-family:'Bebas Neue',sans-serif;font-size:28px;color:#facc15;line-height:1;
+  }
+  .prize-pr {
+    font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;
+    color:var(--muted);text-transform:uppercase;margin-top:2px;
+  }
+  .prize-crown { font-size:14px;margin-left:4px; }
+
+  /* ══ SKILL MOVE OF THE WEEK ══ */
+  .skill-card {
+    width:100%;max-width:860px;margin-top:12px;
+    background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.18);
+    border-radius:18px;padding:20px 22px;
+    opacity:0;animation:fadeUp 0.6s 0.75s forwards;
+  }
+  .skill-card-header {
+    display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px;
+  }
+  .skill-card-left { flex:1;min-width:0; }
+  .skill-week-label {
+    font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;
+    color:rgba(34,197,94,0.6);text-transform:uppercase;margin-bottom:4px;
+  }
+  .skill-move-name {
+    font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#22c55e;
+    margin-bottom:4px;line-height:1.1;
+  }
+  .skill-move-desc {
+    font-family:'Barlow',sans-serif;font-size:12px;color:var(--muted);line-height:1.5;
+  }
+  .skill-diff-badge {
+    font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;
+    text-transform:uppercase;padding:3px 8px;border-radius:8px;flex-shrink:0;margin-top:2px;
+  }
+  .skill-diff-beginner { background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.2); }
+  .skill-diff-intermediate { background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2); }
+  .skill-diff-advanced { background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.2); }
+  .skill-diff-elite { background:rgba(167,139,250,0.12);color:#a78bfa;border:1px solid rgba(167,139,250,0.2); }
+  .skill-confidence-row {
+    display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+  }
+  .skill-conf-label {
+    font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;
+    color:var(--muted);text-transform:uppercase;margin-bottom:6px;
+  }
+  .skill-emoji-btn {
+    flex:1;min-width:44px;padding:8px 4px;border-radius:10px;
+    border:1px solid var(--border);background:var(--surface2);
+    cursor:pointer;text-align:center;transition:all 0.15s;font-size:16px;line-height:1;
+  }
+  .skill-emoji-btn span {
+    display:block;font-family:'Barlow Condensed',sans-serif;font-size:8px;
+    letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-top:3px;
+  }
+  .skill-emoji-btn.selected { border-color:#22c55e;background:rgba(34,197,94,0.1);transform:scale(1.08); }
+  .skill-conf-divider {
+    display:flex;align-items:center;gap:8px;margin:10px 0;
+  }
+  .skill-conf-divider-line { flex:1;height:1px;background:var(--border); }
+  .skill-conf-divider-text {
+    font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;
+    color:var(--muted);text-transform:uppercase;
+  }
+  .skill-save-btn {
+    width:100%;margin-top:12px;padding:11px;border-radius:10px;border:none;
+    background:#22c55e;color:#000;font-family:'Bebas Neue',sans-serif;
+    font-size:17px;letter-spacing:3px;cursor:pointer;transition:all 0.2s;
+  }
+  .skill-save-btn:hover { opacity:0.9; }
+  .skill-save-btn:disabled { opacity:0.3;cursor:not-allowed; }
+  .skill-delta-display {
+    display:flex;align-items:center;gap:8px;margin-top:10px;
+    padding:8px 12px;background:rgba(34,197,94,0.05);
+    border:1px solid rgba(34,197,94,0.15);border-radius:10px;
+  }
+  .skill-delta-emoji { font-size:18px; }
+  .skill-delta-arrow { font-size:12px;color:var(--muted); }
+  .skill-delta-text {
+    font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;
+    color:var(--muted);text-transform:uppercase;flex:1;
+  }
+  .skill-tutorial-link {
+    display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;
+    background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;
+    text-decoration:none;cursor:pointer;transition:all 0.2s;
+  }
+  .skill-tutorial-link:hover { border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.04); }
+  .skill-tutorial-icon { font-size:16px; }
+  .skill-tutorial-text {
+    font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;
+    color:var(--muted);text-transform:uppercase;flex:1;
+  }
+  .skill-tutorial-arrow { font-size:12px;color:var(--muted); }
+
+  /* Skill move library view */
+  #skill-library-view {
+    display:none;min-height:100vh;background:var(--bg);position:relative;z-index:10;
+  }
+  .skill-lib-card {
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;
+    padding:14px 16px;margin-bottom:8px;
+    border-left:3px solid #22c55e;
+  }
+  .skill-lib-name {
+    font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;
+    color:#22c55e;margin-bottom:4px;
+  }
+  .skill-lib-meta {
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  }
+  .skill-lib-tag {
+    font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;
+    text-transform:uppercase;padding:2px 7px;border-radius:8px;
+    background:rgba(34,197,94,0.08);color:rgba(34,197,94,0.7);
+    border:1px solid rgba(34,197,94,0.15);
+  }
+  .skill-lib-delta {
+    font-size:13px;margin-left:auto;
+  }
+
 </style>
 </head>
 <body>
@@ -2037,6 +2197,22 @@
       </div>
     </div>
   <div id="monthly-overview" style="width:100%;max-width:860px;margin-top:28px;opacity:0;animation:fadeUp 0.6s 0.9s forwards;"></div>
+
+  <!-- JUGGLE PRIZE BOARD -->
+  <div class="prize-board" id="prize-board"></div>
+
+  <!-- SKILL MOVE OF THE WEEK -->
+  <div class="skill-card" id="skill-card"></div>
+
+  <!-- SKILL LIBRARY VIEW -->
+  <div id="skill-library-view">
+    <div class="film-header">
+      <button class="back-btn" onclick="closeSkillLibrary()">← Back</button>
+      <div class="film-header-title" style="color:#22c55e;">MOVE LIBRARY</div>
+      <div style="width:80px"></div>
+    </div>
+    <div class="film-content" id="skill-library-content"></div>
+  </div>
 
   <!-- GAME FILM LANDING CARD -->
   <div class="film-landing-card" onclick="openFilmView()" id="film-landing-card">
@@ -2256,7 +2432,7 @@ function renderMonthlyOverview() {
         padding:16px 20px;
       ">
         <div style="
-          font-family:'Bebas Neue',sans-serif;
+          font-family:Bebas Neue,sans-serif;
           font-size:13px;
           letter-spacing:5px;
           color:${m.color};
@@ -3491,24 +3667,24 @@ function renderSubmitArea() {
         <div class="already-done-icon">✅</div>
         <div class="already-done-text">PLAN COMPLETE</div>
         <div class="already-done-sub">Come back tomorrow. Stay sharp.</div>
-        <button onclick="resetDay()" style="margin-top:16px;background:none;border:1px solid #ef444460;color:#ef4444;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;padding:8px 20px;border-radius:20px;cursor:pointer;text-transform:uppercase;">↺ Reset Today</button>
+        <button onclick="resetDay()" style="margin-top:16px;background:none;border:1px solid #ef444460;color:#ef4444;font-family:Barlow Condensed,sans-serif;font-size:13px;letter-spacing:2px;padding:8px 20px;border-radius:20px;cursor:pointer;text-transform:uppercase;">↺ Reset Today</button>
       </div>
       <div style="margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Extra Touches Today</div>
+        <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Extra Touches Today</div>
         <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Wall work? Extra reps? Log them here — they stack on your total.</div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
           <input type="number" id="today-extra-input" placeholder="0" min="1" max="9999"
-            style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:28px;width:100px;padding:8px 14px;text-align:center;outline:none;">
+            style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:Bebas Neue,sans-serif;font-size:28px;width:100px;padding:8px 14px;text-align:center;outline:none;">
           <input type="text" id="today-extra-note" placeholder="What were you working on?"
-            style="flex:1;min-width:160px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:10px 12px;outline:none;">
-          <button onclick="saveTodayExtraTouches()" style="padding:11px 20px;border-radius:8px;border:none;background:var(--player-accent);color:#000;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase;">+ Add</button>
+            style="flex:1;min-width:160px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:Barlow,sans-serif;font-size:13px;padding:10px 12px;outline:none;">
+          <button onclick="saveTodayExtraTouches()" style="padding:11px 20px;border-radius:8px;border:none;background:var(--player-accent);color:#000;font-family:Barlow Condensed,sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;text-transform:uppercase;">+ Add</button>
         </div>
         ${todayExtra.length > 0 ? `
           <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
             ${todayExtra.map(e => `
               <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;">
                 <span style="color:var(--muted)">${e.note || 'Extra touches'}</span>
-                <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--player-accent)">+${e.count.toLocaleString()}</span>
+                <span style="font-family:Bebas Neue,sans-serif;font-size:18px;color:var(--player-accent)">+${e.count.toLocaleString()}</span>
               </div>
             `).join('')}
           </div>
@@ -3908,7 +4084,7 @@ function renderParentDashboard() {
       ${playerCards.map(({id, p, completedDates, jugglePR, wins, losses, streak}) => `
         <div class="player-overview-card" style="border-color:${p.accent}55;background:#0f1724;"
           onclick="parentViewPlayer('${id}')">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:${p.accent};margin-bottom:14px;">${p.name}</div>
+          <div style="font-family:Bebas Neue,sans-serif;font-size:26px;letter-spacing:2px;color:${p.accent};margin-bottom:14px;">${p.name}</div>
           <div class="overview-stat">
             <span class="overview-stat-lbl">Days Completed</span>
             <span class="overview-stat-val">${completedDates.size}</span>
@@ -3973,12 +4149,12 @@ function renderParentDashboard() {
     <div class="h2h-section">
       <div style="display:flex;gap:40px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;">
         <div style="text-align:center;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#4fc3f7">${cWins}</div>
+          <div style="font-family:Bebas Neue,sans-serif;font-size:48px;color:#4fc3f7">${cWins}</div>
           <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">Caysen Wins</div>
         </div>
-        <div style="text-align:center;display:flex;align-items:center;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:24px;">VS</div>
+        <div style="text-align:center;display:flex;align-items:center;color:var(--muted);font-family:Bebas Neue,sans-serif;font-size:24px;">VS</div>
         <div style="text-align:center;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#f59e0b">${eWins}</div>
+          <div style="font-family:Bebas Neue,sans-serif;font-size:48px;color:#f59e0b">${eWins}</div>
           <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">Emmitt Wins</div>
         </div>
       </div>
@@ -3996,7 +4172,7 @@ function renderParentDashboard() {
       const monthIdx = ['MAY','JUNE','JULY'].indexOf(month.name) + 5;
       return `
         <div style="margin-bottom:24px;">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;color:var(--muted);margin-bottom:10px;">${month.name}</div>
+          <div style="font-family:Barlow Condensed,sans-serif;font-size:12px;letter-spacing:3px;color:var(--muted);margin-bottom:10px;">${month.name}</div>
           ${Object.entries(PLAYERS).filter(([id]) => id !== 'madden').map(([id, p]) => {
             const completedDates = new Set(dbCompletions.filter(c => c.player === id).map(c => c.date));
             const todayStr = getTodayStr();
@@ -4048,7 +4224,7 @@ function renderParentDashboard() {
             <div class="heat-bar-wrap" style="height:12px;">
               <div class="heat-bar" style="width:${Math.round(pr/maxPR*100)}%;background:${p.accent};height:100%;"></div>
             </div>
-            <div class="heat-count" style="color:${p.accent};font-family:'Bebas Neue',sans-serif;font-size:20px;min-width:50px;">${pr || '—'}</div>
+            <div class="heat-count" style="color:${p.accent};font-family:Bebas Neue,sans-serif;font-size:20px;min-width:50px;">${pr || '—'}</div>
           </div>
         `;
       }).join('')}
@@ -4057,7 +4233,43 @@ function renderParentDashboard() {
     <div id='perf-section-container'>${renderPerformanceSection()}</div>
     ${renderRetroEntrySection()}
     ${renderParentNotesSection()}
+
+    <div class="parent-section-title" style="margin-top:32px;">Skill Move Control</div>
+    <div id="skill-override-panel" style="margin-bottom:24px;"></div>
+
+    <div class="parent-section-title" style="margin-top:8px;">Juggle Prize — This Month</div>
+    <div id="parent-prize-panel" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:32px;"></div>
   `;
+
+  // Inject skill override control into parent dashboard
+  const soPanel = document.getElementById('skill-override-panel');
+  if (soPanel) renderSkillOverrideControl(soPanel);
+
+  // Inject prize board
+  const ppPanel = document.getElementById('parent-prize-panel');
+  if (ppPanel) renderPrizeBoardInto(ppPanel);
+}
+
+function renderPrizeBoardInto(el) {
+  const now = new Date();
+  const monthStr = localDateStr(now).slice(0, 7);
+  const players = [
+    { id:'caysen', p:PLAYERS['caysen'] },
+    { id:'emmitt', p:PLAYERS['emmitt'] }
+  ].map(({id, p}) => ({
+    id, p,
+    pr: Math.max(0, ...dbJuggles.filter(j=>j.player===id && j.date.startsWith(monthStr)).map(j=>j.count)),
+    payout: (Math.max(0,...dbJuggles.filter(j=>j.player===id&&j.date.startsWith(monthStr)).map(j=>j.count))*0.50).toFixed(2)
+  })).sort((a,b)=>b.pr-a.pr);
+  el.innerHTML = players.map((pd,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:${i===0?'1px solid var(--border)':'none'}">
+      <div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:rgba(255,255,255,0.2);min-width:24px;">${i+1}</div>
+      <div style="flex:1;">
+        <div style="font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:2px;color:${pd.p.accent};">${pd.p.name.toUpperCase()}${i===0?' 👑':''}</div>
+        <div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">PR: ${pd.pr||'—'} juggles</div>
+      </div>
+      <div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:${i===0?'#facc15':'rgba(255,255,255,0.3)'};">$${pd.payout}</div>
+    </div>`).join('');
 }
 
 async function parentViewPlayer(player) {
@@ -4335,7 +4547,7 @@ function renderProfileCard() {
     el.innerHTML = `
       <div style="text-align:center;padding:60px 20px;">
         <div style="font-size:48px;margin-bottom:16px;">⚽</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--player-accent);margin-bottom:8px;">Keep Playing, Madden!</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:24px;letter-spacing:3px;color:var(--player-accent);margin-bottom:8px;">Keep Playing, Madden!</div>
         <div style="font-size:14px;color:var(--muted);line-height:1.7;max-width:280px;margin:0 auto;">Just have fun and love the ball — that's the whole job right now.</div>
       </div>
     `;
@@ -4372,16 +4584,16 @@ function renderProfileCard() {
           <div class="profile-player-name" style="color:${p.accent}">${p.name.toUpperCase()}</div>
           <div style="display:flex;gap:14px;margin-top:6px;">
             <div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:${p.accent};line-height:1;">${streak > 0 ? streak + '🔥' : '0'}</div>
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Streak</div>
+              <div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:${p.accent};line-height:1;">${streak > 0 ? streak + '🔥' : '0'}</div>
+              <div style="font-family:Barlow Condensed,sans-serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Streak</div>
             </div>
             <div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:${p.accent};line-height:1;">${jugglePR || '—'}</div>
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Juggle PR</div>
+              <div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:${p.accent};line-height:1;">${jugglePR || '—'}</div>
+              <div style="font-family:Barlow Condensed,sans-serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Juggle PR</div>
             </div>
             <div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:${p.accent};line-height:1;">${completedDates.size}</div>
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Days</div>
+              <div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:${p.accent};line-height:1;">${completedDates.size}</div>
+              <div style="font-family:Barlow Condensed,sans-serif;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;">Days</div>
             </div>
           </div>
         </div>
@@ -4394,7 +4606,7 @@ function renderProfileCard() {
 
       <!-- Progression bars -->
       <div class="prog-section">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:10px;">Summer Progress</div>
+        <div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:10px;">Summer Progress</div>
 
         <!-- Touches -->
         <div class="prog-row">
@@ -4437,7 +4649,7 @@ function renderProfileCard() {
       <div style="height:1px;background:rgba(255,255,255,0.06);margin:12px 0;position:relative;z-index:1;"></div>
 
       <!-- Strengths -->
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:8px;position:relative;z-index:1;">Strengths</div>
+      <div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-bottom:8px;position:relative;z-index:1;">Strengths</div>
       <div class="profile-strengths">
         ${idp.strengths.map(s => `<div class="strength-pill ${idp.highlightStrengths.includes(s) ? 'highlight' : ''}">${s}</div>`).join('')}
       </div>
@@ -4524,7 +4736,7 @@ function renderJuggleContent(el) {
 
   el.innerHTML = `
     ${renderJuggleMilestones()}
-    <div style="margin-bottom:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;">
+    <div style="margin-bottom:6px;font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;">
       PR: <span style="color:var(--player-accent);font-size:16px;">${pr}</span>
     </div>
     <div style="display:flex;align-items:flex-end;gap:3px;height:80px;margin-bottom:16px;">
@@ -4534,12 +4746,12 @@ function renderJuggleContent(el) {
         return `<div style="flex:1;min-width:4px;height:${h}px;background:${isPR ? '#f59e0b' : 'var(--player-accent)'};opacity:${isPR ? 1 : 0.6};border-radius:2px 2px 0 0;" title="${j.date}: ${j.count}"></div>`;
       }).join('')}
     </div>
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">All Time</div>
+    <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">All Time</div>
     ${[...withPR].reverse().map(j => `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface);border-radius:8px;margin-bottom:5px;border:1px solid var(--border);">
         <div style="font-size:12px;color:var(--muted)">${formatDate(j.date)}</div>
         <div style="display:flex;align-items:center;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--player-accent)">${j.count}</div>
+          <div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--player-accent)">${j.count}</div>
           ${j.isNewPR ? '<div style="font-size:10px;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;margin-left:6px;">⭐ PR</div>' : ''}
         </div>
       </div>
@@ -4593,7 +4805,7 @@ function renderExtraTouchesLogger(p) {
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
       <input type="number" id="touches-extra-input" placeholder="0" min="1" max="9999"
         style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);
-        font-family:'Bebas Neue',sans-serif;font-size:26px;width:90px;padding:6px 12px;text-align:center;outline:none;">
+        font-family:Bebas Neue,sans-serif;font-size:26px;width:90px;padding:6px 12px;text-align:center;outline:none;">
       <input type="text" id="touches-extra-note" placeholder="What were you working on?"
         style="flex:1;min-width:140px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
         color:var(--text);font-family:Barlow,sans-serif;font-size:13px;padding:9px 12px;outline:none;">
@@ -4606,7 +4818,7 @@ function renderExtraTouchesLogger(p) {
     todayExtra.forEach(e => {
       html2 += `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:12px;">
         <span style="color:var(--muted)">${e.note || 'Extra touches'}</span>
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:${accentColor}">+${e.count.toLocaleString()}</span>
+        <span style="font-family:Bebas Neue,sans-serif;font-size:16px;color:${accentColor}">+${e.count.toLocaleString()}</span>
       </div>`;
     });
     html2 += '</div>';
@@ -4657,12 +4869,12 @@ function renderTouchesContent(el) {
       <div class="streak-stat" style="flex:1;min-width:100px;"><div class="streak-num" style="color:${p.accent}">${data.length ? Math.round(totalTouches/data.length).toLocaleString() : '—'}</div><div class="streak-lbl">Avg / Day</div></div>
     </div>
     ${renderTouchesMilestones()}
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Daily Breakdown</div>
+    <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Daily Breakdown</div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;">
       ${Object.entries(CAT_COLORS).map(([cat,color]) => `
         <div style="display:flex;align-items:center;gap:4px;">
           <div style="width:8px;height:8px;border-radius:2px;background:${color};"></div>
-          <div style="font-size:10px;color:rgba(255,255,255,0.4);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">${cat}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);font-family:Barlow Condensed,sans-serif;letter-spacing:1px;">${cat}</div>
         </div>
       `).join('')}
     </div>
@@ -4681,11 +4893,11 @@ function renderTouchesContent(el) {
         </div>`;
       }).join('')}
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;margin-bottom:16px;">
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:Barlow Condensed,sans-serif;letter-spacing:1px;margin-bottom:16px;">
       <span>${data[0] ? formatDate(data[0].date) : ''}</span><span>${data[data.length-1] ? formatDate(data[data.length-1].date) : ''}</span>
     </div>
     ${topMoves.length > 0 ? `
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Most Practiced</div>
+      <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Most Practiced</div>
       ${topMoves.map(([move,count]) => {
         const info = MOVE_CATEGORIES[move]||{color:'#5a7090'};
         const pct = Math.round(count/(topMoves[0]?.[1]||1)*100);
@@ -4694,7 +4906,7 @@ function renderTouchesContent(el) {
           <div style="flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;">
             <div style="width:${pct}%;height:100%;background:${info.color};border-radius:3px;"></div>
           </div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:${info.color};min-width:24px;text-align:right;">${count}</div>
+          <div style="font-family:Bebas Neue,sans-serif;font-size:15px;color:${info.color};min-width:24px;text-align:right;">${count}</div>
         </div>`;
       }).join('')}
     ` : ''}
@@ -4823,14 +5035,14 @@ function renderTouchesTab() {
     ${renderTouchesMilestones()}
 
     <!-- Stacked bar chart -->
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Daily Touches — Move Breakdown</div>
+    <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Daily Touches — Move Breakdown</div>
 
     <!-- Legend -->
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
       ${Object.entries(CAT_COLORS).map(([cat, color]) => `
         <div style="display:flex;align-items:center;gap:5px;">
           <div style="width:10px;height:10px;border-radius:2px;background:${color};flex-shrink:0;"></div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.5);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">${cat}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);font-family:Barlow Condensed,sans-serif;letter-spacing:1px;">${cat}</div>
         </div>
       `).join('')}
     </div>
@@ -4863,7 +5075,7 @@ function renderTouchesTab() {
         `;
       }).join('')}
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:Barlow Condensed,sans-serif;letter-spacing:1px;margin-bottom:24px;">
       <span>${data[0] ? formatDate(data[0].date) : ''}</span>
       <span>${data.length} sessions</span>
       <span>${data[data.length-1] ? formatDate(data[data.length-1].date) : ''}</span>
@@ -4871,7 +5083,7 @@ function renderTouchesTab() {
 
     <!-- Top moves this player does -->
     ${topMoves.length > 0 ? `
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Most Practiced Moves</div>
+      <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Most Practiced Moves</div>
       <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:24px;">
         ${topMoves.map(([move, count]) => {
           const info = MOVE_CATEGORIES[move] || { color: '#5a7090' };
@@ -4882,7 +5094,7 @@ function renderTouchesTab() {
               <div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;">
                 <div style="width:${pct}%;height:100%;background:${info.color};border-radius:3px;"></div>
               </div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:${info.color};min-width:30px;text-align:right;">${count}</div>
+              <div style="font-family:Bebas Neue,sans-serif;font-size:16px;color:${info.color};min-width:30px;text-align:right;">${count}</div>
             </div>
           `;
         }).join('')}
@@ -4890,14 +5102,14 @@ function renderTouchesTab() {
     ` : ''}
 
     <!-- Daily log -->
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Session Log</div>
+    <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Session Log</div>
     ${[...data].reverse().map(d => `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface);border-radius:8px;margin-bottom:6px;border:1px solid var(--border);">
         <div>
           <div style="font-size:13px;color:var(--muted)">${formatDate(d.date)}</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;">${d.plan} day${d.extra ? ' · +' + d.extra.toLocaleString() + ' extra' : ''}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:Barlow Condensed,sans-serif;letter-spacing:1px;text-transform:uppercase;">${d.plan} day${d.extra ? ' · +' + d.extra.toLocaleString() + ' extra' : ''}</div>
         </div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${p.accent}">${d.total.toLocaleString()}</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:24px;color:${p.accent}">${d.total.toLocaleString()}</div>
       </div>
     `).join('')}
   `;
@@ -5066,7 +5278,7 @@ function showMilestonePopover(el, name, desc, earned) {
 function renderTouchesMilestones() {
   const { earned } = getEarnedMilestones(currentPlayer);
   return `
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Touches Milestones</div>
+    <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Touches Milestones</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
       ${MILESTONES.touches.map(m => {
         const isEarned = earned.has(m.id);
@@ -5078,7 +5290,7 @@ function renderTouchesMilestones() {
             opacity:${isEarned ? 1 : 0.3};text-align:center;
           ">
             <div style="font-size:22px;margin-bottom:4px;">${isEarned ? m.icon : '🔒'}</div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:${isEarned ? 'var(--player-accent)' : 'var(--muted)'};text-transform:uppercase;">${m.name}</div>
+            <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:${isEarned ? 'var(--player-accent)' : 'var(--muted)'};text-transform:uppercase;">${m.name}</div>
             <div style="font-size:10px;color:var(--muted);margin-top:2px;">${m.desc}</div>
           </div>
         `;
@@ -5135,7 +5347,7 @@ function renderNotesTab() {
     el.innerHTML = `
       <div style="text-align:center;padding:60px 20px;">
         <div style="font-size:40px;margin-bottom:12px;">📋</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">No Notes Yet</div>
+        <div style="font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">No Notes Yet</div>
         <div style="font-size:13px;color:var(--muted);">Coach feedback will appear here after sessions.</div>
       </div>
     `;
@@ -5143,7 +5355,7 @@ function renderNotesTab() {
   }
 
   el.innerHTML = `
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;">
+    <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;">
       Coach & Session Feedback
     </div>
     <div class="coach-notes-feed">
@@ -5194,7 +5406,7 @@ function renderParentNotesSection() {
           if (notes.length === 0) return '';
           return `
             <div style="margin-bottom:20px;">
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:${p.accent};text-transform:uppercase;margin-bottom:10px;">${p.name}</div>
+              <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:${p.accent};text-transform:uppercase;margin-bottom:10px;">${p.name}</div>
               <div class="coach-notes-feed">
                 ${notes.map(n => `
                   <div class="coach-note-card">
@@ -6688,6 +6900,7 @@ function goBack() {
   document.getElementById('parent-dashboard').style.display = 'none';
   document.getElementById('film-view').style.display = 'none';
   document.getElementById('film-sessions-view').style.display = 'none';
+  document.getElementById('skill-library-view').style.display = 'none';
   document.getElementById('landing').style.display = 'flex';
   currentPlayer = null;
   isParentMode = false;
@@ -6706,6 +6919,408 @@ function showToast(msg) {
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
+
+
+// ═══════════════════════════════════════════════
+// JUGGLE PRIZE BOARD + SKILL MOVE OF THE WEEK
+// ═══════════════════════════════════════════════
+
+// ── 52-week skill move progression ──
+const SKILL_MOVES = [
+  // WEEKS 1-8: Solid foundation (they know Ronaldo chop already)
+  { name:'Step-Over', diff:'beginner', desc:'Plant, circle the ball with your foot without touching it, then push away. Classic defender-freezer.', url:'https://www.youtube.com/watch?v=FDwHHRKDSUA' },
+  { name:'Inside Cut', diff:'beginner', desc:'Receive with inside of foot, immediately cut sharp to change direction. Simple but essential.', url:'https://www.youtube.com/watch?v=1Km3pHKb9aM' },
+  { name:'Outside Cut', diff:'beginner', desc:'Same as inside cut but using the outside of your foot. Keeps you moving forward faster.', url:'https://www.youtube.com/watch?v=GvSc-u_FbLc' },
+  { name:'Ronaldo Chop', diff:'beginner', desc:'Already in your bag. Work on adding pace — do it at full speed without slowing down.', url:'https://www.youtube.com/watch?v=wEE4QXr2-3I' },
+  { name:'V-Pull', diff:'beginner', desc:'Pull the ball back with the sole, push it sideways with the inside. Simple change of direction.', url:'https://www.youtube.com/watch?v=yQGhJLgvPLY' },
+  { name:'Drag-Back', diff:'beginner', desc:'Roll the ball back with the sole while turning 180°. Great for tight spaces.', url:'https://www.youtube.com/watch?v=VzSHRpJlBHg' },
+  { name:'Scissors', diff:'beginner', desc:'Full circle over the ball — one foot goes around from inside to outside. Sets up your burst.', url:'https://www.youtube.com/watch?v=yGGUz-KkVkY' },
+  { name:'Double Scissors', diff:'intermediate', desc:'Two circles, two fakes, one explosive touch. Builds off the single scissors.', url:'https://www.youtube.com/watch?v=8sEkiRTB5Js' },
+  // WEEKS 9-16: Intermediate moves
+  { name:'Cruyff Turn', diff:'intermediate', desc:'Fake the pass or cross, drag the ball behind your standing leg and turn away. Johan Cruyff signature.', url:'https://www.youtube.com/watch?v=PXPS3-RvXW8' },
+  { name:'Heel Chop', diff:'intermediate', desc:'Use your heel to redirect the ball behind you while your body continues forward. Looks like a pass, isn\'t.', url:'https://www.youtube.com/watch?v=5YZPBM0TQPM' },
+  { name:'Fake Shot', diff:'intermediate', desc:'Wind up like you\'re shooting — defender commits — stop and take them on. Timing is everything.', url:'https://www.youtube.com/watch?v=BNzJtKKpKzk' },
+  { name:'Roulette (Zidane Turn)', diff:'intermediate', desc:'360° spin using both feet in sequence. Shield, drag, spin. Zidane\'s signature.', url:'https://www.youtube.com/watch?v=t7OFMoEi-44' },
+  { name:'Elastico', diff:'intermediate', desc:'Outside of foot pushes out, inside snaps it back fast in one motion. Ronaldinho\'s classic.', url:'https://www.youtube.com/watch?v=TvYFbLQD2Gw' },
+  { name:'Maradona (360 Drag)', diff:'intermediate', desc:'Pull with sole, use other foot to complete the spin. Named after Diego himself.', url:'https://www.youtube.com/watch?v=TFmqeJqM0p8' },
+  { name:'Fake Rabona', diff:'intermediate', desc:'Wind up like a rabona cross, don\'t follow through. Defender expects a cross, you go inside.', url:'https://www.youtube.com/watch?v=bCEuJzPqsYY' },
+  { name:'Shoulder Drop', diff:'intermediate', desc:'Drop your shoulder hard one way, go the other. Pure body feint — no touch needed.', url:'https://www.youtube.com/watch?v=9QkFHpJmX6I' },
+  // WEEKS 17-26: Advanced
+  { name:'Reverse Step-Over', diff:'advanced', desc:'Step-over but going the opposite direction to your natural side. Feels awkward at first.', url:'https://www.youtube.com/watch?v=gMjxAqQiJak' },
+  { name:'Okocha Spin', diff:'advanced', desc:'Jay-Jay Okocha\'s signature. Fake shot, drag inside, spin past the defender.', url:'https://www.youtube.com/watch?v=lzHMi5Y3OMo' },
+  { name:'Neymar Chop', diff:'advanced', desc:'Ronaldo chop variation with more disguise — body shape says cross, foot says cut inside.', url:'https://www.youtube.com/watch?v=lHxEqY8YQCQ' },
+  { name:'Fake Throw-In Trick', diff:'advanced', desc:'Receive off a throw-in, flick it behind your standing leg. Pure surprise.', url:'https://www.youtube.com/watch?v=XP3iB7TQe1I' },
+  { name:'Hocus Pocus', diff:'advanced', desc:'Elastico with a complete leg wrap — outside flick, leg over the ball, inside snap. Ronaldinho classic.', url:'https://www.youtube.com/watch?v=oMp4sQFWWaI' },
+  { name:'Sombrero Flick', diff:'advanced', desc:'Flick the ball over the defender\'s head and run around them. Needs pace and nerve.', url:'https://www.youtube.com/watch?v=cP3i0WJiSCM' },
+  { name:'Rainbow Flick', diff:'advanced', desc:'Already partially in the bag — focus on doing it at pace with a defender near you.', url:'https://www.youtube.com/watch?v=rL3YdolISWs' },
+  { name:'Ball Roll Scissors', diff:'advanced', desc:'Ball roll one way, scissors the other. Two fakes layered into one sequence.', url:'https://www.youtube.com/watch?v=RpSg-mBmPzc' },
+  { name:'Stop and Go', diff:'advanced', desc:'Full sprint stop with the sole, burst again. Defender overshoots, you\'re gone.', url:'https://www.youtube.com/watch?v=_8x5KBQM3yg' },
+  { name:'Cryuff + Burst', diff:'advanced', desc:'Chain a Cruyff turn directly into a sprint. No hesitation between the turn and the acceleration.', url:'https://www.youtube.com/watch?v=PXPS3-RvXW8' },
+  { name:'Stepover Elastico', diff:'advanced', desc:'Scissors into an elastico in one fluid sequence. Defender has no chance to read it.', url:'https://www.youtube.com/watch?v=TvYFbLQD2Gw' },
+  { name:'Around the World', diff:'advanced', desc:'Juggling skill — circle the ball with your foot mid-air without losing control. Work up to it slow.', url:'https://www.youtube.com/watch?v=9mhLkT0OVlk' },
+  // WEEKS 29-38: Elite moves
+  { name:'Flip Flap', diff:'elite', desc:'Elastico\'s bigger brother — outside push further out, inside snap more explosive. Used in tight 1v1s at pace.', url:'https://www.youtube.com/watch?v=pP2MXvNwxbs' },
+  { name:'Berba Spin', diff:'elite', desc:'Dimitar Berbatov\'s 360 with a drag — disguised as a back-pass, comes out the other side.', url:'https://www.youtube.com/watch?v=4YaKQurJXy8' },
+  { name:'Seal Dribble', diff:'elite', desc:'Ball balanced on your neck, over a defender. Pure showmanship. Builds ball mastery.', url:'https://www.youtube.com/watch?v=SZN4OLGHbNE' },
+  { name:'Triple Scissors', diff:'elite', desc:'Three step-overs in a row, building rhythm. Then one explosive burst to finish.', url:'https://www.youtube.com/watch?v=8sEkiRTB5Js' },
+  { name:'No-Look Pass', diff:'elite', desc:'Lock your eyes one direction, play the pass the other. Requires total spatial awareness.', url:'https://www.youtube.com/watch?v=Lf7TQYkL-b4' },
+  { name:'Marseille Turn', diff:'elite', desc:'Two-touch spin — first touch pushes through, body spins, second foot takes it away.', url:'https://www.youtube.com/watch?v=z3jqnzMBjpE' },
+  { name:'Knee Stall', diff:'elite', desc:'Juggling — ball balanced on your knee mid-air. Transition move into other tricks.', url:'https://www.youtube.com/watch?v=vjXEfH0lVeQ' },
+  { name:'Okocha Fake Shot Turn', diff:'elite', desc:'Full fake shot, drag across body, spin the other direction. Complex sequence to execute at pace.', url:'https://www.youtube.com/watch?v=lzHMi5Y3OMo' },
+  { name:'Rivelino Fake', diff:'elite', desc:'Explosive shoulder drop with a full fake cross. Named after the Brazilian legend.', url:'https://www.youtube.com/watch?v=9QkFHpJmX6I' },
+  { name:'Chest Trap + Volley', diff:'elite', desc:'Chest control, let it drop, volley before it hits the ground. Timing and coordination.', url:'https://www.youtube.com/watch?v=Ql8P7G_NQXg' },
+  { name:'Trivela', diff:'elite', desc:'Outside of the boot curl — like a normal curve but reversed. Roberto Carlos signature.', url:'https://www.youtube.com/watch?v=8jAmhBM6TqU' },
+  { name:'Rabona', diff:'elite', desc:'Cross or shoot by crossing your kicking foot behind your standing leg. Pure flair.', url:'https://www.youtube.com/watch?v=bCEuJzPqsYY' },
+  // WEEKS 39-44: Elite combinations
+  { name:'Elastico + Sprint', diff:'elite', desc:'Elastico at full pace. Most players slow down to do it — don\'t. That\'s the difference.', url:'https://www.youtube.com/watch?v=TvYFbLQD2Gw' },
+  { name:'Rainbow + Turn', diff:'elite', desc:'Rainbow flick over defender then turn and chase. Requires composure after the flair.', url:'https://www.youtube.com/watch?v=rL3YdolISWs' },
+  { name:'Fake Penalty Run-Up', diff:'elite', desc:'Run-up stutter to freeze the keeper. Focus on the pause and the disguise.', url:'https://www.youtube.com/watch?v=5y_DEb2YMJA' },
+  { name:'Backheel Flick', diff:'elite', desc:'Receive the ball and immediately redirect with your heel. Kills defender\'s momentum.', url:'https://www.youtube.com/watch?v=p3nqEqWGVoA' },
+  { name:'Around the World x2', diff:'elite', desc:'Double around the world while juggling. Builds on the single — double the patience required.', url:'https://www.youtube.com/watch?v=9mhLkT0OVlk' },
+  { name:'Sombrero + Sprint', diff:'elite', desc:'Flick over their head, don\'t wait to admire it — immediately sprint around them to collect.', url:'https://www.youtube.com/watch?v=cP3i0WJiSCM' },
+  // WEEKS 45-52: Master level
+  { name:'Hocus Pocus Fast', diff:'elite', desc:'Hocus Pocus at full match pace with a defender pressuring. Takes months to get here.', url:'https://www.youtube.com/watch?v=oMp4sQFWWaI' },
+  { name:'No-Touch Elastico', diff:'elite', desc:'Body fake into elastico without the initial outside touch. Basically invisible to read.', url:'https://www.youtube.com/watch?v=TvYFbLQD2Gw' },
+  { name:'Freestyle Combo 1', diff:'elite', desc:'Your choice: chain 3 moves you\'ve learned this year into a single 1v1 sequence. Film it.', url:'https://www.youtube.com/watch?v=FDwHHRKDSUA' },
+  { name:'Freestyle Combo 2', diff:'elite', desc:'Higher difficulty version. At least one move must be advanced or elite level.', url:'https://www.youtube.com/watch?v=FDwHHRKDSUA' },
+  { name:'Freestyle Combo 3', diff:'elite', desc:'Full 1v1 scenario from midfield — use your library. No pre-planning, react to the defender.', url:'https://www.youtube.com/watch?v=FDwHHRKDSUA' },
+  { name:'The Signature Move', diff:'elite', desc:'Final week. Pick one move from the year and make it yours. Drill until it\'s automatic.', url:'https://www.youtube.com/watch?v=FDwHHRKDSUA' },
+  { name:'Year Review', diff:'elite', desc:'Film yourself doing 5 moves from your library back to back. Compare to week 1.', url:'https://www.youtube.com/watch?v=FDwHHRKDSUA' },
+  { name:'Free Week', diff:'elite', desc:'Coach\'s choice or your own pick. You\'ve earned this one.', url:'https://www.youtube.com/watch?v=FDwHHRKDSUA' }
+];
+
+// Week number since the program started (May 5 2026 = week 1)
+const PROGRAM_START = new Date('2026-05-05');
+function getProgramWeekNum() {
+  const now = new Date();
+  const diffMs = now - PROGRAM_START;
+  const diffDays = Math.floor(diffMs / (1000*60*60*24));
+  return Math.max(1, Math.floor(diffDays / 7) + 1);
+}
+
+function getCurrentWeekMove(overrideWeek) {
+  const week = overrideWeek || getProgramWeekNum();
+  const idx = Math.min(week - 1, SKILL_MOVES.length - 1);
+  return { ...SKILL_MOVES[idx], week };
+}
+
+// Get Monday of the current week
+function getWeekMonday() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun
+  const diff = (day === 0 ? -6 : 1 - day);
+  const mon = new Date(now);
+  mon.setDate(now.getDate() + diff);
+  return localDateStr(mon);
+}
+function getWeekSunday() {
+  const mon = new Date(getWeekMonday());
+  const sun = new Date(mon);
+  sun.setDate(mon.getDate() + 6);
+  return localDateStr(sun);
+}
+
+// Skill confidence stored in localStorage per player per week
+function skillConfKey(player, role, weekStr) {
+  return `skill_conf_${player}_${role}_${weekStr}`;
+}
+function getSkillConf(player, role, weekStr) {
+  const v = localStorage.getItem(skillConfKey(player, role, weekStr));
+  return v !== null ? parseInt(v) : null;
+}
+function setSkillConf(player, role, weekStr, val) {
+  localStorage.setItem(skillConfKey(player, role, weekStr), String(val));
+}
+
+// Parent override for current week's move index
+function getSkillOverride() {
+  const v = localStorage.getItem('skill_week_override');
+  return v !== null ? parseInt(v) : null;
+}
+function setSkillOverride(val) {
+  if (val === null) localStorage.removeItem('skill_week_override');
+  else localStorage.setItem('skill_week_override', String(val));
+}
+
+// ── Render prize board ──
+function renderPrizeBoard() {
+  const el = document.getElementById('prize-board');
+  if (!el) return;
+
+  const now = new Date();
+  const monthName = now.toLocaleString('default', { month: 'long' }).toUpperCase();
+  const monthStr = localDateStr(now).slice(0, 7); // YYYY-MM
+
+  // Get this month's juggle history per player
+  function monthlyPR(player) {
+    const monthJuggles = dbJuggles.filter(j => j.player === player && j.date.startsWith(monthStr));
+    if (!monthJuggles.length) return 0;
+    return Math.max(...monthJuggles.map(j => j.count));
+  }
+
+  function sparkData(player) {
+    const monthJuggles = dbJuggles
+      .filter(j => j.player === player && j.date.startsWith(monthStr))
+      .sort((a, b) => a.date.localeCompare(b.date));
+    return monthJuggles.map(j => j.count);
+  }
+
+  const players = [
+    { id: 'caysen', p: PLAYERS['caysen'] },
+    { id: 'emmitt', p: PLAYERS['emmitt'] }
+  ].map(({ id, p }) => ({
+    id, p,
+    pr: monthlyPR(id),
+    spark: sparkData(id),
+    payout: (monthlyPR(id) * 0.50).toFixed(2)
+  })).sort((a, b) => b.pr - a.pr);
+
+  const leader = players[0];
+
+  function buildSparkline(data, color) {
+    if (!data.length) return '<div style="color:var(--muted);font-size:10px;letter-spacing:1px;font-family:\'Barlow Condensed\',sans-serif;">No sessions yet</div>';
+    const max = Math.max(...data, 1);
+    return data.map(v => {
+      const h = Math.max(2, Math.round((v / max) * 20));
+      return `<div class="prize-spark-bar" style="height:${h}px;background:${color};"></div>`;
+    }).join('');
+  }
+
+  el.innerHTML = `
+    <div class="prize-board-header">
+      <div class="prize-board-title">💰 Juggle Prize — ${monthName}</div>
+      <div class="prize-board-month">$0.50 per juggle PR</div>
+    </div>
+    <div class="prize-rows">
+      ${players.map((pd, i) => `
+        <div class="prize-row${pd.id === leader.id ? ' leader' : ''}">
+          <div class="prize-rank">${i + 1}</div>
+          <div class="prize-player-info">
+            <div class="prize-player-name" style="color:${pd.p.accent};">
+              ${pd.p.name.toUpperCase()}${pd.id === leader.id ? '<span class="prize-crown">👑</span>' : ''}
+            </div>
+            <div class="prize-sparkline">${buildSparkline(pd.spark, pd.p.accent)}</div>
+          </div>
+          <div class="prize-right">
+            <div class="prize-amount" style="color:${pd.id === leader.id ? '#facc15' : 'rgba(255,255,255,0.4)'};">
+              $${pd.payout}
+            </div>
+            <div class="prize-pr">PR: ${pd.pr || '—'} juggles</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ── Render skill card ──
+function renderSkillCard() {
+  const el = document.getElementById('skill-card');
+  if (!el) return;
+
+  const override = getSkillOverride();
+  const move = getCurrentWeekMove(override);
+  const weekMon = getWeekMonday();
+  const weekSun = getWeekSunday();
+  const today = getTodayStr();
+  const isMonday = new Date().getDay() === 1;
+  const isSunday = new Date().getDay() === 0;
+
+  // For landing screen we show a summary — player picks themselves
+  // We'll show Caysen's rating as primary (first in PLAYERS)
+  // Both boys log from their own player profile theoretically
+  // On landing we show the move + a combined view
+
+  const CONF_EMOJIS = ['😬','😐','🙂','😤','🔥'];
+  const CONF_LABELS = ['Not yet','Kinda','Getting it','Almost','Got it'];
+
+  const diffColors = { beginner:'skill-diff-beginner', intermediate:'skill-diff-intermediate', advanced:'skill-diff-advanced', elite:'skill-diff-elite' };
+
+  // Check if either player has rated this week
+  const cBefore = getSkillConf('caysen', 'before', weekMon);
+  const eBefore = getSkillConf('emmitt', 'before', weekMon);
+  const cAfter  = getSkillConf('caysen', 'after', weekSun);
+  const eAfter  = getSkillConf('emmitt', 'after', weekSun);
+
+  // Show whose check-in is missing
+  const needsBefore = (cBefore === null || eBefore === null);
+  const needsAfter  = today >= weekSun && (cAfter === null || eAfter === null);
+
+  el.innerHTML = `
+    <div class="skill-card-header">
+      <div class="skill-card-left">
+        <div class="skill-week-label">Week ${move.week} · Skill Move</div>
+        <div class="skill-move-name">${move.name}</div>
+        <div class="skill-move-desc">${move.desc}</div>
+      </div>
+      <div class="${diffColors[move.diff] || 'skill-diff-beginner'} skill-diff-badge">${move.diff}</div>
+    </div>
+
+    <a class="skill-tutorial-link" href="${move.url}" target="_blank">
+      <span class="skill-tutorial-icon">▶️</span>
+      <span class="skill-tutorial-text">Watch the tutorial</span>
+      <span class="skill-tutorial-arrow">→</span>
+    </a>
+
+    ${renderSkillConfRows(move, weekMon, weekSun, CONF_EMOJIS, CONF_LABELS, today)}
+
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button onclick="openSkillLibrary()" style="flex:1;padding:9px;border-radius:10px;border:1px solid rgba(34,197,94,0.25);background:rgba(34,197,94,0.04);color:rgba(34,197,94,0.7);font-family:Barlow Condensed,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">
+        📚 Move Library
+      </button>
+    </div>
+  `;
+}
+
+function renderSkillConfRows(move, weekMon, weekSun, CONF_EMOJIS, CONF_LABELS, today) {
+  const players = ['caysen', 'emmitt'];
+  let html = '';
+
+  players.forEach(pid => {
+    const p = PLAYERS[pid];
+    const before = getSkillConf(pid, 'before', weekMon);
+    const after  = getSkillConf(pid, 'after', weekSun);
+
+    html += `<div style="margin-top:10px;padding:10px 12px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;">`;
+    html += `<div style="font-family:Bebas Neue,sans-serif;font-size:14px;letter-spacing:2px;color:${p.accent};margin-bottom:8px;">${p.name.toUpperCase()}</div>`;
+
+    if (before === null) {
+      html += `<div class="skill-conf-label">How confident are you in this move right now?</div>`;
+      html += `<div class="skill-confidence-row">`;
+      CONF_EMOJIS.forEach((e, i) => {
+        html += `<button class="skill-emoji-btn" onclick="saveSkillConf('${pid}','before','${weekMon}',${i})">${e}<span>${CONF_LABELS[i]}</span></button>`;
+      });
+      html += `</div>`;
+    } else if (after === null && today >= weekSun) {
+      html += `<div class="skill-conf-label">End of week — how confident now?</div>`;
+      html += `<div class="skill-confidence-row">`;
+      CONF_EMOJIS.forEach((e, i) => {
+        html += `<button class="skill-emoji-btn" onclick="saveSkillConf('${pid}','after','${weekSun}',${i})">${e}<span>${CONF_LABELS[i]}</span></button>`;
+      });
+      html += `</div>`;
+    } else {
+      // Show current state
+      const beforeEmoji = before !== null ? CONF_EMOJIS[before] : '—';
+      const afterEmoji  = after  !== null ? CONF_EMOJIS[after]  : '?';
+      const delta = (before !== null && after !== null) ? (after - before) : null;
+      html += `<div class="skill-delta-display">
+        <span class="skill-delta-emoji">${beforeEmoji}</span>
+        <span class="skill-delta-arrow">→</span>
+        <span class="skill-delta-emoji">${afterEmoji}</span>
+        <span class="skill-delta-text">${delta !== null ? (delta > 0 ? `+${delta} levels 🔥` : delta === 0 ? 'Held steady' : `${delta} — keep grinding`) : (before !== null ? 'Check back Sunday' : '')}</span>
+      </div>`;
+    }
+    html += `</div>`;
+  });
+
+  return html;
+}
+
+function saveSkillConf(player, role, weekStr, val) {
+  setSkillConf(player, role, weekStr, val);
+  showToast('✓ Confidence logged');
+  renderSkillCard();
+}
+
+// ── Skill library ──
+function openSkillLibrary() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('skill-library-view').style.display = 'block';
+  renderSkillLibrary();
+}
+function closeSkillLibrary() {
+  document.getElementById('skill-library-view').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+}
+function renderSkillLibrary() {
+  const el = document.getElementById('skill-library-content');
+  const currentWeek = getProgramWeekNum();
+  const completed = SKILL_MOVES.slice(0, currentWeek - 1);
+  const CONF_EMOJIS = ['😬','😐','🙂','😤','🔥'];
+
+  if (!completed.length) {
+    el.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--muted);font-family:\'Barlow Condensed\',sans-serif;font-size:14px;letter-spacing:2px;">No moves completed yet — keep grinding.</div>';
+    return;
+  }
+
+  el.innerHTML = `
+    <div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:16px;">${completed.length} moves in the library</div>
+    ${[...completed].reverse().map((m, i) => {
+      const weekNum = completed.length - i;
+      const weekMon = getWeekMondayForWeek(weekNum);
+      const weekSun = getWeekSundayForWeek(weekNum);
+      const diffColors = { beginner:'skill-diff-beginner', intermediate:'skill-diff-intermediate', advanced:'skill-diff-advanced', elite:'skill-diff-elite' };
+      const confRows = ['caysen','emmitt'].map(pid => {
+        const before = getSkillConf(pid, 'before', weekMon);
+        const after  = getSkillConf(pid, 'after', weekSun);
+        if (before === null && after === null) return '';
+        const delta = (before !== null && after !== null) ? after - before : null;
+        return `<span style="font-size:12px;">${PLAYERS[pid].name}: ${before!==null?CONF_EMOJIS[before]:'?'} → ${after!==null?CONF_EMOJIS[after]:'?'}${delta!==null?(delta>0?' 🔥':''):''}</span>`;
+      }).filter(Boolean).join('  ·  ');
+      return `
+        <div class="skill-lib-card">
+          <div class="skill-lib-name">${m.name}</div>
+          <div class="skill-lib-meta">
+            <span class="${diffColors[m.diff] || 'skill-diff-beginner'} skill-diff-badge">${m.diff}</span>
+            <span class="skill-lib-tag">Week ${weekNum}</span>
+            ${confRows ? `<span style="font-size:12px;color:var(--muted);margin-left:auto;">${confRows}</span>` : ''}
+          </div>
+        </div>`;
+    }).join('')}
+  `;
+}
+
+function getWeekMondayForWeek(weekNum) {
+  const start = new Date(PROGRAM_START);
+  const d = new Date(start);
+  d.setDate(start.getDate() + (weekNum - 1) * 7);
+  // Adjust to Monday
+  const day = d.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+  d.setDate(d.getDate() + diff);
+  return localDateStr(d);
+}
+function getWeekSundayForWeek(weekNum) {
+  const mon = new Date(getWeekMondayForWeek(weekNum));
+  mon.setDate(mon.getDate() + 6);
+  return localDateStr(mon);
+}
+
+// ── Parent dashboard skill override ──
+function renderSkillOverrideControl(container) {
+  const current = getSkillOverride() || getProgramWeekNum();
+  const move = getCurrentWeekMove(current);
+  const div = document.createElement('div');
+  div.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;';
+  div.innerHTML = `
+    <div style="font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:3px;color:#22c55e;margin-bottom:12px;">SKILL MOVE CONTROL</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">Current: <span style="color:#22c55e;font-weight:700;">${move.name}</span> (Week ${current})</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <button onclick="adjustSkillWeek(-1)" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:Barlow Condensed,sans-serif;font-size:13px;letter-spacing:2px;cursor:pointer;">← Easier</button>
+      <div style="flex:1;text-align:center;font-family:Bebas Neue,sans-serif;font-size:18px;letter-spacing:2px;color:#22c55e;" id="skill-override-label">${move.name}</div>
+      <button onclick="adjustSkillWeek(1)" style="padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:Barlow Condensed,sans-serif;font-size:13px;letter-spacing:2px;cursor:pointer;">Harder →</button>
+    </div>
+    <button onclick="resetSkillOverride()" style="width:100%;margin-top:10px;padding:8px;border-radius:8px;border:1px solid rgba(34,197,94,0.2);background:none;color:rgba(34,197,94,0.6);font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">Reset to Auto (Week ${getProgramWeekNum()})</button>
+  `;
+  container.appendChild(div);
+}
+
+function adjustSkillWeek(dir) {
+  const current = getSkillOverride() || getProgramWeekNum();
+  const next = Math.max(1, Math.min(SKILL_MOVES.length, current + dir));
+  setSkillOverride(next);
+  const move = SKILL_MOVES[next - 1];
+  const lbl = document.getElementById('skill-override-label');
+  if (lbl) lbl.textContent = move.name;
+  renderSkillCard();
+  showToast('✓ Skill move updated to: ' + move.name);
+}
+
+function resetSkillOverride() {
+  setSkillOverride(null);
+  renderSkillCard();
+  showToast('✓ Back to auto');
+}
 
 // ═══════════════════════════════════════════════
 // GAME FILM
@@ -6901,9 +7516,9 @@ function renderFilmLogStep(content) {
   const count = filmState.actions.length;
   const pct = Math.min((count/10)*100,100);
   const header = document.createElement('div'); header.className = 'film-card';
-  header.innerHTML = `<div class="film-action-header"><div><div class="film-action-count-badge">${count}<span>actions logged</span></div></div><div style="text-align:right"><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">${filmState.trackedPlayer} · ${filmState.sessionType==='own'?'My Session':'Pro Game'}</div><div style="font-size:11px;color:var(--muted);">${filmState.teams}</div></div></div>
+  header.innerHTML = `<div class="film-action-header"><div><div class="film-action-count-badge">${count}<span>actions logged</span></div></div><div style="text-align:right"><div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">${filmState.trackedPlayer} · ${filmState.sessionType==='own'?'My Session':'Pro Game'}</div><div style="font-size:11px;color:var(--muted);">${filmState.teams}</div></div></div>
   <div class="film-progress-bar-wrap"><div class="film-progress-bar-fill" style="width:${pct}%"></div></div>
-  <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">${count<10?`${10-count} more to unlock reflection`:'✓ Minimum reached — keep going or wrap up'}</div>`;
+  <div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">${count<10?`${10-count} more to unlock reflection`:'✓ Minimum reached — keep going or wrap up'}</div>`;
   content.appendChild(header);
   if (filmState.actions.length > 0) {
     const listCard = document.createElement('div'); listCard.className = 'film-card'; listCard.innerHTML = '<div class="film-card-title">LOGGED ACTIONS</div>';
@@ -6925,7 +7540,7 @@ function renderFilmLogStep(content) {
     addSection.appendChild(addBtn);
   } else {
     const form = document.createElement('div'); form.className='film-action-form open';
-    form.innerHTML='<div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:#a78bfa;margin-bottom:14px;">LOG ACTION</div>';
+    form.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:16px;letter-spacing:3px;color:#a78bfa;margin-bottom:14px;">LOG ACTION</div>';
     const topRow = document.createElement('div'); topRow.className='film-action-form-row';
     topRow.innerHTML=`<input class="film-input" type="number" placeholder="Min" min="0" max="120" style="max-width:80px;text-align:center;" value="${filmState.currentAction.minute}" oninput="filmState.currentAction.minute=this.value">`;
     const typeWrap = document.createElement('div'); typeWrap.style.flex='1';
@@ -6973,7 +7588,7 @@ function renderFilmReflectionStep(content) {
   const preQs = filmState.sessionType==='pro' ? FILM_PRE_QUESTIONS_PRO : FILM_PRE_QUESTIONS_OWN;
   const postQs = filmState.sessionType==='pro' ? FILM_POST_QUESTIONS_PRO : FILM_POST_QUESTIONS_OWN;
   const deltaEl=document.createElement('div'); deltaEl.style.cssText='margin-bottom:16px;padding:12px 14px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;';
-  deltaEl.innerHTML='<div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>';
+  deltaEl.innerHTML='<div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>';
   preQs.forEach(pq=>{
     const preVal=filmState.preRatings[pq.id]; const postVal=filmState.postRatings[pq.id]; if(preVal===undefined) return;
     const dr=document.createElement('div'); dr.className='film-delta-row';
@@ -7032,14 +7647,14 @@ async function filmSubmitSession() {
 
 function renderFilmSessionsList() {
   const el=document.getElementById('film-sessions-content'); el.innerHTML='';
-  if (allFilmSessions.length===0) { el.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:2px;">No sessions yet. Log your first game.</div>'; return; }
+  if (allFilmSessions.length===0) { el.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-family:Barlow Condensed,sans-serif;font-size:14px;letter-spacing:2px;">No sessions yet. Log your first game.</div>'; return; }
   const byPlayer={};
   allFilmSessions.forEach(s=>{ if(!byPlayer[s.player]) byPlayer[s.player]=[]; byPlayer[s.player].push(s); });
   Object.entries(byPlayer).forEach(([player,sessions])=>{
     const pname=player.charAt(0).toUpperCase()+player.slice(1);
     const pData=PLAYERS[player]; const color=pData?pData.accent:'#a78bfa';
     const section=document.createElement('div'); section.style.marginBottom='24px';
-    section.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:${color};margin-bottom:10px;">${pname}</div>`;
+    section.innerHTML=`<div style="font-family:Bebas Neue,sans-serif;font-size:18px;letter-spacing:3px;color:${color};margin-bottom:10px;">${pname}</div>`;
     sessions.forEach(s=>{
       const card=document.createElement('div'); card.className='film-session-card';
       card.innerHTML=`<div class="film-session-top"><div class="film-session-teams">${s.teams}</div><div class="film-session-date">${formatDate(s.date)}</div></div><div class="film-session-meta"><span class="film-session-tag${s.session_type==='own'?' own-session':''}">${s.session_type==='own'?'My Session':'Pro Game'}</span><span class="film-session-tag">${s.tracked_player}</span><span class="film-session-tag">${s.position}</span><span class="film-session-tag">${s.action_count} actions</span></div>`;
@@ -7056,7 +7671,7 @@ function openFilmSessionDetail(s) {
   const actions=(s.actions||[]).sort((a,b)=>(a.minute||0)-(b.minute||0));
   const actionRows=actions.map(a=>{ const details=Object.values(a.followups||{}).filter(Boolean).join(' · '); return `<div class="film-detail-action-row"><div class="film-detail-min">${a.minute}'</div><div class="film-detail-action-info"><div class="film-detail-action-type">${a.type}</div>${details?'<div class="film-detail-action-notes">'+details+'</div>':''}${a.freeText?'<div class="film-detail-action-notes" style="color:rgba(255,255,255,0.5);font-style:italic;">"'+a.freeText+'"</div>':''}</div></div>`; }).join('');
   const ref=s.reflections||{};
-  box.innerHTML=`<button class="film-detail-close" onclick="closeFilmSessionDetail()">← Back</button><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px;">${s.teams}</div><div style="font-size:12px;color:var(--muted);margin-bottom:16px;">${formatDate(s.date)} · ${s.tracked_player} · ${s.position}</div>${deltaRows?'<div style="margin-bottom:16px;padding:12px 14px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>'+deltaRows+'</div>':''}<div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">${actions.length} Actions</div>${actionRows}${ref.best||ref.improve||ref.next?'<div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;">'+(ref.best?'<div style="margin-bottom:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Best Thing</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.best+'</div></div>':'')+(ref.improve?'<div style="margin-bottom:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;margin-bottom:4px;">Work On</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.improve+'</div></div>':'')+(ref.next?'<div><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#22c55e;text-transform:uppercase;margin-bottom:4px;">Next Session Focus</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.next+'</div></div>':'')+'</div>':''}`;
+  box.innerHTML=`<button class="film-detail-close" onclick="closeFilmSessionDetail()">← Back</button><div style="font-family:Bebas Neue,sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px;">${s.teams}</div><div style="font-size:12px;color:var(--muted);margin-bottom:16px;">${formatDate(s.date)} · ${s.tracked_player} · ${s.position}</div>${deltaRows?'<div style="margin-bottom:16px;padding:12px 14px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;"><div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>'+deltaRows+'</div>':''}<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">${actions.length} Actions</div>${actionRows}${ref.best||ref.improve||ref.next?'<div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;">'+(ref.best?'<div style="margin-bottom:10px;"><div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:2px;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Best Thing</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.best+'</div></div>':'')+(ref.improve?'<div style="margin-bottom:10px;"><div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;margin-bottom:4px;">Work On</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.improve+'</div></div>':'')+(ref.next?'<div><div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:2px;color:#22c55e;text-transform:uppercase;margin-bottom:4px;">Next Session Focus</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.next+'</div></div>':'')+'</div>':''}`;
 }
 function closeFilmSessionDetail() { document.getElementById('film-detail-overlay').classList.remove('open'); }
 
@@ -7067,6 +7682,8 @@ window.addEventListener('DOMContentLoaded', () => {
   renderLandingCards();
   renderMonthlyOverview();
   renderFilmLandingCount();
+  renderPrizeBoard();
+  renderSkillCard();
 });
 </script>
 </body>
