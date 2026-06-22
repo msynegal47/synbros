@@ -4258,9 +4258,11 @@ function renderPrizeBoardInto(el) {
     { id:'emmitt', p:PLAYERS['emmitt'] }
   ].map(({id, p}) => ({
     id, p,
-    pr: Math.max(0, ...dbJuggles.filter(j=>j.player===id && j.date.startsWith(monthStr)).map(j=>j.count)),
-    payout: (Math.max(0,...dbJuggles.filter(j=>j.player===id&&j.date.startsWith(monthStr)).map(j=>j.count))*0.50).toFixed(2)
-  })).sort((a,b)=>b.pr-a.pr);
+    pr: Math.max(0, ...dbJuggles.filter(j=>j.player===id && j.date.startsWith(monthStr)).map(j=>j.count), 0)
+  })).sort((a,b)=>b.pr-a.pr).map((pd,i) => ({
+    ...pd,
+    payout: i===0 ? (pd.pr*1.00).toFixed(2) : (pd.pr*0.50).toFixed(2)
+  }));
   el.innerHTML = players.map((pd,i)=>`
     <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:${i===0?'1px solid var(--border)':'none'}">
       <div style="font-family:Bebas Neue,sans-serif;font-size:20px;color:rgba(255,255,255,0.2);min-width:24px;">${i+1}</div>
@@ -6934,7 +6936,7 @@ const SKILL_MOVES = [
   { name:'Ronaldo Chop', diff:'beginner', desc:'Already in your bag. Work on adding pace — do it at full speed without slowing down.', url:'https://www.youtube.com/watch?v=wEE4QXr2-3I' },
   { name:'V-Pull', diff:'beginner', desc:'Pull the ball back with the sole, push it sideways with the inside. Simple change of direction.', url:'https://www.youtube.com/watch?v=yQGhJLgvPLY' },
   { name:'Drag-Back', diff:'beginner', desc:'Roll the ball back with the sole while turning 180°. Great for tight spaces.', url:'https://www.youtube.com/watch?v=VzSHRpJlBHg' },
-  { name:'Scissors', diff:'beginner', desc:'Full circle over the ball — one foot goes around from inside to outside. Sets up your burst.', url:'https://www.youtube.com/watch?v=yGGUz-KkVkY' },
+  { name:'Roll to Chop', diff:'intermediate', desc:'Sole roll across the ball to sell the direction, then Ronaldo chop back the other way. Two touches, one defender frozen. Requires the chop to already be clean.', url:'https://www.youtube.com/watch?v=wEE4QXr2-3I' },
   { name:'Double Scissors', diff:'intermediate', desc:'Two circles, two fakes, one explosive touch. Builds off the single scissors.', url:'https://www.youtube.com/watch?v=8sEkiRTB5Js' },
   // WEEKS 9-16: Intermediate moves
   { name:'Cruyff Turn', diff:'intermediate', desc:'Fake the pass or cross, drag the ball behind your standing leg and turn away. Johan Cruyff signature.', url:'https://www.youtube.com/watch?v=PXPS3-RvXW8' },
@@ -7072,8 +7074,12 @@ function renderPrizeBoard() {
     id, p,
     pr: monthlyPR(id),
     spark: sparkData(id),
-    payout: (monthlyPR(id) * 0.50).toFixed(2)
+    payout: null  // calculated after sort
   })).sort((a, b) => b.pr - a.pr);
+
+  // Winner $1/juggle, loser $0.50/juggle
+  players[0].payout = (players[0].pr * 1.00).toFixed(2);
+  if (players[1]) players[1].payout = (players[1].pr * 0.50).toFixed(2);
 
   const leader = players[0];
 
@@ -7089,7 +7095,7 @@ function renderPrizeBoard() {
   el.innerHTML = `
     <div class="prize-board-header">
       <div class="prize-board-title">💰 Juggle Prize — ${monthName}</div>
-      <div class="prize-board-month">$0.50 per juggle PR</div>
+      <div class="prize-board-month">$1.00 winner · $0.50 loser</div>
     </div>
     <div class="prize-rows">
       ${players.map((pd, i) => `
