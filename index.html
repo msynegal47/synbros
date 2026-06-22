@@ -1867,433 +1867,101 @@
   .mode-training { background: rgba(79,195,247,0.12); color: #4fc3f7; }
   .mode-game { background: rgba(57,255,20,0.1); color: #39ff14; }
 
-  /* ══════════════════════════════════════════
-     GAME FILM
-  ══════════════════════════════════════════ */
-
-  /* Landing card */
+  /* ══ GAME FILM ══ */
   .film-landing-card {
-    width: 100%;
-    max-width: 860px;
-    margin-top: 12px;
-    background: rgba(167,139,250,0.04);
-    border: 1px solid rgba(167,139,250,0.18);
-    border-radius: 18px;
-    padding: 18px 22px;
-    cursor: pointer;
-    transition: all 0.25s;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.88s forwards;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  .film-landing-card:hover {
-    background: rgba(167,139,250,0.09);
-    border-color: rgba(167,139,250,0.45);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(167,139,250,0.12);
-  }
-  .film-landing-left { display: flex; align-items: center; gap: 14px; }
-  .film-landing-icon {
-    font-size: 22px;
-    width: 44px; height: 44px;
-    background: rgba(167,139,250,0.1);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .film-landing-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px; letter-spacing: 3px; color: #a78bfa; margin-bottom: 2px;
-  }
-  .film-landing-sub {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase;
-  }
-  .film-landing-count {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px; color: rgba(167,139,250,0.4); flex-shrink: 0;
-  }
-
-  /* Full-screen Game Film view */
-  #film-view {
-    display: none;
-    min-height: 100vh;
-    background: var(--bg);
-    position: relative;
-    z-index: 10;
-  }
-  .film-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0;
-    background: rgba(8,12,20,0.97);
-    backdrop-filter: blur(12px);
-    z-index: 50;
-  }
-  .film-header-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px; letter-spacing: 4px; color: #a78bfa;
-  }
-  .film-content { padding: 20px 16px 60px; max-width: 680px; margin: 0 auto; }
-
-  /* Step indicator */
-  .film-steps {
-    display: flex; gap: 6px; margin-bottom: 24px; align-items: center;
-  }
-  .film-step-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--border); transition: all 0.3s;
-    flex-shrink: 0;
-  }
-  .film-step-dot.active { background: #a78bfa; width: 24px; border-radius: 4px; }
-  .film-step-dot.done { background: rgba(167,139,250,0.4); }
-  .film-step-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 3px; color: var(--muted);
-    text-transform: uppercase; margin-left: 6px;
-  }
-
-  /* Section card */
-  .film-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 14px;
-    position: relative;
-    overflow: hidden;
-  }
-  .film-card::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px; background: #a78bfa;
-  }
-  .film-card-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px; letter-spacing: 3px; color: #a78bfa; margin-bottom: 16px;
-  }
-
-  /* Form fields */
-  .film-field { margin-bottom: 14px; }
-  .film-field-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 3px; color: var(--muted);
-    text-transform: uppercase; margin-bottom: 7px; display: block;
-  }
-  .film-input, .film-select, .film-textarea {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    font-size: 14px;
-    padding: 11px 13px;
-    outline: none;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
-  }
-  .film-input:focus, .film-select:focus, .film-textarea:focus { border-color: #a78bfa; }
-  .film-select { cursor: pointer; }
-  .film-textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
-
-  /* Type selector pills */
-  .film-type-pills {
-    display: flex; gap: 8px;
-  }
-  .film-type-pill {
-    flex: 1; padding: 12px 8px; border-radius: 12px;
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--muted); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-    text-align: center;
-  }
-  .film-type-pill.active {
-    border-color: #a78bfa; color: #a78bfa;
-    background: rgba(167,139,250,0.1);
-  }
-
-  /* Emoji rating scale */
-  .film-rating-row {
-    margin-bottom: 16px;
-  }
-  .film-rating-q {
-    font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 10px; line-height: 1.4;
-  }
-  .film-emoji-row {
-    display: flex; gap: 6px;
-  }
-  .film-emoji-btn {
-    flex: 1; padding: 10px 4px; border-radius: 10px;
-    border: 1px solid var(--border); background: var(--surface2);
-    cursor: pointer; text-align: center; transition: all 0.15s;
-    font-size: 18px; line-height: 1;
-  }
-  .film-emoji-btn span {
-    display: block; font-family: 'Barlow Condensed', sans-serif;
-    font-size: 8px; letter-spacing: 1px; color: var(--muted);
-    text-transform: uppercase; margin-top: 4px;
-  }
-  .film-emoji-btn.selected {
-    border-color: #a78bfa; background: rgba(167,139,250,0.12);
-    transform: scale(1.08);
-  }
-
-  /* Position selector */
-  .film-pos-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-  }
-  .film-pos-btn {
-    padding: 12px; border-radius: 10px;
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--muted); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px; font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-    text-align: center;
-  }
-  .film-pos-btn.active {
-    border-color: #a78bfa; color: #a78bfa;
-    background: rgba(167,139,250,0.1);
-  }
-
-  /* Action log */
-  .film-action-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 14px;
-  }
-  .film-action-count-badge {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px; color: #a78bfa; line-height: 1;
-  }
-  .film-action-count-badge span {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 2px; color: var(--muted);
-    text-transform: uppercase; display: block;
-  }
-  .film-action-min-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 2px; color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  /* Individual logged action */
-  .film-action-item {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
-    position: relative; animation: fadeUp 0.25s ease forwards;
-  }
-  .film-action-item-top {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
-  }
-  .film-action-minute {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px; color: #a78bfa; min-width: 40px; line-height: 1;
-  }
-  .film-action-type {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; font-weight: 700; letter-spacing: 1px;
-    color: var(--text); text-transform: uppercase; flex: 1;
-  }
-  .film-action-delete {
-    background: none; border: none; color: var(--muted);
-    cursor: pointer; font-size: 16px; padding: 2px 6px;
-    transition: color 0.15s; flex-shrink: 0;
-  }
-  .film-action-delete:hover { color: #ef4444; }
-  .film-action-details {
-    font-size: 12px; color: var(--muted); line-height: 1.5;
-    padding-left: 50px;
-  }
-
-  /* Add action form */
-  .film-add-action-btn {
-    width: 100%; padding: 14px;
-    border-radius: 12px; border: 1px dashed rgba(167,139,250,0.35);
-    background: rgba(167,139,250,0.04); color: #a78bfa;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px; font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-    margin-bottom: 14px;
-  }
-  .film-add-action-btn:hover {
-    background: rgba(167,139,250,0.09); border-color: rgba(167,139,250,0.6);
-  }
-
-  .film-action-form {
-    background: rgba(167,139,250,0.05);
-    border: 1px solid rgba(167,139,250,0.2);
-    border-radius: 12px; padding: 16px; margin-bottom: 14px;
-    display: none;
-  }
-  .film-action-form.open { display: block; animation: fadeUp 0.2s ease; }
-
-  .film-action-form-row { display: flex; gap: 10px; margin-bottom: 10px; }
-  .film-action-form-row .film-input { flex: 1; }
-
-  .film-followup-fields { margin-top: 10px; }
-  .film-followup-fields .film-field { margin-bottom: 10px; }
-
-  /* Follow-up quick-select */
-  .film-quick-select {
-    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;
-  }
-  .film-qs-btn {
-    padding: 6px 12px; border-radius: 20px;
-    border: 1px solid var(--border); background: var(--surface2);
-    color: var(--muted); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; cursor: pointer; transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .film-qs-btn.selected {
-    border-color: #a78bfa; color: #a78bfa;
-    background: rgba(167,139,250,0.1);
-  }
-
-  /* Add action confirm btn */
-  .film-add-confirm-btn {
-    width: 100%; padding: 12px;
-    border-radius: 10px; border: none;
-    background: #a78bfa; color: #000;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px; letter-spacing: 3px;
-    cursor: pointer; transition: all 0.2s; margin-top: 10px;
-  }
-  .film-add-confirm-btn:hover { opacity: 0.9; }
-  .film-add-confirm-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .film-add-cancel-btn {
-    width: 100%; padding: 9px;
-    border-radius: 10px; border: 1px solid var(--border);
-    background: none; color: var(--muted);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
-    cursor: pointer; transition: all 0.15s; margin-top: 6px;
-  }
-
-  /* Progress bar for 10 actions */
-  .film-progress-bar-wrap {
-    background: var(--surface2); border-radius: 4px;
-    height: 6px; margin-bottom: 16px; overflow: hidden;
-  }
-  .film-progress-bar-fill {
-    height: 100%; border-radius: 4px;
-    background: #a78bfa; transition: width 0.4s ease;
-  }
-
-  /* Reflection section */
-  .film-reflection-divider {
-    text-align: center; margin: 20px 0 16px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 4px; color: var(--muted);
-    text-transform: uppercase;
-    position: relative;
-  }
-  .film-reflection-divider::before {
-    content: ''; position: absolute; left: 0; top: 50%;
-    width: 30%; height: 1px; background: var(--border);
-  }
-  .film-reflection-divider::after {
-    content: ''; position: absolute; right: 0; top: 50%;
-    width: 30%; height: 1px; background: var(--border);
-  }
-
-  /* Submit */
-  .film-submit-btn {
-    width: 100%; padding: 18px; border-radius: 12px; border: none;
-    background: #a78bfa; color: #000;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px; letter-spacing: 3px;
-    cursor: pointer; transition: all 0.2s; margin-top: 20px;
-  }
-  .film-submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-  .film-submit-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
-
-  /* Past sessions list */
-  #film-sessions-view {
-    display: none; min-height: 100vh; background: var(--bg);
-    position: relative; z-index: 10;
-  }
-  .film-session-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px; margin-bottom: 10px;
-    cursor: pointer; transition: all 0.2s;
-    border-left: 3px solid #a78bfa;
-  }
-  .film-session-card:hover { border-color: rgba(167,139,250,0.5); transform: translateY(-2px); }
-  .film-session-top {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 8px;
-  }
-  .film-session-teams {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px; letter-spacing: 2px; color: var(--text);
-  }
-  .film-session-date { font-size: 12px; color: var(--muted); }
-  .film-session-meta {
-    display: flex; gap: 10px; flex-wrap: wrap;
-  }
-  .film-session-tag {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-    padding: 2px 8px; border-radius: 10px;
-    background: rgba(167,139,250,0.1); color: #a78bfa;
-    border: 1px solid rgba(167,139,250,0.2);
-  }
-  .film-session-tag.own-session {
-    background: rgba(245,158,11,0.1); color: #f59e0b;
-    border-color: rgba(245,158,11,0.2);
-  }
-
-  /* Session detail modal */
-  .film-detail-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-    z-index: 300; display: none;
-    align-items: flex-start; justify-content: center;
-    padding: 20px 16px; overflow-y: auto;
-  }
-  .film-detail-overlay.open { display: flex; }
-  .film-detail-box {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 18px; padding: 24px; width: 100%; max-width: 640px;
-    margin: auto;
-  }
-  .film-detail-close {
-    background: none; border: 1px solid var(--border);
-    color: var(--muted); padding: 6px 14px; border-radius: 8px;
-    cursor: pointer; font-size: 13px; letter-spacing: 1px; transition: all 0.2s;
-    margin-bottom: 16px;
-  }
-  .film-detail-action-row {
-    display: flex; gap: 10px; align-items: flex-start;
-    padding: 10px 0; border-bottom: 1px solid var(--border);
-  }
-  .film-detail-action-row:last-child { border-bottom: none; }
-  .film-detail-min {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px; color: #a78bfa; min-width: 44px; line-height: 1;
-  }
-  .film-detail-action-info { flex: 1; }
-  .film-detail-action-type {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; font-weight: 700; letter-spacing: 1px;
-    color: var(--text); text-transform: uppercase; margin-bottom: 3px;
-  }
-  .film-detail-action-notes { font-size: 12px; color: var(--muted); line-height: 1.5; }
-
-  /* Rating delta display */
-  .film-delta-row {
-    display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
-  }
-  .film-delta-label { font-size: 12px; color: var(--muted); flex: 1; }
-  .film-delta-before { font-size: 18px; }
-  .film-delta-arrow { font-size: 12px; color: var(--muted); }
-  .film-delta-after { font-size: 18px; }
+    width:100%;max-width:860px;margin-top:12px;
+    background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.18);
+    border-radius:18px;padding:18px 22px;cursor:pointer;transition:all 0.25s;
+    opacity:0;animation:fadeUp 0.6s 0.88s forwards;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .film-landing-card:hover { background:rgba(167,139,250,0.09);border-color:rgba(167,139,250,0.45);transform:translateY(-3px);box-shadow:0 12px 32px rgba(167,139,250,0.12); }
+  .film-landing-left { display:flex;align-items:center;gap:14px; }
+  .film-landing-icon { font-size:22px;width:44px;height:44px;background:rgba(167,139,250,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+  .film-landing-label { font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#a78bfa;margin-bottom:2px; }
+  .film-landing-sub { font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase; }
+  .film-landing-count { font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(167,139,250,0.4);flex-shrink:0; }
+  #film-view { display:none;min-height:100vh;background:var(--bg);position:relative;z-index:10; }
+  #film-sessions-view { display:none;min-height:100vh;background:var(--bg);position:relative;z-index:10; }
+  .film-header { display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(8,12,20,0.97);backdrop-filter:blur(12px);z-index:50; }
+  .film-header-title { font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:#a78bfa; }
+  .film-content { padding:20px 16px 60px;max-width:680px;margin:0 auto; }
+  .film-steps { display:flex;gap:6px;margin-bottom:24px;align-items:center; }
+  .film-step-dot { width:8px;height:8px;border-radius:50%;background:var(--border);transition:all 0.3s;flex-shrink:0; }
+  .film-step-dot.active { background:#a78bfa;width:24px;border-radius:4px; }
+  .film-step-dot.done { background:rgba(167,139,250,0.4); }
+  .film-step-label { font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-left:6px; }
+  .film-card { background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden; }
+  .film-card::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#a78bfa; }
+  .film-card-title { font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:#a78bfa;margin-bottom:16px; }
+  .film-field { margin-bottom:14px; }
+  .film-field-label { font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:7px;display:block; }
+  .film-input,.film-select,.film-textarea { width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;padding:11px 13px;outline:none;transition:border-color 0.2s;-webkit-appearance:none; }
+  .film-input:focus,.film-select:focus,.film-textarea:focus { border-color:#a78bfa; }
+  .film-textarea { resize:vertical;min-height:72px;line-height:1.5; }
+  .film-type-pills { display:flex;gap:8px; }
+  .film-type-pill { flex:1;padding:12px 8px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-align:center; }
+  .film-type-pill.active { border-color:#a78bfa;color:#a78bfa;background:rgba(167,139,250,0.1); }
+  .film-rating-row { margin-bottom:16px; }
+  .film-rating-q { font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:10px;line-height:1.4; }
+  .film-emoji-row { display:flex;gap:6px; }
+  .film-emoji-btn { flex:1;padding:10px 4px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;text-align:center;transition:all 0.15s;font-size:18px;line-height:1; }
+  .film-emoji-btn span { display:block;font-family:'Barlow Condensed',sans-serif;font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-top:4px; }
+  .film-emoji-btn.selected { border-color:#a78bfa;background:rgba(167,139,250,0.12);transform:scale(1.08); }
+  .film-pos-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+  .film-pos-btn { padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-align:center; }
+  .film-pos-btn.active { border-color:#a78bfa;color:#a78bfa;background:rgba(167,139,250,0.1); }
+  .film-action-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:14px; }
+  .film-action-count-badge { font-family:'Bebas Neue',sans-serif;font-size:28px;color:#a78bfa;line-height:1; }
+  .film-action-count-badge span { font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;display:block; }
+  .film-action-item { background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;position:relative;animation:fadeUp 0.25s ease forwards; }
+  .film-action-item-top { display:flex;align-items:center;gap:10px;margin-bottom:6px; }
+  .film-action-minute { font-family:'Bebas Neue',sans-serif;font-size:20px;color:#a78bfa;min-width:40px;line-height:1; }
+  .film-action-type { font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--text);text-transform:uppercase;flex:1; }
+  .film-action-delete { background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 6px;transition:color 0.15s;flex-shrink:0; }
+  .film-action-delete:hover { color:#ef4444; }
+  .film-action-details { font-size:12px;color:var(--muted);line-height:1.5;padding-left:50px; }
+  .film-add-action-btn { width:100%;padding:14px;border-radius:12px;border:1px dashed rgba(167,139,250,0.35);background:rgba(167,139,250,0.04);color:#a78bfa;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;margin-bottom:14px; }
+  .film-add-action-btn:hover { background:rgba(167,139,250,0.09);border-color:rgba(167,139,250,0.6); }
+  .film-action-form { background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.2);border-radius:12px;padding:16px;margin-bottom:14px;display:none; }
+  .film-action-form.open { display:block;animation:fadeUp 0.2s ease; }
+  .film-action-form-row { display:flex;gap:10px;margin-bottom:10px; }
+  .film-followup-fields { margin-top:10px; }
+  .film-followup-fields .film-field { margin-bottom:10px; }
+  .film-quick-select { display:flex;flex-wrap:wrap;gap:6px;margin-top:6px; }
+  .film-qs-btn { padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;white-space:nowrap; }
+  .film-qs-btn.selected { border-color:#a78bfa;color:#a78bfa;background:rgba(167,139,250,0.1); }
+  .film-add-confirm-btn { width:100%;padding:12px;border-radius:10px;border:none;background:#a78bfa;color:#000;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;transition:all 0.2s;margin-top:10px; }
+  .film-add-confirm-btn:hover { opacity:0.9; }
+  .film-add-confirm-btn:disabled { opacity:0.3;cursor:not-allowed; }
+  .film-add-cancel-btn { width:100%;padding:9px;border-radius:10px;border:1px solid var(--border);background:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;margin-top:6px; }
+  .film-progress-bar-wrap { background:var(--surface2);border-radius:4px;height:6px;margin-bottom:16px;overflow:hidden; }
+  .film-progress-bar-fill { height:100%;border-radius:4px;background:#a78bfa;transition:width 0.4s ease; }
+  .film-submit-btn { width:100%;padding:18px;border-radius:12px;border:none;background:#a78bfa;color:#000;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;cursor:pointer;transition:all 0.2s;margin-top:20px; }
+  .film-submit-btn:hover { opacity:0.9;transform:translateY(-1px); }
+  .film-submit-btn:disabled { opacity:0.3;cursor:not-allowed;transform:none; }
+  .film-session-card { background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;border-left:3px solid #a78bfa; }
+  .film-session-card:hover { border-color:rgba(167,139,250,0.5);transform:translateY(-2px); }
+  .film-session-top { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px; }
+  .film-session-teams { font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--text); }
+  .film-session-date { font-size:12px;color:var(--muted); }
+  .film-session-meta { display:flex;gap:10px;flex-wrap:wrap; }
+  .film-session-tag { font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.2); }
+  .film-session-tag.own-session { background:rgba(245,158,11,0.1);color:#f59e0b;border-color:rgba(245,158,11,0.2); }
+  .film-detail-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:20px 16px;overflow-y:auto; }
+  .film-detail-overlay.open { display:flex; }
+  .film-detail-box { background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;width:100%;max-width:640px;margin:auto; }
+  .film-detail-close { background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;letter-spacing:1px;transition:all 0.2s;margin-bottom:16px; }
+  .film-detail-action-row { display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border); }
+  .film-detail-action-row:last-child { border-bottom:none; }
+  .film-detail-min { font-family:'Bebas Neue',sans-serif;font-size:22px;color:#a78bfa;min-width:44px;line-height:1; }
+  .film-detail-action-info { flex:1; }
+  .film-detail-action-type { font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--text);text-transform:uppercase;margin-bottom:3px; }
+  .film-detail-action-notes { font-size:12px;color:var(--muted);line-height:1.5; }
+  .film-delta-row { display:flex;gap:8px;align-items:center;margin-bottom:8px; }
+  .film-delta-label { font-size:12px;color:var(--muted);flex:1; }
+  .film-delta-before,.film-delta-after { font-size:18px; }
+  .film-delta-arrow { font-size:12px;color:var(--muted); }
 
 </style>
 </head>
@@ -4230,7 +3898,7 @@ function renderParentDashboard() {
           html += '<div style="flex:1;min-width:120px;background:' + (isToday ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)') + ';border:1px solid ' + (isToday ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)') + ';border-radius:10px;padding:12px;">';
           html += '<div style="font-family:Barlow Condensed,sans-serif;font-size:10px;letter-spacing:3px;color:' + (isToday ? '#fff' : '#5a7090') + ';text-transform:uppercase;margin-bottom:8px;">' + days[d.getDay()] + (isToday ? ' · TODAY' : '') + '</div>';
           if (sched) {
-            ['caysen','emmitt'].forEach(pid => {
+            ['caysen','emmitt','madden'].forEach(pid => {
               if (!sched[pid]) return;
               const p = PLAYERS[pid];
               html += '<div style="font-size:11px;color:' + p.accent + ';font-family:Barlow Condensed,sans-serif;font-weight:700;letter-spacing:1px;margin-bottom:2px;">' + p.name + '</div>';
@@ -6520,7 +6188,7 @@ function drawProgramShareCard() {
 
 function buildPlayerShareData(filterDates) {
   // filterDates: Set of date strings to filter to, or null for all time
-  return ['caysen','emmitt','madden'].map(id => {
+  return ['caysen','emmitt'].map(id => {
     const p = PLAYERS[id];
     const allComp = dbCompletions.filter(c => c.player === id);
     const allJuggles = dbJuggles.filter(j => j.player === id);
@@ -6594,13 +6262,14 @@ function drawWeeklyShareCard(week) {
   ctx.lineWidth = 1;
   for (let x=0;x<W;x+=60) { ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke(); }
   for (let y=0;y<H;y+=60) { ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke(); }
-  [['#4fc3f7',W*0.85,H*0.05,320],['#f59e0b',W*0.05,H*0.5,240],['#39ff14',W*0.75,H*0.9,240]].forEach(([c,gx,gy,gr])=>{
+  [['#4fc3f7',W*0.85,H*0.05,320],['#f59e0b',W*0.05,H*0.5,240]].forEach(([c,gx,gy,gr])=>{
     const g=ctx.createRadialGradient(gx,gy,0,gx,gy,gr);
     g.addColorStop(0,hexToRgba(c,0.14)); g.addColorStop(1,'transparent');
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   });
   const barW = W/3;
-  ['#4fc3f7','#f59e0b','#39ff14'].forEach((c,i)=>{ ctx.fillStyle=c; ctx.fillRect(i*barW,0,barW,6); });
+  const barW2 = W/2;
+  ['#4fc3f7','#f59e0b'].forEach((c,i)=>{ ctx.fillStyle=c; ctx.fillRect(i*barW2,0,barW2,6); });
 
   // ── HEADER ──
   ctx.textAlign='center';
@@ -6832,13 +6501,14 @@ function drawTotalShareCard() {
   ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
   for(let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
   for(let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-  [['#4fc3f7',W*0.85,H*0.05,320],['#f59e0b',W*0.05,H*0.5,240],['#39ff14',W*0.75,H*0.9,240]].forEach(([c,gx,gy,gr])=>{
+  [['#4fc3f7',W*0.85,H*0.05,320],['#f59e0b',W*0.05,H*0.5,240]].forEach(([c,gx,gy,gr])=>{
     const g=ctx.createRadialGradient(gx,gy,0,gx,gy,gr);
     g.addColorStop(0,hexToRgba(c,0.14)); g.addColorStop(1,'transparent');
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   });
   const barW=W/3;
-  ['#4fc3f7','#f59e0b','#39ff14'].forEach((c,i)=>{ ctx.fillStyle=c; ctx.fillRect(i*barW,0,barW,6); });
+  const barW2 = W/2;
+  ['#4fc3f7','#f59e0b'].forEach((c,i)=>{ ctx.fillStyle=c; ctx.fillRect(i*barW2,0,barW2,6); });
 
   // ── HEADER ──
   ctx.textAlign='center';
@@ -6981,32 +6651,21 @@ function showToast(msg) {
 }
 
 // ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════
 // GAME FILM
 // ═══════════════════════════════════════════════
 
-// ── Action libraries by position ──
 const FILM_ACTIONS = {
-  striker: [
-    'Run Toward Goal','Run Away from Defender','Hold the Ball Up',
-    'Shot on Goal','Header','Dribble Past Defender','Pass to Teammate','Dummy Run'
-  ],
-  winger: [
-    'Run Down the Line','Cut Inside','Cross into the Box',
-    'Dribble Past Defender','Chase Back to Defend','Pass to Teammate','Receive the Ball Wide','Dummy Run'
-  ],
-  midfielder: [
-    'Pass Forward','Switch the Ball','Carry the Ball Forward',
-    'Win the Ball Back','Receive Under Pressure','Make a Run','Block a Pass','Support a Teammate'
-  ],
-  defender: [
-    'Make a Tackle','Head the Ball','Chase the Attacker',
-    'Block a Shot','Pass Out from the Back','Stay Goal-Side','Win a Duel','Clear the Ball'
-  ]
+  striker: ['Run Toward Goal','Run Away from Defender','Hold the Ball Up','Shot on Goal','Header','Dribble Past Defender','Pass to Teammate','Dummy Run'],
+  winger:  ['Run Down the Line','Cut Inside','Cross into the Box','Dribble Past Defender','Chase Back to Defend','Pass to Teammate','Receive the Ball Wide','Dummy Run'],
+  midfielder: ['Pass Forward','Switch the Ball','Carry the Ball Forward','Win the Ball Back','Receive Under Pressure','Make a Run','Block a Pass','Support a Teammate'],
+  defender: ['Make a Tackle','Head the Ball','Chase the Attacker','Block a Shot','Pass Out from the Back','Stay Goal-Side','Win a Duel','Clear the Ball']
 };
 
-// Follow-up fields per action type — simplified for ages 8-9
 const FILM_FOLLOWUPS = {
-  // STRIKER
   'Run Toward Goal':        { qs: [{ q:'Did you get the ball?', opts:['Yes','No','Not yet'] }, { q:'What kind of run?', opts:['In behind the defender','Across the goal','Short to feet'] }] },
   'Run Away from Defender': { qs: [{ q:'Did it create space?', opts:['Yes — for me','Yes — for a teammate','Not this time'] }, { q:'Where did you run?', opts:['Into space behind','Sideways','Toward the ball'] }] },
   'Hold the Ball Up':       { qs: [{ q:'What happened next?', opts:['Passed to teammate','Turned and went','Lost the ball','Won a foul'] }, { q:'How much pressure?', opts:['One defender','Two defenders','Not much pressure'] }] },
@@ -7015,13 +6674,11 @@ const FILM_FOLLOWUPS = {
   'Dribble Past Defender':  { qs: [{ q:'Did you get past them?', opts:['Yes — scored or assisted','Yes — kept going','No — lost the ball','Won a foul'] }, { q:'How did you beat them?', opts:['Speed','Change of direction','Skill move','They backed off'] }] },
   'Pass to Teammate':       { qs: [{ q:'Was the pass good?', opts:['Yes — they kept it','Yes — created a chance','It was off','Intercepted'] }, { q:'What kind of pass?', opts:['Short pass','Long pass','Through ball','One-touch'] }] },
   'Dummy Run':              { qs: [{ q:'Did it work?', opts:['Yes — created space for teammate','Yes — I got the ball after','Not really'] }] },
-  // WINGER
   'Run Down the Line':      { qs: [{ q:'Did you get the ball?', opts:['Yes','No — ball not played','No — defender cut it off'] }, { q:'What happened next?', opts:['Got behind the defense','Cross delivered','Held the ball up','Lost it'] }] },
   'Cut Inside':             { qs: [{ q:'Which way did you cut?', opts:['Right foot — shot','Left foot — shot','Passed after cutting'] }, { q:'Did you beat the defender?', opts:['Yes','Partially','No'] }] },
   'Cross into the Box':     { qs: [{ q:'What happened to the cross?', opts:['Teammate shot','Teammate headed it','Cleared away','Out of reach'] }, { q:'What kind of cross?', opts:['Early cross','Driven low','High and looping','Cut-back'] }] },
   'Chase Back to Defend':   { qs: [{ q:'Did you stop them?', opts:['Yes — won the ball','Yes — slowed them down','No — they got past'] }] },
   'Receive the Ball Wide':  { qs: [{ q:'What did you do next?', opts:['Dribbled forward','Crossed it','Cut inside','Passed back'] }, { q:'Was there pressure on you?', opts:['Yes — tight on me','Some pressure','Lots of space'] }] },
-  // MIDFIELDER
   'Pass Forward':           { qs: [{ q:'Did it reach the teammate?', opts:['Yes — they kept it','Yes — created a chance','Intercepted','Too heavy or light'] }, { q:'What kind of pass?', opts:['Short pass','Through ball','Long pass','One-touch'] }] },
   'Switch the Ball':        { qs: [{ q:'Did it find the player?', opts:['Yes — teammate was free','Yes — but under pressure','Intercepted','Out of bounds'] }] },
   'Carry the Ball Forward': { qs: [{ q:'What happened?', opts:['Passed to a teammate','Got a shot off','Lost the ball','Won a foul'] }, { q:'How far?', opts:['Short carry','Medium carry','Long run'] }] },
@@ -7030,58 +6687,45 @@ const FILM_FOLLOWUPS = {
   'Make a Run':             { qs: [{ q:'Did you get the ball?', opts:['Yes','No — not played to me'] }, { q:'Where did you run?', opts:['Into space in front','In behind the defense','To the side','Toward the ball'] }] },
   'Block a Pass':           { qs: [{ q:'Did you block it?', opts:['Yes — won the ball','Yes — went out of play','No — got through'] }] },
   'Support a Teammate':     { qs: [{ q:'How did you support?', opts:['Gave them a pass option','Ran to make space','Covered behind them','Told them where to go'] }] },
-  // DEFENDER
   'Make a Tackle':          { qs: [{ q:'Did you win it?', opts:['Yes — clean tackle','Yes — but foul given','No — got dribbled past'] }, { q:'What happened after?', opts:['Team kept possession','Cleared it away','Lost it again'] }] },
   'Head the Ball':          { qs: [{ q:'Attacking or defending?', opts:['Defending — cleared it','Defending — lost the header','Attacking — on target','Attacking — off target'] }] },
-  'Chase the Attacker':     { qs: [{ q:'Did you stop them?', opts:['Yes — won the ball','Yes — slowed them down','No — they scored or crossed'] }, { q:'How?', opts:['Tackled from behind','Got goal-side','Forced them wide','Foul given'] }] },
+  'Chase the Attacker':     { qs: [{ q:'Did you stop them?', opts:['Yes — won the ball','Yes — slowed them down','No — they scored or crossed'] }, { q:'How?', opts:['Tackled','Got goal-side','Forced them wide','Foul given'] }] },
   'Block a Shot':           { qs: [{ q:'Did you block it?', opts:['Yes — blocked completely','Deflected it','No — went in or on target'] }] },
   'Pass Out from the Back': { qs: [{ q:'Was the pass good?', opts:['Yes — clean buildup','Under pressure but kept it','Lost it — pressed high'] }] },
   'Stay Goal-Side':         { qs: [{ q:'Did you keep goal-side?', opts:['Yes — blocked the run','Yes — won the ball','Lost them for a moment','Lost them completely'] }] },
   'Win a Duel':             { qs: [{ q:'Did you win it?', opts:['Yes — got the ball','Yes — cleared it','No — they kept it'] }, { q:'How?', opts:['Physical strength','Good positioning','Speed','Tackled'] }] },
   'Clear the Ball':         { qs: [{ q:'Where did you clear it?', opts:['Far up the field','Out of bounds — safe','To a teammate','Only a short clear'] }, { q:'Was there pressure?', opts:['Yes — had to clear fast','Some pressure','Plenty of time'] }] },
-  'default':                { qs: [{ q:'What happened?', opts:['Went well','Went okay','Didn\'t work out'] }] }
+  'default':                { qs: [{ q:'What happened?', opts:["Went well","Went okay","Didn\'t work out"] }] }
 };
 
-// Own-session additional followup for reflection
 const OWN_SESSION_EXTRA = { q: 'What were you thinking in that moment?', freeText: true };
 
-// Pre/post rating questions
 const FILM_PRE_QUESTIONS_PRO = [
-  { id: 'focus',    q: 'How locked in are you right now?',        emojis: ['😴','😐','🙂','😤','🔥'], labels: ['Dead','Meh','Ready','Locked','On Fire'] },
-  { id: 'expect',   q: 'What are you expecting from this session?', emojis: ['😬','😐','🙂','😊','🔥'], labels: ['Rough','OK','Good','Great','Best Yet'] }
+  { id:'focus',  q:'How locked in are you right now?',          emojis:['😴','😐','🙂','😤','🔥'], labels:['Dead','Meh','Ready','Locked','On Fire'] },
+  { id:'expect', q:'What are you expecting from this session?',  emojis:['😬','😐','🙂','😊','🔥'], labels:['Rough','OK','Good','Great','Best Yet'] }
 ];
 const FILM_PRE_QUESTIONS_OWN = [
-  { id: 'focus',    q: 'How locked in are you right now?',        emojis: ['😴','😐','🙂','😤','🔥'], labels: ['Dead','Meh','Ready','Locked','On Fire'] },
-  { id: 'effort',   q: 'How hard did you actually work today?',    emojis: ['💤','🚶','🏃','💪','🔥'], labels: ['Coasted','Light','Solid','Hard','Max'] },
-  { id: 'expect',   q: 'How do you feel about how you performed?', emojis: ['😬','😐','🙂','😊','🤩'], labels: ['Rough','OK','Fine','Good','Great'] }
+  { id:'focus',  q:'How locked in are you right now?',          emojis:['😴','😐','🙂','😤','🔥'], labels:['Dead','Meh','Ready','Locked','On Fire'] },
+  { id:'effort', q:'How hard did you actually work today?',      emojis:['💤','🚶','🏃','💪','🔥'], labels:['Coasted','Light','Solid','Hard','Max'] },
+  { id:'expect', q:'How do you feel about how you performed?',   emojis:['😬','😐','🙂','😊','🤩'], labels:['Rough','OK','Fine','Good','Great'] }
 ];
 const FILM_POST_QUESTIONS_PRO = [
-  { id: 'focus',    q: 'How locked in were you during the session?', emojis: ['😴','😐','🙂','😤','🔥'], labels: ['Not at all','A little','OK','Dialed in','Fully locked'] },
-  { id: 'learned',  q: 'How much did you pick up watching this player?', emojis: ['🤷','😐','🙂','💡','🧠'], labels: ['Nothing','A bit','Some','A lot','So much'] }
+  { id:'focus',   q:'How locked in were you during the session?',         emojis:['😴','😐','🙂','😤','🔥'], labels:['Not at all','A little','OK','Dialed in','Fully locked'] },
+  { id:'learned', q:'How much did you pick up watching this player?',      emojis:['🤷','😐','🙂','💡','🧠'], labels:['Nothing','A bit','Some','A lot','So much'] }
 ];
 const FILM_POST_QUESTIONS_OWN = [
-  { id: 'focus',    q: 'How locked in were you during the session?', emojis: ['😴','😐','🙂','😤','🔥'], labels: ['Not at all','A little','OK','Dialed in','Fully locked'] },
-  { id: 'effort',   q: 'Now that you\'ve watched — how hard did you really work?', emojis: ['💤','🚶','🏃','💪','🔥'], labels: ['Coasted','Light','Solid','Hard','Max'] },
-  { id: 'honest',   q: 'Were you happy with how you played?',       emojis: ['😬','😐','🙂','😊','🤩'], labels: ['No','Not really','Sort of','Yes','Absolutely'] }
+  { id:'focus',  q:'How locked in were you during the session?',          emojis:['😴','😐','🙂','😤','🔥'], labels:['Not at all','A little','OK','Dialed in','Fully locked'] },
+  { id:'effort', q:"Now that you\'ve watched — how hard did you really work?", emojis:['💤','🚶','🏃','💪','🔥'], labels:['Coasted','Light','Solid','Hard','Max'] },
+  { id:'honest', q:'Were you happy with how you played?',                 emojis:['😬','😐','🙂','😊','🤩'], labels:['No','Not really','Sort of','Yes','Absolutely'] }
 ];
 
-// ── Film state ──
 let filmState = {
-  step: 'pre',   // pre | setup | log | reflection
-  player: null,
-  sessionType: null,   // 'pro' | 'own'
-  teams: '',
-  trackedPlayer: '',
-  position: null,
-  preRatings: {},
-  postRatings: {},
-  actions: [],
-  reflections: {},
-  addingAction: false,
-  submitted: false,
-  currentAction: { minute: '', type: '', followups: {}, freeText: '' }
+  step:'pre', player:null, sessionType:null,
+  teams:'', trackedPlayer:'', position:null,
+  preRatings:{}, postRatings:{}, actions:[],
+  reflections:{}, addingAction:false, submitted:false,
+  currentAction:{ minute:'', type:'', followups:{}, freeText:'' }
 };
-
 let allFilmSessions = [];
 
 async function loadFilmSessions() {
@@ -7098,24 +6742,16 @@ async function renderFilmLandingCount() {
 }
 
 function openFilmView() {
-  filmState = {
-    step: 'pre', player: null, sessionType: null,
-    teams: '', trackedPlayer: '', position: null,
-    preRatings: {}, postRatings: {}, actions: [],
-    reflections: {}, addingAction: false,
-    currentAction: { minute: '', type: '', followups: {}, freeText: '' }
-  };
+  filmState = { step:'pre', player:null, sessionType:null, teams:'', trackedPlayer:'', position:null, preRatings:{}, postRatings:{}, actions:[], reflections:{}, addingAction:false, submitted:false, currentAction:{ minute:'', type:'', followups:{}, freeText:'' } };
   document.getElementById('landing').style.display = 'none';
   document.getElementById('film-view').style.display = 'block';
   renderFilmStep();
 }
-
 function closeFilmView() {
   document.getElementById('film-view').style.display = 'none';
   document.getElementById('landing').style.display = 'flex';
   renderFilmLandingCount();
 }
-
 function openFilmSessionsList() {
   loadFilmSessions().then(() => {
     document.getElementById('film-view').style.display = 'none';
@@ -7123,699 +6759,254 @@ function openFilmSessionsList() {
     renderFilmSessionsList();
   });
 }
-
 function closeFilmSessionsList() {
   document.getElementById('film-sessions-view').style.display = 'none';
   document.getElementById('film-view').style.display = 'block';
 }
 
-// ── Main render dispatcher ──
 function renderFilmStep() {
   const content = document.getElementById('film-content');
   content.innerHTML = '';
-
   const steps = ['pre','setup','log','reflection'];
   const stepIdx = steps.indexOf(filmState.step);
-
-  // Step indicator
-  const stepsEl = document.createElement('div');
-  stepsEl.className = 'film-steps';
+  const stepsEl = document.createElement('div'); stepsEl.className = 'film-steps';
   const labels = ['Check-In','Setup','Log Actions','Reflect'];
-  steps.forEach((s, i) => {
+  steps.forEach((s,i) => {
     const dot = document.createElement('div');
     dot.className = 'film-step-dot' + (i < stepIdx ? ' done' : '') + (i === stepIdx ? ' active' : '');
     stepsEl.appendChild(dot);
   });
-  const lbl = document.createElement('div');
-  lbl.className = 'film-step-label';
-  lbl.textContent = labels[stepIdx];
-  stepsEl.appendChild(lbl);
+  const lbl = document.createElement('div'); lbl.className = 'film-step-label'; lbl.textContent = labels[stepIdx]; stepsEl.appendChild(lbl);
   content.appendChild(stepsEl);
-
   if (filmState.step === 'pre') renderFilmPreStep(content);
   else if (filmState.step === 'setup') renderFilmSetupStep(content);
   else if (filmState.step === 'log') renderFilmLogStep(content);
   else if (filmState.step === 'reflection') renderFilmReflectionStep(content);
 }
 
-// ── Step 1: Pre check-in ──
 function renderFilmPreStep(content) {
-  const card = document.createElement('div');
-  card.className = 'film-card';
-  card.innerHTML = `<div class="film-card-title">CHECK-IN</div>`;
-
-  // Player select first
-  const playerField = document.createElement('div');
-  playerField.className = 'film-field';
-  playerField.innerHTML = `
-    <label class="film-field-label">Who are you?</label>
-    <div class="film-pos-grid" id="film-player-select">
-      ${['Caysen','Emmitt','Madden'].map(n => `
-        <button class="film-pos-btn${filmState.player===n.toLowerCase()?' active':''}"
-          onclick="filmSelectPlayer('${n.toLowerCase()}')">${n}</button>
-      `).join('')}
-      <button class="film-pos-btn${filmState.player==='coach'?' active':''}"
-        onclick="filmSelectPlayer('coach')">Coach</button>
-    </div>
-  `;
+  const card = document.createElement('div'); card.className = 'film-card';
+  card.innerHTML = '<div class="film-card-title">CHECK-IN</div>';
+  const playerField = document.createElement('div'); playerField.className = 'film-field';
+  playerField.innerHTML = '<label class="film-field-label">Who are you?</label><div class="film-pos-grid" id="film-player-select">' +
+    ['Caysen','Emmitt','Madden'].map(n => `<button class="film-pos-btn${filmState.player===n.toLowerCase()?' active':''}" onclick="filmSelectPlayer('${n.toLowerCase()}')">${n}</button>`).join('') +
+    `<button class="film-pos-btn${filmState.player==='coach'?' active':''}" onclick="filmSelectPlayer('coach')">Coach</button></div>`;
   card.appendChild(playerField);
-
-  // Session type
-  const typeField = document.createElement('div');
-  typeField.className = 'film-field';
-  typeField.innerHTML = `
-    <label class="film-field-label">What are you watching?</label>
-    <div class="film-type-pills">
-      <button class="film-type-pill${filmState.sessionType==='pro'?' active':''}"
-        onclick="filmSelectType('pro')">📺 Pro Game</button>
-      <button class="film-type-pill${filmState.sessionType==='own'?' active':''}"
-        onclick="filmSelectType('own')">⚽ My Session</button>
-    </div>
-  `;
+  const typeField = document.createElement('div'); typeField.className = 'film-field';
+  typeField.innerHTML = '<label class="film-field-label">What are you watching?</label><div class="film-type-pills">' +
+    `<button class="film-type-pill${filmState.sessionType==='pro'?' active':''}" onclick="filmSelectType('pro')">📺 Pro Game</button>` +
+    `<button class="film-type-pill${filmState.sessionType==='own'?' active':''}" onclick="filmSelectType('own')">⚽ My Session</button></div>`;
   card.appendChild(typeField);
-
-  // Rating questions — only show once type is selected
   if (filmState.sessionType) {
     const qs = filmState.sessionType === 'pro' ? FILM_PRE_QUESTIONS_PRO : FILM_PRE_QUESTIONS_OWN;
     qs.forEach(q => {
-      const row = document.createElement('div');
-      row.className = 'film-rating-row';
-      row.innerHTML = `<div class="film-rating-q">${q.q}</div>
-        <div class="film-emoji-row" id="film-pre-${q.id}">
-          ${q.emojis.map((e,i) => `
-            <button class="film-emoji-btn${filmState.preRatings[q.id]===i?' selected':''}"
-              onclick="filmSetPreRating('${q.id}',${i})">
-              ${e}<span>${q.labels[i]}</span>
-            </button>
-          `).join('')}
-        </div>`;
+      const row = document.createElement('div'); row.className = 'film-rating-row';
+      row.innerHTML = `<div class="film-rating-q">${q.q}</div><div class="film-emoji-row">` +
+        q.emojis.map((e,i) => `<button class="film-emoji-btn${filmState.preRatings[q.id]===i?' selected':''}" onclick="filmSetPreRating('${q.id}',${i})">${e}<span>${q.labels[i]}</span></button>`).join('') + '</div>';
       card.appendChild(row);
     });
   }
-
   content.appendChild(card);
-
-  // Next button
-  const btn = document.createElement('button');
-  btn.className = 'film-submit-btn';
-  btn.style.background = filmCanAdvancePre() ? '#a78bfa' : '';
-  btn.disabled = !filmCanAdvancePre();
-  btn.textContent = 'START SESSION →';
-  btn.onclick = () => { filmState.step = 'setup'; renderFilmStep(); };
-  content.appendChild(btn);
+  const btn = document.createElement('button'); btn.className = 'film-submit-btn'; btn.disabled = !filmCanAdvancePre(); btn.textContent = 'START SESSION →';
+  btn.onclick = () => { filmState.step = 'setup'; renderFilmStep(); }; content.appendChild(btn);
 }
-
-function filmSelectPlayer(p) {
-  filmState.player = p;
-  renderFilmStep();
-}
-function filmSelectType(t) {
-  filmState.sessionType = t;
-  filmState.preRatings = {};
-  renderFilmStep();
-}
-function filmSetPreRating(id, val) {
-  filmState.preRatings[id] = val;
-  renderFilmStep();
-}
+function filmSelectPlayer(p) { filmState.player = p; renderFilmStep(); }
+function filmSelectType(t) { filmState.sessionType = t; filmState.preRatings = {}; renderFilmStep(); }
+function filmSetPreRating(id, val) { filmState.preRatings[id] = val; renderFilmStep(); }
 function filmCanAdvancePre() {
   if (!filmState.player || !filmState.sessionType) return false;
   const qs = filmState.sessionType === 'pro' ? FILM_PRE_QUESTIONS_PRO : FILM_PRE_QUESTIONS_OWN;
   return qs.every(q => filmState.preRatings[q.id] !== undefined);
 }
 
-// ── Step 2: Setup ──
 function renderFilmSetupStep(content) {
-  const card = document.createElement('div');
-  card.className = 'film-card';
-  card.innerHTML = `<div class="film-card-title">SESSION SETUP</div>`;
-
-  // Teams
-  const teamsField = document.createElement('div');
-  teamsField.className = 'film-field';
+  const card = document.createElement('div'); card.className = 'film-card';
+  card.innerHTML = '<div class="film-card-title">SESSION SETUP</div>';
   const teamsLabel = filmState.sessionType === 'own' ? 'Teams / Match' : 'Teams Playing';
   const teamsPlaceholder = filmState.sessionType === 'own' ? 'e.g. My Team vs Desert FC' : 'e.g. Real Madrid vs Barcelona';
-  teamsField.innerHTML = `
-    <label class="film-field-label">${teamsLabel}</label>
-    <input class="film-input" id="film-teams-input" type="text"
-      placeholder="${teamsPlaceholder}" value="${filmState.teams}"
-      oninput="filmState.teams=this.value">
-  `;
-  card.appendChild(teamsField);
-
-  // Player being tracked
-  const playerField = document.createElement('div');
-  playerField.className = 'film-field';
-  const trackedLabel = filmState.sessionType === 'own' ? 'Your Name' : 'Player You\'re Tracking';
-  const trackedPlaceholder = filmState.sessionType === 'own'
-    ? (filmState.player !== 'coach' ? (filmState.player.charAt(0).toUpperCase() + filmState.player.slice(1)) : 'Player name')
-    : 'e.g. Vinicius Jr.';
-  playerField.innerHTML = `
-    <label class="film-field-label">${trackedLabel}</label>
-    <input class="film-input" id="film-tracked-input" type="text"
-      placeholder="${trackedPlaceholder}"
-      value="${filmState.trackedPlayer || (filmState.sessionType==='own' && filmState.player!=='coach' ? (filmState.player.charAt(0).toUpperCase()+filmState.player.slice(1)) : '')}"
-      oninput="filmState.trackedPlayer=this.value">
-  `;
-  card.appendChild(playerField);
-
-  // Position
-  const posField = document.createElement('div');
-  posField.className = 'film-field';
-  posField.innerHTML = `
-    <label class="film-field-label">Position</label>
-    <div class="film-pos-grid">
-      ${['striker','winger','midfielder','defender'].map(p => `
-        <button class="film-pos-btn${filmState.position===p?' active':''}"
-          onclick="filmSelectPos('${p}')">${p.charAt(0).toUpperCase()+p.slice(1)}</button>
-      `).join('')}
-    </div>
-  `;
-  card.appendChild(posField);
-
+  const tf = document.createElement('div'); tf.className = 'film-field';
+  tf.innerHTML = `<label class="film-field-label">${teamsLabel}</label><input class="film-input" id="film-teams-input" type="text" placeholder="${teamsPlaceholder}" value="${filmState.teams}" oninput="filmState.teams=this.value">`;
+  card.appendChild(tf);
+  const autoName = filmState.sessionType==='own' && filmState.player!=='coach' ? (filmState.player.charAt(0).toUpperCase()+filmState.player.slice(1)) : '';
+  const pf = document.createElement('div'); pf.className = 'film-field';
+  pf.innerHTML = `<label class="film-field-label">${filmState.sessionType==='own'?'Your Name':'Player You\'re Tracking'}</label><input class="film-input" type="text" placeholder="${filmState.sessionType==='own'?autoName:'e.g. Vinicius Jr.'}" value="${filmState.trackedPlayer||autoName}" oninput="filmState.trackedPlayer=this.value">`;
+  card.appendChild(pf);
+  const posf = document.createElement('div'); posf.className = 'film-field';
+  posf.innerHTML = '<label class="film-field-label">Position</label><div class="film-pos-grid">' +
+    ['striker','winger','midfielder','defender'].map(p => `<button class="film-pos-btn${filmState.position===p?' active':''}" onclick="filmSelectPos('${p}')">${p.charAt(0).toUpperCase()+p.slice(1)}</button>`).join('') + '</div>';
+  card.appendChild(posf);
   content.appendChild(card);
-
-  // Nav buttons
-  const btnRow = document.createElement('div');
-  btnRow.style.cssText = 'display:flex;gap:10px;margin-top:4px;';
-  const backBtn = document.createElement('button');
-  backBtn.className = 'film-add-cancel-btn';
-  backBtn.style.marginTop = '0';
-  backBtn.textContent = '← Back';
-  backBtn.onclick = () => { filmState.step = 'pre'; renderFilmStep(); };
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'film-submit-btn';
-  nextBtn.style.cssText = 'flex:2;margin-top:0;padding:14px;font-size:18px;';
-  nextBtn.disabled = !filmCanAdvanceSetup();
-  nextBtn.textContent = 'START LOGGING →';
-  nextBtn.onclick = () => { filmState.step = 'log'; renderFilmStep(); };
-  btnRow.appendChild(backBtn);
-  btnRow.appendChild(nextBtn);
-  content.appendChild(btnRow);
+  const btnRow = document.createElement('div'); btnRow.style.cssText='display:flex;gap:10px;margin-top:4px;';
+  const backBtn = document.createElement('button'); backBtn.className='film-add-cancel-btn'; backBtn.style.marginTop='0'; backBtn.textContent='← Back'; backBtn.onclick=()=>{ filmState.step='pre'; renderFilmStep(); };
+  const nextBtn = document.createElement('button'); nextBtn.className='film-submit-btn'; nextBtn.style.cssText='flex:2;margin-top:0;padding:14px;font-size:18px;'; nextBtn.disabled=!filmCanAdvanceSetup(); nextBtn.textContent='START LOGGING →'; nextBtn.onclick=()=>{ filmState.step='log'; renderFilmStep(); };
+  btnRow.appendChild(backBtn); btnRow.appendChild(nextBtn); content.appendChild(btnRow);
 }
+function filmSelectPos(p) { filmState.position = p; renderFilmStep(); }
+function filmCanAdvanceSetup() { return filmState.teams.trim().length>0 && filmState.trackedPlayer.trim().length>0 && filmState.position!==null; }
 
-function filmSelectPos(p) {
-  filmState.position = p;
-  renderFilmStep();
-}
-function filmCanAdvanceSetup() {
-  return filmState.teams.trim().length > 0
-    && filmState.trackedPlayer.trim().length > 0
-    && filmState.position !== null;
-}
-
-// ── Step 3: Action log ──
 function renderFilmLogStep(content) {
   const count = filmState.actions.length;
-  const pct = Math.min((count / 10) * 100, 100);
-
-  // Header card
-  const header = document.createElement('div');
-  header.className = 'film-card';
-  header.innerHTML = `
-    <div class="film-action-header">
-      <div>
-        <div class="film-action-count-badge">${count}<span>actions logged</span></div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">
-          ${filmState.trackedPlayer} · ${filmState.sessionType==='own'?'My Session':'Pro Game'}
-        </div>
-        <div style="font-size:11px;color:var(--muted);">${filmState.teams}</div>
-      </div>
-    </div>
-    <div class="film-progress-bar-wrap">
-      <div class="film-progress-bar-fill" style="width:${pct}%"></div>
-    </div>
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">
-      ${count < 10 ? `${10-count} more to unlock reflection` : '✓ Minimum reached — keep going or wrap up'}
-    </div>
-  `;
+  const pct = Math.min((count/10)*100,100);
+  const header = document.createElement('div'); header.className = 'film-card';
+  header.innerHTML = `<div class="film-action-header"><div><div class="film-action-count-badge">${count}<span>actions logged</span></div></div><div style="text-align:right"><div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">${filmState.trackedPlayer} · ${filmState.sessionType==='own'?'My Session':'Pro Game'}</div><div style="font-size:11px;color:var(--muted);">${filmState.teams}</div></div></div>
+  <div class="film-progress-bar-wrap"><div class="film-progress-bar-fill" style="width:${pct}%"></div></div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">${count<10?`${10-count} more to unlock reflection`:'✓ Minimum reached — keep going or wrap up'}</div>`;
   content.appendChild(header);
-
-  // Existing actions
   if (filmState.actions.length > 0) {
-    const listCard = document.createElement('div');
-    listCard.className = 'film-card';
-    listCard.innerHTML = '<div class="film-card-title">LOGGED ACTIONS</div>';
-    const sorted = [...filmState.actions].sort((a,b) => (parseInt(a.minute)||0)-(parseInt(b.minute)||0));
-    sorted.forEach((action, i) => {
-      const item = document.createElement('div');
-      item.className = 'film-action-item';
+    const listCard = document.createElement('div'); listCard.className = 'film-card'; listCard.innerHTML = '<div class="film-card-title">LOGGED ACTIONS</div>';
+    const sorted = [...filmState.actions].sort((a,b)=>(parseInt(a.minute)||0)-(parseInt(b.minute)||0));
+    sorted.forEach(action => {
+      const item = document.createElement('div'); item.className = 'film-action-item';
       const detailParts = [];
-      Object.entries(action.followups||{}).forEach(([k,v]) => { if(v) detailParts.push(v); });
-      if (action.freeText) detailParts.push(`"${action.freeText}"`);
-      item.innerHTML = `
-        <div class="film-action-item-top">
-          <div class="film-action-minute">${action.minute}'</div>
-          <div class="film-action-type">${action.type}</div>
-          <button class="film-action-delete" onclick="filmDeleteAction(${filmState.actions.indexOf(action)})">✕</button>
-        </div>
-        ${detailParts.length ? `<div class="film-action-details">${detailParts.join(' · ')}</div>` : ''}
-      `;
+      Object.entries(action.followups||{}).forEach(([k,v])=>{ if(v) detailParts.push(v); });
+      if (action.freeText) detailParts.push('"'+action.freeText+'"');
+      item.innerHTML = `<div class="film-action-item-top"><div class="film-action-minute">${action.minute}'</div><div class="film-action-type">${action.type}</div><button class="film-action-delete" onclick="filmDeleteAction(${filmState.actions.indexOf(action)})">✕</button></div>${detailParts.length?'<div class="film-action-details">'+detailParts.join(' · ')+'</div>':''}`;
       listCard.appendChild(item);
     });
     content.appendChild(listCard);
   }
-
-  // Add action form / button
   const addSection = document.createElement('div');
-
   if (!filmState.addingAction) {
-    const addBtn = document.createElement('button');
-    addBtn.className = 'film-add-action-btn';
-    addBtn.textContent = '+ Add Action';
-    addBtn.onclick = () => {
-      filmState.addingAction = true;
-      filmState.currentAction = { minute: '', type: '', followups: {}, freeText: '' };
-      renderFilmStep();
-    };
+    const addBtn = document.createElement('button'); addBtn.className='film-add-action-btn'; addBtn.textContent='+ Add Action';
+    addBtn.onclick=()=>{ filmState.addingAction=true; filmState.currentAction={ minute:'', type:'', followups:{}, freeText:'' }; renderFilmStep(); };
     addSection.appendChild(addBtn);
   } else {
-    const form = document.createElement('div');
-    form.className = 'film-action-form open';
-    form.innerHTML = `<div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:#a78bfa;margin-bottom:14px;">LOG ACTION</div>`;
-
-    // Minute + action type row
-    const topRow = document.createElement('div');
-    topRow.className = 'film-action-form-row';
-    topRow.innerHTML = `
-      <input class="film-input" type="number" placeholder="Min" min="0" max="120"
-        style="max-width:80px;text-align:center;"
-        value="${filmState.currentAction.minute}"
-        oninput="filmState.currentAction.minute=this.value;filmUpdateActionForm()">
-    `;
-
-    const typeWrap = document.createElement('div');
-    typeWrap.style.flex = '1';
-    const actions = FILM_ACTIONS[filmState.position] || [];
-    const sel = document.createElement('select');
-    sel.className = 'film-select';
-    sel.innerHTML = `<option value="">Select action...</option>` +
-      actions.map(a => `<option value="${a}"${filmState.currentAction.type===a?' selected':''}>${a}</option>`).join('');
-    sel.onchange = () => {
-      filmState.currentAction.type = sel.value;
-      filmState.currentAction.followups = {};
-      filmState.currentAction.freeText = '';
-      renderFilmStep();
-    };
-    typeWrap.appendChild(sel);
-    topRow.appendChild(typeWrap);
-    form.appendChild(topRow);
-
-    // Follow-up fields
+    const form = document.createElement('div'); form.className='film-action-form open';
+    form.innerHTML='<div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:#a78bfa;margin-bottom:14px;">LOG ACTION</div>';
+    const topRow = document.createElement('div'); topRow.className='film-action-form-row';
+    topRow.innerHTML=`<input class="film-input" type="number" placeholder="Min" min="0" max="120" style="max-width:80px;text-align:center;" value="${filmState.currentAction.minute}" oninput="filmState.currentAction.minute=this.value">`;
+    const typeWrap = document.createElement('div'); typeWrap.style.flex='1';
+    const sel = document.createElement('select'); sel.className='film-select';
+    sel.innerHTML='<option value="">Select action...</option>'+(FILM_ACTIONS[filmState.position]||[]).map(a=>`<option value="${a}"${filmState.currentAction.type===a?' selected':''}>${a}</option>`).join('');
+    sel.onchange=()=>{ filmState.currentAction.type=sel.value; filmState.currentAction.followups={}; filmState.currentAction.freeText=''; renderFilmStep(); };
+    typeWrap.appendChild(sel); topRow.appendChild(typeWrap); form.appendChild(topRow);
     if (filmState.currentAction.type) {
-      const fuKey = filmState.currentAction.type;
-      const fuDef = FILM_FOLLOWUPS[fuKey] || FILM_FOLLOWUPS['default'];
-      const fuSection = document.createElement('div');
-      fuSection.className = 'film-followup-fields';
-
-      fuDef.qs.forEach((fq, fi) => {
-        const fqField = document.createElement('div');
-        fqField.className = 'film-field';
-        fqField.innerHTML = `<label class="film-field-label">${fq.q}</label>`;
-        const qs = document.createElement('div');
-        qs.className = 'film-quick-select';
-        fq.opts.forEach(opt => {
-          const btn = document.createElement('button');
-          btn.className = 'film-qs-btn' + (filmState.currentAction.followups[fi]===opt?' selected':'');
-          btn.textContent = opt;
-          btn.onclick = () => {
-            filmState.currentAction.followups[fi] = opt;
-            renderFilmStep();
-          };
-          qs.appendChild(btn);
-        });
-        fqField.appendChild(qs);
-        fuSection.appendChild(fqField);
+      const fuDef = FILM_FOLLOWUPS[filmState.currentAction.type] || FILM_FOLLOWUPS['default'];
+      const fuSection = document.createElement('div'); fuSection.className='film-followup-fields';
+      fuDef.qs.forEach((fq,fi)=>{
+        const fqField = document.createElement('div'); fqField.className='film-field';
+        fqField.innerHTML=`<label class="film-field-label">${fq.q}</label>`;
+        const qs = document.createElement('div'); qs.className='film-quick-select';
+        fq.opts.forEach(opt=>{ const btn=document.createElement('button'); btn.className='film-qs-btn'+(filmState.currentAction.followups[fi]===opt?' selected':''); btn.textContent=opt; btn.onclick=()=>{ filmState.currentAction.followups[fi]=opt; renderFilmStep(); }; qs.appendChild(btn); });
+        fqField.appendChild(qs); fuSection.appendChild(fqField);
       });
-
-      // Own session: free text
-      if (filmState.sessionType === 'own') {
-        const ftField = document.createElement('div');
-        ftField.className = 'film-field';
-        ftField.innerHTML = `
-          <label class="film-field-label">${OWN_SESSION_EXTRA.q}</label>
-          <textarea class="film-textarea" placeholder="What were you thinking in that moment..." rows="2"
-            oninput="filmState.currentAction.freeText=this.value">${filmState.currentAction.freeText}</textarea>
-        `;
+      if (filmState.sessionType==='own') {
+        const ftField=document.createElement('div'); ftField.className='film-field';
+        ftField.innerHTML=`<label class="film-field-label">${OWN_SESSION_EXTRA.q}</label><textarea class="film-textarea" placeholder="What were you thinking in that moment..." rows="2" oninput="filmState.currentAction.freeText=this.value">${filmState.currentAction.freeText}</textarea>`;
         fuSection.appendChild(ftField);
       }
-
       form.appendChild(fuSection);
     }
-
-    // Confirm + cancel
-    const confirmBtn = document.createElement('button');
-    confirmBtn.className = 'film-add-confirm-btn';
-    confirmBtn.disabled = !(filmState.currentAction.minute && filmState.currentAction.type);
-    confirmBtn.textContent = 'LOG THIS ACTION';
-    confirmBtn.onclick = filmConfirmAction;
-
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'film-add-cancel-btn';
-    cancelBtn.textContent = 'Cancel';
-    cancelBtn.onclick = () => { filmState.addingAction = false; renderFilmStep(); };
-
-    form.appendChild(confirmBtn);
-    form.appendChild(cancelBtn);
-    addSection.appendChild(form);
+    const confirmBtn=document.createElement('button'); confirmBtn.className='film-add-confirm-btn'; confirmBtn.disabled=!(filmState.currentAction.minute&&filmState.currentAction.type); confirmBtn.textContent='LOG THIS ACTION'; confirmBtn.onclick=filmConfirmAction;
+    const cancelBtn=document.createElement('button'); cancelBtn.className='film-add-cancel-btn'; cancelBtn.textContent='Cancel'; cancelBtn.onclick=()=>{ filmState.addingAction=false; renderFilmStep(); };
+    form.appendChild(confirmBtn); form.appendChild(cancelBtn); addSection.appendChild(form);
   }
   content.appendChild(addSection);
-
-  // Bottom nav
-  const navRow = document.createElement('div');
-  navRow.style.cssText = 'display:flex;gap:10px;margin-top:8px;';
-  const backBtn = document.createElement('button');
-  backBtn.className = 'film-add-cancel-btn';
-  backBtn.style.marginTop = '0';
-  backBtn.textContent = '← Back';
-  backBtn.onclick = () => { filmState.step = 'setup'; filmState.addingAction = false; renderFilmStep(); };
-
-  const wrapBtn = document.createElement('button');
-  wrapBtn.className = 'film-submit-btn';
-  wrapBtn.style.cssText = 'flex:2;margin-top:0;padding:14px;font-size:18px;';
-  wrapBtn.disabled = filmState.actions.length < 10;
-  wrapBtn.textContent = filmState.actions.length < 10
-    ? `LOG ${10 - filmState.actions.length} MORE TO WRAP UP`
-    : 'WRAP UP SESSION →';
-  wrapBtn.onclick = () => { filmState.step = 'reflection'; renderFilmStep(); };
-  navRow.appendChild(backBtn);
-  navRow.appendChild(wrapBtn);
-  content.appendChild(navRow);
+  const navRow=document.createElement('div'); navRow.style.cssText='display:flex;gap:10px;margin-top:8px;';
+  const backBtn=document.createElement('button'); backBtn.className='film-add-cancel-btn'; backBtn.style.marginTop='0'; backBtn.textContent='← Back'; backBtn.onclick=()=>{ filmState.step='setup'; filmState.addingAction=false; renderFilmStep(); };
+  const wrapBtn=document.createElement('button'); wrapBtn.className='film-submit-btn'; wrapBtn.style.cssText='flex:2;margin-top:0;padding:14px;font-size:18px;'; wrapBtn.disabled=filmState.actions.length<10; wrapBtn.textContent=filmState.actions.length<10?`LOG ${10-filmState.actions.length} MORE TO WRAP UP`:'WRAP UP SESSION →'; wrapBtn.onclick=()=>{ filmState.step='reflection'; renderFilmStep(); };
+  navRow.appendChild(backBtn); navRow.appendChild(wrapBtn); content.appendChild(navRow);
 }
-
-function filmDeleteAction(idx) {
-  filmState.actions.splice(idx, 1);
-  renderFilmStep();
-}
-
+function filmDeleteAction(idx) { filmState.actions.splice(idx,1); renderFilmStep(); }
 function filmConfirmAction() {
   const a = filmState.currentAction;
-  if (!a.minute || !a.type) return;
-  filmState.actions.push({
-    minute: parseInt(a.minute),
-    type: a.type,
-    followups: { ...a.followups },
-    freeText: a.freeText || ''
-  });
-  filmState.addingAction = false;
-  filmState.currentAction = { minute: '', type: '', followups: {}, freeText: '' };
-  renderFilmStep();
+  if (!a.minute||!a.type) return;
+  filmState.actions.push({ minute:parseInt(a.minute), type:a.type, followups:{...a.followups}, freeText:a.freeText||'' });
+  filmState.addingAction=false; filmState.currentAction={ minute:'', type:'', followups:{}, freeText:'' }; renderFilmStep();
 }
 
-// ── Step 4: Reflection ──
 function renderFilmReflectionStep(content) {
-  const card = document.createElement('div');
-  card.className = 'film-card';
-  card.innerHTML = `<div class="film-card-title">WRAP UP</div>`;
-
-  // Post ratings
-  const qs = filmState.sessionType === 'pro' ? FILM_POST_QUESTIONS_PRO : FILM_POST_QUESTIONS_OWN;
-  const preQs = filmState.sessionType === 'pro' ? FILM_PRE_QUESTIONS_PRO : FILM_PRE_QUESTIONS_OWN;
-
-  // Show delta context
-  const deltaEl = document.createElement('div');
-  deltaEl.style.cssText = 'margin-bottom:16px;padding:12px 14px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;';
-  deltaEl.innerHTML = `<div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>`;
-  preQs.forEach(pq => {
-    const preVal = filmState.preRatings[pq.id];
-    const postVal = filmState.postRatings[pq.id];
-    if (preVal === undefined) return;
-    const deltaRow = document.createElement('div');
-    deltaRow.className = 'film-delta-row';
-    deltaRow.innerHTML = `
-      <div class="film-delta-label">${pq.q.split('?')[0]}</div>
-      <div class="film-delta-before">${pq.emojis[preVal]}</div>
-      <div class="film-delta-arrow">→</div>
-      <div class="film-delta-after">${postVal !== undefined ? pq.emojis[postVal] : '?'}</div>
-    `;
-    deltaEl.appendChild(deltaRow);
+  const card = document.createElement('div'); card.className='film-card'; card.innerHTML='<div class="film-card-title">WRAP UP</div>';
+  const preQs = filmState.sessionType==='pro' ? FILM_PRE_QUESTIONS_PRO : FILM_PRE_QUESTIONS_OWN;
+  const postQs = filmState.sessionType==='pro' ? FILM_POST_QUESTIONS_PRO : FILM_POST_QUESTIONS_OWN;
+  const deltaEl=document.createElement('div'); deltaEl.style.cssText='margin-bottom:16px;padding:12px 14px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;';
+  deltaEl.innerHTML='<div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>';
+  preQs.forEach(pq=>{
+    const preVal=filmState.preRatings[pq.id]; const postVal=filmState.postRatings[pq.id]; if(preVal===undefined) return;
+    const dr=document.createElement('div'); dr.className='film-delta-row';
+    dr.innerHTML=`<div class="film-delta-label">${pq.q.split('?')[0]}</div><div class="film-delta-before">${pq.emojis[preVal]}</div><div class="film-delta-arrow">→</div><div class="film-delta-after">${postVal!==undefined?pq.emojis[postVal]:'?'}</div>`;
+    deltaEl.appendChild(dr);
   });
   card.appendChild(deltaEl);
-
-  qs.forEach(q => {
-    const row = document.createElement('div');
-    row.className = 'film-rating-row';
-    row.innerHTML = `<div class="film-rating-q">${q.q}</div>
-      <div class="film-emoji-row">
-        ${q.emojis.map((e,i) => `
-          <button class="film-emoji-btn${filmState.postRatings[q.id]===i?' selected':''}"
-            onclick="filmSetPostRating('${q.id}',${i})">
-            ${e}<span>${q.labels[i]}</span>
-          </button>
-        `).join('')}
-      </div>`;
+  postQs.forEach(q=>{
+    const row=document.createElement('div'); row.className='film-rating-row';
+    row.innerHTML=`<div class="film-rating-q">${q.q}</div><div class="film-emoji-row">`+q.emojis.map((e,i)=>`<button class="film-emoji-btn${filmState.postRatings[q.id]===i?' selected':''}" onclick="filmSetPostRating('${q.id}',${i})">${e}<span>${q.labels[i]}</span></button>`).join('')+'</div>';
     card.appendChild(row);
   });
-
   content.appendChild(card);
-
-  // Reflection prompts
-  const refCard = document.createElement('div');
-  refCard.className = 'film-card';
-  refCard.innerHTML = `<div class="film-card-title">REFLECTION</div>`;
-
-  const bestField = document.createElement('div');
-  bestField.className = 'film-field';
-  const bestLabel = filmState.sessionType === 'own'
-    ? 'What was the best thing about your session today?'
-    : `What was the best thing about ${filmState.trackedPlayer}'s game?`;
-  bestField.innerHTML = `
-    <label class="film-field-label">${bestLabel}</label>
-    <textarea class="film-textarea" placeholder="Be specific — what stood out?"
-      oninput="filmState.reflections.best=this.value">${filmState.reflections.best||''}</textarea>
-  `;
-  refCard.appendChild(bestField);
-
-  const improveField = document.createElement('div');
-  improveField.className = 'film-field';
-  const improveLabel = filmState.sessionType === 'own'
-    ? 'One thing you\'d do differently next time?'
-    : `One thing ${filmState.trackedPlayer} could work on?`;
-  improveField.innerHTML = `
-    <label class="film-field-label">${improveLabel}</label>
-    <textarea class="film-textarea" placeholder="One specific thing..."
-      oninput="filmState.reflections.improve=this.value">${filmState.reflections.improve||''}</textarea>
-  `;
-  refCard.appendChild(improveField);
-
-  if (filmState.sessionType === 'own') {
-    const nextField = document.createElement('div');
-    nextField.className = 'film-field';
-    nextField.innerHTML = `
-      <label class="film-field-label">What do you want to focus on in your next session?</label>
-      <textarea class="film-textarea" placeholder="Specific skill, movement, or habit..."
-        oninput="filmState.reflections.next=this.value">${filmState.reflections.next||''}</textarea>
-    `;
-    refCard.appendChild(nextField);
+  const refCard=document.createElement('div'); refCard.className='film-card'; refCard.innerHTML='<div class="film-card-title">REFLECTION</div>';
+  const bestLabel = filmState.sessionType==='own' ? 'What was the best thing about your session today?' : `What was the best thing about ${filmState.trackedPlayer}\'s game?`;
+  const impLabel = filmState.sessionType==='own' ? "One thing you\'d do differently next time?" : `One thing ${filmState.trackedPlayer} could work on?`;
+  const bestF=document.createElement('div'); bestF.className='film-field'; bestF.innerHTML=`<label class="film-field-label">${bestLabel}</label><textarea class="film-textarea" placeholder="Be specific — what stood out?" oninput="filmState.reflections.best=this.value">${filmState.reflections.best||''}</textarea>`; refCard.appendChild(bestF);
+  const impF=document.createElement('div'); impF.className='film-field'; impF.innerHTML=`<label class="film-field-label">${impLabel}</label><textarea class="film-textarea" placeholder="One specific thing..." oninput="filmState.reflections.improve=this.value">${filmState.reflections.improve||''}</textarea>`; refCard.appendChild(impF);
+  if (filmState.sessionType==='own') {
+    const nxtF=document.createElement('div'); nxtF.className='film-field'; nxtF.innerHTML=`<label class="film-field-label">What do you want to focus on in your next session?</label><textarea class="film-textarea" placeholder="Specific skill, movement, or habit..." oninput="filmState.reflections.next=this.value">${filmState.reflections.next||''}</textarea>`; refCard.appendChild(nxtF);
   }
-
   content.appendChild(refCard);
-
-  // Nav
-  const navRow = document.createElement('div');
-  navRow.style.cssText = 'display:flex;gap:10px;margin-top:4px;';
-  const backBtn = document.createElement('button');
-  backBtn.className = 'film-add-cancel-btn';
-  backBtn.style.marginTop = '0';
-  backBtn.textContent = '← Back';
-  backBtn.onclick = () => { filmState.step = 'log'; renderFilmStep(); };
-
-  const submitBtn = document.createElement('button');
-  submitBtn.className = 'film-submit-btn';
-  submitBtn.style.cssText = 'flex:2;margin-top:0;padding:14px;font-size:18px;';
-  submitBtn.disabled = !filmCanSubmit();
-  submitBtn.textContent = 'SUBMIT SESSION';
-  submitBtn.onclick = filmSubmitSession;
-
-  navRow.appendChild(backBtn);
-  navRow.appendChild(submitBtn);
-  content.appendChild(navRow);
+  const navRow=document.createElement('div'); navRow.style.cssText='display:flex;gap:10px;margin-top:4px;';
+  const backBtn=document.createElement('button'); backBtn.className='film-add-cancel-btn'; backBtn.style.marginTop='0'; backBtn.textContent='← Back'; backBtn.onclick=()=>{ filmState.step='log'; renderFilmStep(); };
+  const submitBtn=document.createElement('button'); submitBtn.className='film-submit-btn'; submitBtn.style.cssText='flex:2;margin-top:0;padding:14px;font-size:18px;'; submitBtn.disabled=!filmCanSubmit(); submitBtn.textContent='SUBMIT SESSION'; submitBtn.onclick=filmSubmitSession;
+  navRow.appendChild(backBtn); navRow.appendChild(submitBtn); content.appendChild(navRow);
 }
-
-function filmSetPostRating(id, val) {
-  filmState.postRatings[id] = val;
-  renderFilmStep();
-}
-
+function filmSetPostRating(id,val) { filmState.postRatings[id]=val; renderFilmStep(); }
 function filmCanSubmit() {
-  const qs = filmState.sessionType === 'pro' ? FILM_POST_QUESTIONS_PRO : FILM_POST_QUESTIONS_OWN;
-  return qs.every(q => filmState.postRatings[q.id] !== undefined)
-    && (filmState.reflections.best || '').trim().length > 0
-    && (filmState.reflections.improve || '').trim().length > 0;
+  const qs = filmState.sessionType==='pro' ? FILM_POST_QUESTIONS_PRO : FILM_POST_QUESTIONS_OWN;
+  return qs.every(q=>filmState.postRatings[q.id]!==undefined) && (filmState.reflections.best||'').trim().length>0 && (filmState.reflections.improve||'').trim().length>0;
 }
-
 async function filmSubmitSession() {
-  // Prevent double-submit
   if (filmState.submitted) return;
   filmState.submitted = true;
-
   const today = getTodayStr();
-  const payload = {
-    player: filmState.player,
-    date: today,
-    session_type: filmState.sessionType,
-    teams: filmState.teams.trim(),
-    tracked_player: filmState.trackedPlayer.trim(),
-    position: filmState.position,
-    pre_ratings: filmState.preRatings,
-    actions: filmState.actions,
-    post_ratings: filmState.postRatings,
-    reflections: filmState.reflections,
-    action_count: filmState.actions.length
-  };
-
-  // Upsert — if same player+date+teams already exists, update it instead of inserting
-  const existing = allFilmSessions.find(s =>
-    s.player === payload.player &&
-    s.date === payload.date &&
-    s.teams === payload.teams
-  );
-
+  const payload = { player:filmState.player, date:today, session_type:filmState.sessionType, teams:filmState.teams.trim(), tracked_player:filmState.trackedPlayer.trim(), position:filmState.position, pre_ratings:filmState.preRatings, actions:filmState.actions, post_ratings:filmState.postRatings, reflections:filmState.reflections, action_count:filmState.actions.length };
+  const existing = allFilmSessions.find(s => s.player===payload.player && s.date===payload.date && s.teams===payload.teams);
   let result;
   if (existing) {
-    result = await sbFetch('film_sessions?id=eq.' + existing.id, {
-      method: 'PATCH',
-      body: JSON.stringify(payload)
-    });
+    result = await sbFetch('film_sessions?id=eq.'+existing.id, { method:'PATCH', body:JSON.stringify(payload) });
   } else {
-    result = await sbFetch('film_sessions', {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
+    result = await sbFetch('film_sessions', { method:'POST', body:JSON.stringify(payload) });
   }
-
   if (result !== null) {
     showToast('🎬 Session saved!');
     await loadFilmSessions();
-    // Navigate to landing and show confirmation
-    document.getElementById('film-view').style.display = 'none';
-    document.getElementById('landing').style.display = 'flex';
-    renderFilmLandingCount();
-    renderLandingCards();
-    showToast('🎬 Session saved!');
+    document.getElementById('film-view').style.display='none';
+    document.getElementById('landing').style.display='flex';
+    renderFilmLandingCount(); renderLandingCards();
   } else {
     filmState.submitted = false;
     showToast('⚠ Save failed — check connection');
   }
 }
 
-// ── Past Sessions List ──
 function renderFilmSessionsList() {
-  const el = document.getElementById('film-sessions-content');
-  el.innerHTML = '';
-
-  if (allFilmSessions.length === 0) {
-    el.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:2px;">No sessions yet. Log your first game.</div>`;
-    return;
-  }
-
-  // Group by player
-  const byPlayer = {};
-  allFilmSessions.forEach(s => {
-    if (!byPlayer[s.player]) byPlayer[s.player] = [];
-    byPlayer[s.player].push(s);
-  });
-
-  Object.entries(byPlayer).forEach(([player, sessions]) => {
-    const pname = player.charAt(0).toUpperCase() + player.slice(1);
-    const pData = PLAYERS[player];
-    const color = pData ? pData.accent : '#a78bfa';
-
-    const section = document.createElement('div');
-    section.style.marginBottom = '24px';
-    section.innerHTML = `<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:${color};margin-bottom:10px;">${pname}</div>`;
-
-    sessions.forEach(s => {
-      const card = document.createElement('div');
-      card.className = 'film-session-card';
-      card.innerHTML = `
-        <div class="film-session-top">
-          <div class="film-session-teams">${s.teams}</div>
-          <div class="film-session-date">${formatDate(s.date)}</div>
-        </div>
-        <div class="film-session-meta">
-          <span class="film-session-tag${s.session_type==='own'?' own-session':''}">${s.session_type==='own'?'My Session':'Pro Game'}</span>
-          <span class="film-session-tag">${s.tracked_player}</span>
-          <span class="film-session-tag">${s.position}</span>
-          <span class="film-session-tag">${s.action_count} actions</span>
-        </div>
-      `;
-      card.onclick = () => openFilmSessionDetail(s);
-      section.appendChild(card);
+  const el=document.getElementById('film-sessions-content'); el.innerHTML='';
+  if (allFilmSessions.length===0) { el.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:2px;">No sessions yet. Log your first game.</div>'; return; }
+  const byPlayer={};
+  allFilmSessions.forEach(s=>{ if(!byPlayer[s.player]) byPlayer[s.player]=[]; byPlayer[s.player].push(s); });
+  Object.entries(byPlayer).forEach(([player,sessions])=>{
+    const pname=player.charAt(0).toUpperCase()+player.slice(1);
+    const pData=PLAYERS[player]; const color=pData?pData.accent:'#a78bfa';
+    const section=document.createElement('div'); section.style.marginBottom='24px';
+    section.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:${color};margin-bottom:10px;">${pname}</div>`;
+    sessions.forEach(s=>{
+      const card=document.createElement('div'); card.className='film-session-card';
+      card.innerHTML=`<div class="film-session-top"><div class="film-session-teams">${s.teams}</div><div class="film-session-date">${formatDate(s.date)}</div></div><div class="film-session-meta"><span class="film-session-tag${s.session_type==='own'?' own-session':''}">${s.session_type==='own'?'My Session':'Pro Game'}</span><span class="film-session-tag">${s.tracked_player}</span><span class="film-session-tag">${s.position}</span><span class="film-session-tag">${s.action_count} actions</span></div>`;
+      card.onclick=()=>openFilmSessionDetail(s); section.appendChild(card);
     });
-
     el.appendChild(section);
   });
 }
 
 function openFilmSessionDetail(s) {
-  const overlay = document.getElementById('film-detail-overlay');
-  const box = document.getElementById('film-detail-box');
-  overlay.classList.add('open');
-
-  // Build pre/post delta
-  const preQs = s.session_type === 'pro' ? FILM_PRE_QUESTIONS_PRO : FILM_PRE_QUESTIONS_OWN;
-  const postQs = s.session_type === 'pro' ? FILM_POST_QUESTIONS_PRO : FILM_POST_QUESTIONS_OWN;
-
-  const deltaRows = preQs.map(q => {
-    const pre = s.pre_ratings?.[q.id];
-    const post = s.post_ratings?.[q.id];
-    if (pre === undefined) return '';
-    return `<div class="film-delta-row">
-      <div class="film-delta-label">${q.q.split('?')[0]}</div>
-      <div class="film-delta-before">${q.emojis[pre]}</div>
-      <div class="film-delta-arrow">→</div>
-      <div class="film-delta-after">${post !== undefined ? q.emojis[post] : '?'}</div>
-    </div>`;
-  }).join('');
-
-  const actions = (s.actions || []).sort((a,b) => (a.minute||0)-(b.minute||0));
-  const actionRows = actions.map(a => {
-    const details = Object.values(a.followups||{}).filter(Boolean).join(' · ');
-    return `<div class="film-detail-action-row">
-      <div class="film-detail-min">${a.minute}'</div>
-      <div class="film-detail-action-info">
-        <div class="film-detail-action-type">${a.type}</div>
-        ${details ? `<div class="film-detail-action-notes">${details}</div>` : ''}
-        ${a.freeText ? `<div class="film-detail-action-notes" style="color:rgba(255,255,255,0.5);font-style:italic;">"${a.freeText}"</div>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-
-  const ref = s.reflections || {};
-
-  box.innerHTML = `
-    <button class="film-detail-close" onclick="closeFilmSessionDetail()">← Back</button>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px;">${s.teams}</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">${formatDate(s.date)} · ${s.tracked_player} · ${s.position}</div>
-
-    ${deltaRows ? `
-      <div style="margin-bottom:16px;padding:12px 14px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>
-        ${deltaRows}
-      </div>` : ''}
-
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">${actions.length} Actions</div>
-    ${actionRows}
-
-    ${ref.best || ref.improve || ref.next ? `
-      <div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;">
-        ${ref.best ? `<div style="margin-bottom:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Best Thing</div><div style="font-size:13px;color:var(--text);line-height:1.5;">${ref.best}</div></div>` : ''}
-        ${ref.improve ? `<div style="margin-bottom:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;margin-bottom:4px;">Work On</div><div style="font-size:13px;color:var(--text);line-height:1.5;">${ref.improve}</div></div>` : ''}
-        ${ref.next ? `<div><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#22c55e;text-transform:uppercase;margin-bottom:4px;">Next Session Focus</div><div style="font-size:13px;color:var(--text);line-height:1.5;">${ref.next}</div></div>` : ''}
-      </div>` : ''}
-  `;
+  const overlay=document.getElementById('film-detail-overlay'); const box=document.getElementById('film-detail-box'); overlay.classList.add('open');
+  const preQs=s.session_type==='pro'?FILM_PRE_QUESTIONS_PRO:FILM_PRE_QUESTIONS_OWN;
+  const deltaRows=preQs.map(q=>{ const pre=s.pre_ratings?.[q.id]; const post=s.post_ratings?.[q.id]; if(pre===undefined) return ''; return `<div class="film-delta-row"><div class="film-delta-label">${q.q.split('?')[0]}</div><div class="film-delta-before">${q.emojis[pre]}</div><div class="film-delta-arrow">→</div><div class="film-delta-after">${post!==undefined?q.emojis[post]:'?'}</div></div>`; }).join('');
+  const actions=(s.actions||[]).sort((a,b)=>(a.minute||0)-(b.minute||0));
+  const actionRows=actions.map(a=>{ const details=Object.values(a.followups||{}).filter(Boolean).join(' · '); return `<div class="film-detail-action-row"><div class="film-detail-min">${a.minute}'</div><div class="film-detail-action-info"><div class="film-detail-action-type">${a.type}</div>${details?'<div class="film-detail-action-notes">'+details+'</div>':''}${a.freeText?'<div class="film-detail-action-notes" style="color:rgba(255,255,255,0.5);font-style:italic;">"'+a.freeText+'"</div>':''}</div></div>`; }).join('');
+  const ref=s.reflections||{};
+  box.innerHTML=`<button class="film-detail-close" onclick="closeFilmSessionDetail()">← Back</button><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:4px;">${s.teams}</div><div style="font-size:12px;color:var(--muted);margin-bottom:16px;">${formatDate(s.date)} · ${s.tracked_player} · ${s.position}</div>${deltaRows?'<div style="margin-bottom:16px;padding:12px 14px;background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:rgba(167,139,250,0.6);text-transform:uppercase;margin-bottom:8px;">Before vs After</div>'+deltaRows+'</div>':''}<div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">${actions.length} Actions</div>${actionRows}${ref.best||ref.improve||ref.next?'<div style="margin-top:16px;padding:14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;">'+(ref.best?'<div style="margin-bottom:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#a78bfa;text-transform:uppercase;margin-bottom:4px;">Best Thing</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.best+'</div></div>':'')+(ref.improve?'<div style="margin-bottom:10px;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;margin-bottom:4px;">Work On</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.improve+'</div></div>':'')+(ref.next?'<div><div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:#22c55e;text-transform:uppercase;margin-bottom:4px;">Next Session Focus</div><div style="font-size:13px;color:var(--text);line-height:1.5;">'+ref.next+'</div></div>':'')+'</div>':''}`;
 }
+function closeFilmSessionDetail() { document.getElementById('film-detail-overlay').classList.remove('open'); }
 
-function closeFilmSessionDetail() {
-  document.getElementById('film-detail-overlay').classList.remove('open');
-}
-
-// ═══════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
   ['caysen','emmitt','madden'].forEach(p => seedMay1(p));
   seedV1Records();
