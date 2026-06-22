@@ -2674,16 +2674,18 @@ function getMotivationalLine(completedCount) {
 }
 
 function calcStreak(completions) {
+  // Streak = total days logged since program start (May 1 2026)
+  // Gaps from travel/rest don't break it — every logged day counts
+  const STREAK_START = '2026-05-01';
   const dates = new Set(completions.map(c => c.date));
   const todayStr = localDateStr(new Date());
-  // If today isn't done yet, start counting from yesterday so streak stays alive
-  const startOffset = dates.has(todayStr) ? 0 : 1;
+
+  // Count every date from program start through today that has a completion
   let streak = 0;
-  for (let i = startOffset; i < 100; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
+  const start = new Date(STREAK_START);
+  const end = new Date(todayStr);
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
     if (dates.has(localDateStr(d))) streak++;
-    else break;
   }
   return streak;
 }
