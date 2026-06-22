@@ -2740,6 +2740,14 @@ async function renderLandingCards() {
     const motiveEl = document.getElementById('motive-line');
     if (motiveEl) motiveEl.textContent = getMotivationalLine(completedToday);
 
+    // Prize board has data now — render it
+    dbJuggles = allJuggles;
+    renderPrizeBoard();
+
+    // Run 1v1 audit silently
+    dbCompletions = allComp;
+    auditV1Records();
+
   } catch(e) {
     console.warn('Landing card render error:', e);
     const motiveEl = document.getElementById('motive-line');
@@ -6992,7 +7000,7 @@ const SKILL_MOVES = [
 ];
 
 // Week number since the program started (May 5 2026 = week 1)
-const PROGRAM_START = new Date('2026-05-05');
+const PROGRAM_START = new Date('2026-04-28');
 function getProgramWeekNum() {
   const now = new Date();
   const diffMs = now - PROGRAM_START;
@@ -7326,6 +7334,93 @@ function resetSkillOverride() {
   setSkillOverride(null);
   renderSkillCard();
   showToast('✓ Back to auto');
+}
+
+
+// ═══════════════════════════════════════════════
+// 1V1 SELF-HEALING AUDIT
+// Runs silently on every load — fixes mirrors, gaps, double-results
+// ═══════════════════════════════════════════════
+async function auditV1Records() {
+  // Load all completions for caysen + emmitt
+  const all = dbCompletions.filter(c => c.player === 'caysen' || c.player === 'emmitt');
+  
+  // Build map by date
+  const byDate = {};
+  all.forEach(c => {
+    if (!byDate[c.date]) byDate[c.date] = {};
+    byDate[c.date][c.player] = c;
+  });
+
+  const fixes = [];
+
+  Object.entries(byDate).forEach(([date, players]) => {
+    const c = players['caysen'];
+    const e = players['emmitt'];
+    const cw = c ? (c.v1_wins || 0) : null;
+    const cl = c ? (c.v1_losses || 0) : null;
+    const ew = e ? (e.v1_wins || 0) : null;
+    const el = e ? (e.v1_losses || 0) : null;
+
+    // Skip days with no 1v1 data
+    if (cw === 0 && cl === 0 && ew === 0 && el === 0) return;
+    if (cw === null && ew === 0 && el === 0) return;
+    if (ew === null && cw === 0 && cl === 0) return;
+
+    // Fix: player has both win AND loss — strip the win
+    if (cw === 1 && cl === 1) {
+      fixes.push({ player: 'caysen', date, v1_wins: 0, v1_losses: 1, reason: 'caysen had both W+L' });
+    }
+    if (ew === 1 && el === 1) {
+      fixes.push({ player: 'emmitt', date, v1_wins: 0, v1_losses: 1, reason: 'emmitt had both W+L' });
+    }
+
+    // Re-read after potential fix above
+    const fcw = fixes.find(f => f.player==='caysen' && f.date===date)?.v1_wins ?? cw;
+    const fcl = fixes.find(f => f.player==='caysen' && f.date===date)?.v1_losses ?? cl;
+    const few = fixes.find(f => f.player==='emmitt' && f.date===date)?.v1_wins ?? ew;
+    const fel = fixes.find(f => f.player==='emmitt' && f.date===date)?.v1_losses ?? el;
+
+    // Fix: both win — correct emmitt to loss (caysen logged first by convention)
+    if (fcw === 1 && few === 1) {
+      fixes.push({ player: 'emmitt', date, v1_wins: 0, v1_losses: 1, reason: 'both won — corrected emmitt' });
+    }
+    // Fix: both lose — correct emmitt to win
+    if (fcl === 1 && fel === 1) {
+      fixes.push({ player: 'emmitt', date, v1_wins: 1, v1_losses: 0, reason: 'both lost — corrected emmitt' });
+    }
+
+    // Fix: caysen has result but emmitt missing — mirror
+    if (c && e && (ew === null || (ew === 0 && el === 0)) && (fcw === 1 || fcl === 1)) {
+      if (!fixes.find(f => f.player==='emmitt' && f.date===date)) {
+        fixes.push({ player: 'emmitt', date, v1_wins: fcw===1?0:1, v1_losses: fcw===1?1:0, reason: 'mirrored from caysen' });
+      }
+    }
+    // Fix: emmitt has result but caysen missing — mirror
+    if (e && c && (cw === null || (cw === 0 && cl === 0)) && (few === 1 || fel === 1)) {
+      if (!fixes.find(f => f.player==='caysen' && f.date===date)) {
+        fixes.push({ player: 'caysen', date, v1_wins: few===1?0:1, v1_losses: few===1?1:0, reason: 'mirrored from emmitt' });
+      }
+    }
+  });
+
+  if (fixes.length === 0) return;
+
+  console.log('[1v1 audit] Fixing', fixes.length, 'records:', fixes);
+
+  // Apply fixes silently
+  for (const fix of fixes) {
+    const row = dbCompletions.find(c => c.player === fix.player && c.date === fix.date);
+    if (row) {
+      await sbFetch('completions?player=eq.' + fix.player + '&date=eq.' + fix.date, {
+        method: 'PATCH',
+        body: JSON.stringify({ v1_wins: fix.v1_wins, v1_losses: fix.v1_losses })
+      });
+      // Update local cache
+      row.v1_wins = fix.v1_wins;
+      row.v1_losses = fix.v1_losses;
+    }
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -7688,8 +7783,8 @@ window.addEventListener('DOMContentLoaded', () => {
   renderLandingCards();
   renderMonthlyOverview();
   renderFilmLandingCount();
-  renderPrizeBoard();
   renderSkillCard();
+  // Prize board needs juggle data — rendered after loadAllData
 });
 </script>
 </body>
