@@ -2979,15 +2979,67 @@ async function loadAllData() {
 }
 
 async function saveCompletion(player, date, plan, juggleCount, v1wins, v1losses, movesChecked) {
+  // Cap at 1 win or 1 loss per day — no doubles
+  const safeWins   = v1wins   > 0 ? 1 : 0;
+  const safeLosses = v1losses > 0 ? 1 : 0;
+
+  // Auto-mirror: Caysen and Emmitt are always head-to-head.
+  // If the opponent already has a result for this date, enforce the opposite.
+  const OPPONENTS = { caysen: 'emmitt', emmitt: 'caysen' };
+  const opponent = OPPONENTS[player];
+  if (opponent && (safeWins > 0 || safeLosses > 0)) {
+    const oppEntry = dbCompletions.find(c => c.player === opponent && c.date === date);
+    if (oppEntry && ((oppEntry.v1_wins || 0) + (oppEntry.v1_losses || 0)) > 0) {
+      // Opponent already submitted — mirror their result to this player
+      const oppWon = (oppEntry.v1_wins || 0) > 0;
+      const correctedWins   = oppWon ? 0 : 1;
+      const correctedLosses = oppWon ? 1 : 0;
+      if (correctedWins !== safeWins || correctedLosses !== safeLosses) {
+        // Silently correct and show toast so they know
+        setTimeout(() => showToast('↔ 1v1 result synced with ' + opponent.charAt(0).toUpperCase() + opponent.slice(1)), 600);
+        return sbFetch('completions', {
+          method: 'POST',
+          headers: { 'Prefer': 'resolution=merge-duplicates,return=representation' },
+          body: JSON.stringify({
+            player, date, plan,
+            juggle_count: juggleCount || 0,
+            v1_wins: correctedWins,
+            v1_losses: correctedLosses,
+            moves_checked: movesChecked
+          })
+        });
+      }
+    } else if (oppEntry && (safeWins > 0 || safeLosses > 0)) {
+      // This player submitted first — also write the mirror to the opponent row
+      const oppCurrentPlan = oppEntry.plan || plan;
+      sbFetch('completions', {
+        method: 'POST',
+        headers: { 'Prefer': 'resolution=merge-duplicates,return=representation' },
+        body: JSON.stringify({
+          player: opponent, date, plan: oppCurrentPlan,
+          juggle_count: oppEntry.juggle_count || 0,
+          v1_wins: safeWins > 0 ? 0 : 1,
+          v1_losses: safeWins > 0 ? 1 : 0,
+          moves_checked: oppEntry.moves_checked || {}
+        })
+      });
+      // Update local cache for opponent too
+      const oppIdx = dbCompletions.findIndex(c => c.player === opponent && c.date === date);
+      if (oppIdx !== -1) {
+        dbCompletions[oppIdx].v1_wins   = safeWins > 0 ? 0 : 1;
+        dbCompletions[oppIdx].v1_losses = safeWins > 0 ? 1 : 0;
+      }
+    }
+  }
+
   return sbFetch('completions', {
     method: 'POST',
-    prefer: 'resolution=merge-duplicates,return=representation',
     headers: { 'Prefer': 'resolution=merge-duplicates,return=representation' },
     body: JSON.stringify({
       player, date, plan,
       juggle_count: juggleCount || 0,
-      v1_wins: v1wins || 0,
-      v1_losses: v1losses || 0,
+      v1_wins: safeWins,
+      v1_losses: safeLosses,
       moves_checked: movesChecked
     })
   });
@@ -3387,8 +3439,9 @@ function toggleMove(phaseIdx, move, minRequired, label) {
 }
 
 function addV1Result(result) {
-  if (result === 'win') todayV1.wins++;
-  else todayV1.losses++;
+  // Cap at 1 win or 1 loss — head to head, one result per day
+  if (result === 'win') { todayV1.wins = 1; todayV1.losses = 0; }
+  else { todayV1.losses = 1; todayV1.wins = 0; }
   renderV1TodayScore();
   renderSubmitArea();
 }
