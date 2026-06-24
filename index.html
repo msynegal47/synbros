@@ -3232,11 +3232,20 @@ async function saveCompletion(player, date, plan, juggleCount, v1wins, v1losses,
 }
 
 async function saveJuggle(player, date, count) {
-  // Only save if this is a new PR or new date entry
-  const existing = dbJuggles.find(j => j.player === player && j.date === date);
-  if (existing) {
-    // Only update if higher than existing for this date
-    if (count > existing.count) {
+  // Always check Supabase directly — don't rely on local cache which may be stale
+  const rows = await sbFetch(`juggle_history?player=eq.${player}&date=eq.${date}`);
+  
+  if (rows && rows.length > 0) {
+    // Delete any duplicates first — keep only one row per player+date
+    if (rows.length > 1) {
+      await sbFetch(`juggle_history?player=eq.${player}&date=eq.${date}`, { method: 'DELETE' });
+      return sbFetch('juggle_history', {
+        method: 'POST',
+        body: JSON.stringify({ player, date, count })
+      });
+    }
+    // Update only if new count is higher
+    if (count > rows[0].count) {
       return sbFetch(`juggle_history?player=eq.${player}&date=eq.${date}`, {
         method: 'PATCH',
         body: JSON.stringify({ count })
@@ -3244,6 +3253,7 @@ async function saveJuggle(player, date, count) {
     }
     return; // lower count — don't overwrite
   }
+  // No existing row — insert fresh
   return sbFetch('juggle_history', {
     method: 'POST',
     body: JSON.stringify({ player, date, count })
