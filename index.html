@@ -1625,6 +1625,14 @@
     display: block;
     box-shadow: 0 0 60px rgba(0,0,0,0.8);
   }
+  .share-img-preview {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    display: block;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    -webkit-touch-callout: default;
+  }
 
   .share-actions {
     display: flex;
@@ -2229,6 +2237,18 @@
   </div>
 </div>
 
+<!-- PR CARD OVERLAY -->
+<div class="share-overlay" id="pr-card-overlay">
+  <div class="share-card-wrap" id="pr-canvas-wrap">
+    <canvas id="pr-canvas" width="1080" height="1920"></canvas>
+  </div>
+  <div class="share-actions">
+    <button class="share-action-btn" onclick="closePRCard()">✕ Close</button>
+    <button class="share-action-btn primary" style="background:#facc15;color:#000;" onclick="copyShareCaption('pr')">📋 Copy Caption</button>
+  </div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;text-align:center;">Hold image to save to camera roll</div>
+</div>
+
 <!-- GAME FILM — Main logging view -->
 <div id="film-view">
   <div class="film-header">
@@ -2353,27 +2373,27 @@
 
 <!-- SHARE OVERLAY — Individual player -->
 <div class="share-overlay" id="share-overlay">
-  <div class="share-card-wrap">
-    <canvas id="share-canvas" width="680" height="1208"></canvas>
+  <div class="share-card-wrap" id="share-canvas-wrap">
+    <canvas id="share-canvas" width="1080" height="1920"></canvas>
   </div>
   <div class="share-actions">
     <button class="share-action-btn" onclick="closeShareCard()">✕ Close</button>
-    <button class="share-action-btn primary" onclick="downloadShareCard()">↓ Save Image</button>
+    <button class="share-action-btn primary" onclick="copyShareCaption('player')" id="caption-copy-btn">📋 Copy Caption</button>
   </div>
-  <div style="font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:2px;text-transform:uppercase;">Long-press image to save on mobile</div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;text-align:center;">Hold image to save to camera roll</div>
 </div>
 
 <!-- PROGRAM SHARE OVERLAY — Weekly + Total family card -->
 <div class="share-overlay" id="program-share-overlay">
   <div id="program-share-week-selector" style="width:min(340px,calc(100vw - 32px));margin:0 auto;"></div>
-  <div class="share-card-wrap">
-    <canvas id="program-share-canvas" width="680" height="1208"></canvas>
+  <div class="share-card-wrap" id="program-share-canvas-wrap">
+    <canvas id="program-share-canvas" width="1080" height="1920"></canvas>
   </div>
   <div class="share-actions">
     <button class="share-action-btn" onclick="closeProgramShareCard()">✕ Close</button>
-    <button class="share-action-btn primary" style="background:#4fc3f7" onclick="downloadProgramShareCard()">↓ Save Image</button>
+    <button class="share-action-btn primary" style="background:#4fc3f7" onclick="copyShareCaption('program')" id="prog-caption-btn">📋 Copy Caption</button>
   </div>
-  <div style="font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:2px;text-transform:uppercase;">Long-press to save on mobile</div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase;text-align:center;">Hold image to save to camera roll</div>
 </div>
 
 <script>
@@ -2752,6 +2772,7 @@ async function renderLandingCards() {
     // Run 1v1 audit silently
     dbCompletions = allComp;
     auditV1Records();
+    checkWeeklySharePrompt();
 
   } catch(e) {
     console.warn('Landing card render error:', e);
@@ -4106,7 +4127,7 @@ function renderParentDashboard() {
     <div class="player-overview-grid">
       ${playerCards.map(({id, p, completedDates, jugglePR, wins, losses, streak}) => `
         <div class="player-overview-card" style="border-color:${p.accent}55;background:#0f1724;"
-          onclick="parentViewPlayer('${id}')">
+          onclick="parentViewPlayer('${id}')" ondblclick="openPlayerShareCard('${id}')">
           <div style="font-family:Bebas Neue,sans-serif;font-size:26px;letter-spacing:2px;color:${p.accent};margin-bottom:14px;">${p.name}</div>
           <div class="overview-stat">
             <span class="overview-stat-lbl">Days Completed</span>
@@ -5495,11 +5516,12 @@ function openShareCard() {
   overlay.classList.add('open');
   // Small delay ensures overlay is visible before canvas draws
   // so fonts and dimensions resolve correctly
-  setTimeout(drawShareCard, 80);
+  setTimeout(() => { drawShareCard(); setTimeout(() => injectSharePreview('share-canvas','share-canvas-wrap'), 200); }, 80);
 }
 
 function closeShareCard() {
   document.getElementById('share-overlay').classList.remove('open');
+  resetSharePreview('share-canvas','share-canvas-wrap');
 }
 
 function drawShareCard() {
@@ -6375,12 +6397,13 @@ function openProgramShareCard() {
   // Always load fresh data before drawing — ensures weekly filter has real records
   loadAllData().then(() => {
     renderProgramShareUI();
-    setTimeout(drawProgramShareCard, 80);
+    setTimeout(() => { drawProgramShareCard(); setTimeout(() => injectSharePreview('program-share-canvas','program-share-canvas-wrap'), 200); }, 80);
   });
 }
 
 function closeProgramShareCard() {
   document.getElementById('program-share-overlay').classList.remove('open');
+  resetSharePreview('program-share-canvas','program-share-canvas-wrap');
 }
 
 function downloadProgramShareCard() {
@@ -6535,9 +6558,9 @@ function buildPlayerShareData(filterDates) {
 function drawWeeklyShareCard(week) {
   const canvas = document.getElementById('program-share-canvas');
   const ctx = canvas.getContext('2d');
-  const W = 680, H = 1208;
+  const W = 1080, H = 1920;
   canvas.width = W; canvas.height = H;
-  const PAD = 48;
+  const PAD = 72;
 
   const weekDates = new Set(getWeekDays(week));
   const playerData = buildPlayerShareData(weekDates);
@@ -6774,9 +6797,9 @@ function drawWeeklyShareCard(week) {
 function drawTotalShareCard() {
   const canvas = document.getElementById('program-share-canvas');
   const ctx = canvas.getContext('2d');
-  const W = 680, H = 1208;
+  const W = 1080, H = 1920;
   canvas.width = W; canvas.height = H;
-  const PAD = 44;
+  const PAD = 64;
 
   const playerData = buildPlayerShareData(null);
   const combinedTouches = playerData.reduce((s,pd)=>s+pd.totalTouches,0);
@@ -7520,6 +7543,418 @@ async function auditV1Records() {
       row.v1_wins = fix.v1_wins;
       row.v1_losses = fix.v1_losses;
     }
+  }
+}
+
+
+// ═══════════════════════════════════════════════
+// SHARE CARD ENHANCEMENTS
+// iOS save fix, caption copy, PR card, player cards, weekly prompt
+// ═══════════════════════════════════════════════
+
+// ── After drawing any canvas, inject a long-pressable img for iOS ──
+function injectSharePreview(canvasId, wrapId) {
+  const canvas = document.getElementById(canvasId);
+  const wrap = document.getElementById(wrapId);
+  if (!canvas || !wrap) return;
+  // Remove old preview if exists
+  const old = wrap.querySelector('.share-img-preview');
+  if (old) old.remove();
+  // Create img
+  const img = document.createElement('img');
+  img.className = 'share-img-preview';
+  img.src = canvas.toDataURL('image/png');
+  img.alt = 'Syn Bros share card';
+  // Hide canvas, show img
+  canvas.style.display = 'none';
+  wrap.appendChild(img);
+}
+
+// Reset canvas visibility when overlay closes
+function resetSharePreview(canvasId, wrapId) {
+  const canvas = document.getElementById(canvasId);
+  const wrap = document.getElementById(wrapId);
+  if (!canvas || !wrap) return;
+  canvas.style.display = 'block';
+  const old = wrap.querySelector('.share-img-preview');
+  if (old) old.remove();
+}
+
+// ── Caption copy ──
+const CAPTION_TEMPLATES = {
+  player: (name, streak, pr, v1Record) => {
+    const lines = [
+      `${streak} days in and we're not stopping. ${name} is locked in. 🔒`,
+      `Juggle PR: ${pr}. 1v1 record: ${v1Record}. The work shows.`,
+      `Homeschool, soccer, faith. God's got us. ✝️`,
+      `#SynBros #SummerGrind`,
+    ];
+    return lines.join('\n');
+  },
+  program: (touches, weeks) => {
+    const lines = [
+      `${touches.toLocaleString()} combined touches. ${weeks} weeks deep.`,
+      `Two bros, one mission. The grind doesn't stop. 🔥`,
+      `Homeschool + soccer + faith = everything. God's got us. ✝️`,
+      `#SynBros #SummerGrind #WorkCompeteDominate`,
+    ];
+    return lines.join('\n');
+  },
+  pr: (name, pr) => {
+    const lines = [
+      `NEW JUGGLE PR 🔥 ${name} just hit ${pr} juggles.`,
+      `That's what happens when you show up every single day.`,
+      `God's got us. ✝️`,
+      `#SynBros #NewPR #JuggleChallenge`,
+    ];
+    return lines.join('\n');
+  },
+};
+
+function copyShareCaption(type) {
+  let caption = '';
+  const pd = buildPlayerShareData(null);
+  const cPD = pd[0], ePD = pd[1];
+
+  if (type === 'player') {
+    const p = PLAYERS[currentPlayer];
+    const playerPD = pd.find(d => d.id === currentPlayer) || cPD;
+    caption = CAPTION_TEMPLATES.player(
+      p.name,
+      playerPD.streak,
+      playerPD.jugglePR,
+      playerPD.v1Wins + 'W-' + playerPD.v1Losses + 'L'
+    );
+  } else if (type === 'program') {
+    const combined = pd.reduce((s,d)=>s+d.totalTouches,0);
+    const weeks = getProgramWeekNum();
+    caption = CAPTION_TEMPLATES.program(combined, weeks);
+  } else if (type === 'pr') {
+    const p = PLAYERS[prCardPlayer];
+    const playerPD = pd.find(d=>d.id===prCardPlayer) || cPD;
+    caption = CAPTION_TEMPLATES.pr(p.name, prCardPR);
+  }
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(caption).then(() => {
+      showToast('📋 Caption copied!');
+      const btn = document.getElementById(
+        type==='player'?'caption-copy-btn':type==='program'?'prog-caption-btn':'pr-caption-btn'
+      );
+      if (btn) { btn.textContent = '✓ Copied!'; setTimeout(()=>{ btn.textContent='📋 Copy Caption'; },2000); }
+    });
+  } else {
+    // Fallback for older iOS
+    const ta = document.createElement('textarea');
+    ta.value = caption;
+    ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('📋 Caption copied!');
+  }
+}
+
+// ── PR Card ──
+let prCardPlayer = null;
+let prCardPR = 0;
+
+function triggerPRCard(player, pr) {
+  prCardPlayer = player;
+  prCardPR = pr;
+  drawPRCard(player, pr);
+  document.getElementById('pr-card-overlay').classList.add('open');
+  setTimeout(() => injectSharePreview('pr-canvas','pr-canvas-wrap'), 100);
+}
+
+function closePRCard() {
+  document.getElementById('pr-card-overlay').classList.remove('open');
+  resetSharePreview('pr-canvas','pr-canvas-wrap');
+}
+
+function drawPRCard(playerId, pr) {
+  const canvas = document.getElementById('pr-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1920;
+  canvas.width = W; canvas.height = H;
+  const PAD = 80;
+  const p = PLAYERS[playerId];
+
+  // Background
+  ctx.fillStyle = '#060a10'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=80){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Big glow
+  const g = ctx.createRadialGradient(W/2,H*0.4,0,W/2,H*0.4,600);
+  g.addColorStop(0, hexToRgba(p.accent, 0.25));
+  g.addColorStop(0.5, hexToRgba(p.accent, 0.08));
+  g.addColorStop(1, 'transparent');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  // Secondary glow bottom
+  const g2 = ctx.createRadialGradient(W/2,H*0.85,0,W/2,H*0.85,400);
+  g2.addColorStop(0, hexToRgba('#facc15', 0.12));
+  g2.addColorStop(1, 'transparent');
+  ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+
+  // Top bar
+  ctx.fillStyle=p.accent; ctx.fillRect(0,0,W,8);
+
+  // Header
+  ctx.textAlign='center';
+  ctx.fillStyle='rgba(255,255,255,0.2)';
+  ctx.font='700 20px Barlow Condensed, sans-serif'; ctx.letterSpacing='10px';
+  ctx.fillText('SYN BROS TRAINING', W/2, 70);
+
+  // NEW PR label
+  ctx.fillStyle=p.accent;
+  ctx.font='700 28px Barlow Condensed, sans-serif'; ctx.letterSpacing='14px';
+  ctx.fillText('NEW PERSONAL RECORD', W/2, 580);
+
+  // Big PR number
+  ctx.fillStyle='#ffffff';
+  ctx.font='400 380px Bebas Neue, sans-serif'; ctx.letterSpacing='-10px';
+  ctx.fillText(String(pr), W/2, 1020);
+
+  // Fire emoji
+  ctx.font='140px sans-serif'; ctx.letterSpacing='0';
+  ctx.fillText('🔥', W/2, 1160);
+
+  // JUGGLES label
+  ctx.fillStyle='rgba(255,255,255,0.3)';
+  ctx.font='700 28px Barlow Condensed, sans-serif'; ctx.letterSpacing='12px';
+  ctx.fillText('JUGGLES IN A ROW', W/2, 1240);
+
+  // Player name
+  ctx.fillStyle=p.accent;
+  ctx.font='400 110px Bebas Neue, sans-serif'; ctx.letterSpacing='4px';
+  ctx.fillText(p.name.toUpperCase(), W/2, 1400);
+
+  // Divider
+  ctx.fillStyle=`rgba(${p.accentRgb},0.3)`; ctx.fillRect(PAD,1430,W-PAD*2,2);
+
+  // Date
+  ctx.fillStyle='rgba(255,255,255,0.2)';
+  ctx.font='500 22px Barlow Condensed, sans-serif'; ctx.letterSpacing='4px';
+  const dateStr = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}).toUpperCase();
+  ctx.fillText(dateStr, W/2, 1480);
+
+  // Faith anchor
+  ctx.fillStyle='rgba(255,255,255,0.15)';
+  ctx.font='400 30px Bebas Neue, sans-serif'; ctx.letterSpacing='6px';
+  ctx.fillText("GOD'S GOT US  ✝", W/2, 1560);
+
+  // Hashtags
+  ctx.fillStyle='rgba(255,255,255,0.12)';
+  ctx.font='500 20px Barlow Condensed, sans-serif'; ctx.letterSpacing='3px';
+  ctx.fillText('#SynBros  #NewPR  #JuggleChallenge', W/2, 1620);
+
+  // Bottom bar
+  ctx.fillStyle=p.accent; ctx.fillRect(0,H-8,W,8);
+}
+
+// ── Inject PR card trigger into juggle save flow ──
+const _origSaveJuggle = saveJuggle;
+async function saveJuggle(player, date, count) {
+  const result = await _origSaveJuggle(player, date, count);
+  // Check if this is a new all-time PR
+  const today = getTodayStr();
+  if (date === today) {
+    const allJuggles = dbJuggles.filter(j=>j.player===player && j.date!==today);
+    const prevPR = allJuggles.reduce((m,j)=>Math.max(m,j.count),0);
+    if (count > prevPR && count > 10) {
+      // New PR — show card after short delay
+      setTimeout(() => triggerPRCard(player, count), 800);
+    }
+  }
+  return result;
+}
+
+// ── Individual player share cards ──
+function openPlayerShareCard(playerId) {
+  const p = PLAYERS[playerId];
+  const pd = buildPlayerShareData(null);
+  const playerPD = pd.find(d=>d.id===playerId);
+  if (!playerPD) return;
+  drawPlayerSummaryCard(playerId, playerPD);
+  document.getElementById('share-overlay').classList.add('open');
+  setTimeout(() => injectSharePreview('share-canvas','share-canvas-wrap'), 120);
+}
+
+function drawPlayerSummaryCard(playerId, playerPD) {
+  const canvas = document.getElementById('share-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1920;
+  canvas.width = W; canvas.height = H;
+  const PAD = 72;
+  const p = PLAYERS[playerId];
+  const { jugglePR, streak, totalTouches, v1Wins, v1Losses, completedDates } = playerPD;
+
+  // Background
+  ctx.fillStyle='#060a10'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
+  for(let x=0;x<W;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=80){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  [p.accent].forEach(c=>{
+    const g=ctx.createRadialGradient(W*0.8,H*0.1,0,W*0.8,H*0.1,600);
+    g.addColorStop(0,hexToRgba(c,0.2)); g.addColorStop(1,'transparent');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    const g2=ctx.createRadialGradient(W*0.2,H*0.7,0,W*0.2,H*0.7,500);
+    g2.addColorStop(0,hexToRgba(c,0.1)); g2.addColorStop(1,'transparent');
+    ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+  });
+
+  // Top bar
+  ctx.fillStyle=p.accent; ctx.fillRect(0,0,W,8);
+
+  // Header
+  ctx.textAlign='center';
+  ctx.fillStyle='rgba(255,255,255,0.2)';
+  ctx.font='700 20px Barlow Condensed, sans-serif'; ctx.letterSpacing='10px';
+  ctx.fillText('SYN BROS TRAINING', W/2, 68);
+
+  // Player name — huge
+  ctx.fillStyle=p.accent;
+  ctx.font='400 200px Bebas Neue, sans-serif'; ctx.letterSpacing='8px';
+  ctx.fillText(p.name.toUpperCase(), W/2, 360);
+
+  // Divider
+  ctx.fillStyle=`rgba(${p.accentRgb},0.3)`; ctx.fillRect(PAD,390,W-PAD*2,2);
+
+  // Big streak
+  ctx.textAlign='center';
+  ctx.fillStyle='#ffffff';
+  ctx.font='400 260px Bebas Neue, sans-serif'; ctx.letterSpacing='-5px';
+  ctx.fillText(String(streak), W/2-60, 680);
+  ctx.font='120px sans-serif'; ctx.letterSpacing='0';
+  ctx.fillText('🔥', W/2+160, 660);
+  ctx.fillStyle='rgba(255,255,255,0.25)';
+  ctx.font='700 24px Barlow Condensed, sans-serif'; ctx.letterSpacing='10px';
+  ctx.fillText('DAY STREAK', W/2, 726);
+
+  // 3 stat blocks
+  const statY = 800;
+  const statH = 220;
+  const statW = (W-PAD*2-32)/3;
+  const stats = [
+    { lbl:'TOUCHES', val: totalTouches>0?totalTouches.toLocaleString():'—' },
+    { lbl:'JUGGLE PR', val: String(jugglePR||'—') },
+    { lbl:'1V1 RECORD', val: v1Wins+'W' },
+  ];
+  stats.forEach((st,i)=>{
+    const sx = PAD + i*(statW+16);
+    roundRect(ctx,sx,statY,statW,statH,16);
+    ctx.fillStyle=`rgba(${p.accentRgb},0.08)`; ctx.fill();
+    ctx.strokeStyle=`rgba(${p.accentRgb},0.3)`; ctx.lineWidth=1; ctx.stroke();
+    ctx.textAlign='left'; ctx.fillStyle=p.accent;
+    ctx.font='400 72px Bebas Neue, sans-serif'; ctx.letterSpacing='0';
+    ctx.fillText(String(st.val), sx+20, statY+90);
+    ctx.fillStyle='rgba(255,255,255,0.3)';
+    ctx.font='600 16px Barlow Condensed, sans-serif'; ctx.letterSpacing='3px';
+    ctx.fillText(st.lbl, sx+20, statY+120);
+  });
+
+  // Juggle sparkline
+  const juggles = dbJuggles.filter(j=>j.player===playerId).sort((a,b)=>a.date.localeCompare(b.date));
+  if (juggles.length > 2) {
+    const spH=120, spY=1060, spX=PAD, spW=W-PAD*2;
+    const maxJ=Math.max(...juggles.map(j=>j.count),1);
+    const minJ=Math.min(...juggles.map(j=>j.count),0);
+    const range=maxJ-minJ||1;
+    const step=spW/(juggles.length-1);
+    ctx.textAlign='left'; ctx.fillStyle='rgba(255,255,255,0.2)';
+    ctx.font='700 16px Barlow Condensed, sans-serif'; ctx.letterSpacing='4px';
+    ctx.fillText('JUGGLE TREND', spX, spY-12);
+    ctx.beginPath();
+    juggles.forEach((j,ji)=>{
+      const jx=spX+ji*step;
+      const jy=spY+spH-((j.count-minJ)/range)*spH;
+      if(ji===0) ctx.moveTo(jx,jy); else ctx.lineTo(jx,jy);
+    });
+    ctx.strokeStyle=hexToRgba(p.accent,0.7); ctx.lineWidth=3; ctx.stroke();
+    ctx.lineTo(spX+(juggles.length-1)*step,spY+spH); ctx.lineTo(spX,spY+spH); ctx.closePath();
+    const grad=ctx.createLinearGradient(0,spY,0,spY+spH);
+    grad.addColorStop(0,hexToRgba(p.accent,0.25)); grad.addColorStop(1,hexToRgba(p.accent,0));
+    ctx.fillStyle=grad; ctx.fill();
+    const prJ=juggles.reduce((m,j)=>j.count>m.count?j:m,juggles[0]);
+    const prJi=juggles.indexOf(prJ);
+    ctx.beginPath(); ctx.arc(spX+prJi*step,spY+spH-((prJ.count-minJ)/range)*spH,6,0,Math.PI*2);
+    ctx.fillStyle=p.accent; ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.3)';
+    ctx.font='600 14px Barlow Condensed, sans-serif'; ctx.letterSpacing='2px';
+    ctx.textAlign='right'; ctx.fillText('PR: '+prJ.count,spX+spW,spY-12);
+  }
+
+  // Summer dot grid — compact
+  const dotY = 1220;
+  ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.2)';
+  ctx.font='700 16px Barlow Condensed, sans-serif'; ctx.letterSpacing='6px';
+  ctx.fillText('SUMMER PROGRESS', W/2, dotY);
+  const allSummerDays=[];
+  [[5,31],[6,30],[7,31]].forEach(([mo,days])=>{
+    for(let d=1;d<=days;d++) allSummerDays.push(`2026-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`);
+  });
+  const todayStr=getTodayStr();
+  const dotAreaW2=W-PAD*2; const n2=allSummerDays.length;
+  const ds3=Math.floor(dotAreaW2/n2)-1;
+  allSummerDays.forEach((ds,di)=>{
+    const dx=PAD+di*(ds3+1);
+    const isDone=completedDates.has(ds);
+    const isFuture=ds>todayStr;
+    ctx.fillStyle=isDone?p.accent:(isFuture?'rgba(255,255,255,0.04)':'rgba(255,255,255,0.1)');
+    ctx.beginPath();ctx.roundRect(dx,dotY+18,ds3,ds3,1);ctx.fill();
+  });
+  [['MAY',0],['JUN',31],['JUL',61]].forEach(([mo,offset])=>{
+    const lx=PAD+offset*(ds3+1);
+    ctx.textAlign='left'; ctx.fillStyle='rgba(255,255,255,0.2)';
+    ctx.font='600 14px Barlow Condensed, sans-serif'; ctx.letterSpacing='2px';
+    ctx.fillText(mo,lx,dotY+18+ds3+18);
+  });
+
+  // Footer
+  const footY2=H-180;
+  ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(PAD,footY2,W-PAD*2,2);
+  ctx.textAlign='center';
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='400 36px Bebas Neue, sans-serif'; ctx.letterSpacing='8px';
+  ctx.fillText('SYN BROS', W/2, footY2+48);
+  ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.font='500 18px Barlow Condensed, sans-serif'; ctx.letterSpacing='3px';
+  ctx.fillText("GOD'S GOT US  ✝", W/2, footY2+80);
+  ctx.fillStyle='rgba(255,255,255,0.1)'; ctx.font='500 16px Barlow Condensed, sans-serif'; ctx.letterSpacing='2px';
+  ctx.fillText('#SynBros  #SummerGrind', W/2, footY2+108);
+
+  ctx.fillStyle=p.accent; ctx.fillRect(0,H-8,W,8);
+}
+
+// ── Weekly prompt — shows Sunday evening if week is done ──
+function checkWeeklySharePrompt() {
+  const now = new Date();
+  const dow = now.getDay(); // 0=Sun
+  const hour = now.getHours();
+  // Show Sunday after 4pm
+  if (dow !== 0 || hour < 16) return;
+
+  const promptKey = 'weekly_share_prompt_' + getWeekMonday();
+  if (localStorage.getItem(promptKey)) return;
+
+  // Check if both boys completed something this week
+  const weekMon = getWeekMonday();
+  const weekSun = getWeekSunday();
+  const cDone = dbCompletions.filter(c=>c.player==='caysen'&&c.date>=weekMon&&c.date<=weekSun).length;
+  const eDone = dbCompletions.filter(c=>c.player==='emmitt'&&c.date>=weekMon&&c.date<=weekSun).length;
+  if (cDone === 0 && eDone === 0) return;
+
+  localStorage.setItem(promptKey, '1');
+
+  // Show toast with action
+  const toast = document.getElementById('toast');
+  if (toast) {
+    toast.innerHTML = 'Week done 🔥 <span style="text-decoration:underline;cursor:pointer;" onclick="openProgramShareCard()">Share it</span>';
+    toast.classList.add('show');
+    setTimeout(()=>{ toast.classList.remove('show'); toast.innerHTML=''; }, 8000);
   }
 }
 
