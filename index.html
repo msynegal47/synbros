@@ -6776,7 +6776,7 @@ function drawTotalShareCard() {
   const ctx = canvas.getContext('2d');
   const W = 680, H = 1208;
   canvas.width = W; canvas.height = H;
-  const PAD = 48;
+  const PAD = 44;
 
   const playerData = buildPlayerShareData(null);
   const combinedTouches = playerData.reduce((s,pd)=>s+pd.totalTouches,0);
@@ -6791,9 +6791,9 @@ function drawTotalShareCard() {
   ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=1;
   for(let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
   for(let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-  [['#4fc3f7',W*0.85,H*0.08,360],['#f59e0b',W*0.1,H*0.55,280]].forEach(([c,gx,gy,gr])=>{
+  [['#4fc3f7',W*0.85,H*0.08,380],['#f59e0b',W*0.1,H*0.6,300]].forEach(([c,gx,gy,gr])=>{
     const g=ctx.createRadialGradient(gx,gy,0,gx,gy,gr);
-    g.addColorStop(0,hexToRgba(c,0.14)); g.addColorStop(1,'transparent');
+    g.addColorStop(0,hexToRgba(c,0.16)); g.addColorStop(1,'transparent');
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   });
   const barW2=W/2;
@@ -6807,134 +6807,125 @@ function drawTotalShareCard() {
   ctx.fillStyle='rgba(255,255,255,0.18)';
   ctx.font='500 11px Barlow, sans-serif'; ctx.letterSpacing='3px';
   ctx.fillText('SUMMER TOTAL · ' + new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}).toUpperCase(), W/2, 64);
-  ctx.fillStyle='rgba(255,255,255,0.07)';
-  ctx.fillRect(PAD,76,W-PAD*2,1);
+  ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(PAD,76,W-PAD*2,1);
 
   // ── HERO — COMBINED TOUCHES ──
   ctx.textAlign='center';
   ctx.fillStyle='#ffffff';
-  ctx.font='400 112px Bebas Neue, sans-serif'; ctx.letterSpacing='2px';
-  ctx.fillText(combinedTouches>0?combinedTouches.toLocaleString():'—', W/2, 196);
+  ctx.font='400 120px Bebas Neue, sans-serif'; ctx.letterSpacing='2px';
+  ctx.fillText(combinedTouches>0?combinedTouches.toLocaleString():'—', W/2, 208);
   ctx.fillStyle='rgba(255,255,255,0.3)';
   ctx.font='700 11px Barlow Condensed, sans-serif'; ctx.letterSpacing='7px';
-  ctx.fillText('COMBINED SUMMER TOUCHES', W/2, 218);
-  ctx.fillStyle='rgba(255,255,255,0.08)';
-  ctx.fillRect(PAD,232,W-PAD*2,1);
+  ctx.fillText('COMBINED SUMMER TOUCHES', W/2, 228);
+  ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fillRect(PAD,242,W-PAD*2,1);
 
-  // ── BIG PLAYER STAT BLOCKS ──
-  const blockY = 248;
-  const blockW = (W - PAD*2 - 16) / 2;
+  // ── PLAYER STAT CARDS — full width stacked ──
+  const cardH = 180;
+  const cardGap = 12;
+  const card1Y = 254;
+  const card2Y = card1Y + cardH + cardGap;
 
   playerData.forEach((pd, i) => {
-    const { p, jugglePR, streak, totalTouches, v1Wins, v1Losses, sessions } = pd;
-    const bx = PAD + i * (blockW + 16);
-    const by = blockY;
-    const bh = 230;
+    const { p, jugglePR, streak, totalTouches, v1Wins, v1Losses } = pd;
+    const cx = PAD;
+    const cy = i === 0 ? card1Y : card2Y;
+    const cw = W - PAD*2;
 
-    // Card background
-    roundRect(ctx, bx, by, blockW, bh, 12);
-    ctx.fillStyle = `rgba(${p.accentRgb},0.06)`; ctx.fill();
-    ctx.strokeStyle = `rgba(${p.accentRgb},0.3)`; ctx.lineWidth = 1; ctx.stroke();
+    // Card bg
+    roundRect(ctx, cx, cy, cw, cardH, 14);
+    ctx.fillStyle = `rgba(${p.accentRgb},0.07)`; ctx.fill();
+    ctx.strokeStyle = `rgba(${p.accentRgb},0.35)`; ctx.lineWidth=1; ctx.stroke();
 
-    // Top accent bar
-    roundRect(ctx, bx, by, blockW, 4, [12,12,0,0]);
+    // Left accent bar
+    roundRect(ctx, cx, cy, 5, cardH, [14,0,0,14]);
     ctx.fillStyle = p.accent; ctx.fill();
 
     // Player name
-    ctx.textAlign = 'left';
-    ctx.fillStyle = p.accent;
-    ctx.font = '400 28px Bebas Neue, sans-serif'; ctx.letterSpacing = '3px';
-    ctx.fillText(p.name.toUpperCase(), bx+16, by+36);
+    ctx.textAlign='left'; ctx.fillStyle=p.accent;
+    ctx.font='400 22px Bebas Neue, sans-serif'; ctx.letterSpacing='4px';
+    ctx.fillText(p.name.toUpperCase(), cx+22, cy+30);
 
-    // Big streak number
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '400 72px Bebas Neue, sans-serif'; ctx.letterSpacing = '0px';
-    ctx.fillText(streak > 0 ? String(streak) : '0', bx+16, by+114);
-    ctx.fillStyle = 'rgba(255,255,255,0.0)';
-    // fire emoji via fillText
-    ctx.font = '48px sans-serif';
-    const sW = ctx.measureText(streak > 0 ? String(streak) : '0').width;
-    // draw fire next to number
-    ctx.font = '400 72px Bebas Neue, sans-serif';
-    const numW = ctx.measureText(streak > 0 ? String(streak) : '0').width;
-    ctx.font = '36px sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,1)';
-    ctx.fillText('🔥', bx+16+numW+4, by+110);
+    // Big streak
+    ctx.fillStyle='#ffffff';
+    ctx.font='400 88px Bebas Neue, sans-serif'; ctx.letterSpacing='-2px';
+    const streakStr = streak > 0 ? String(streak) : '0';
+    ctx.fillText(streakStr, cx+22, cy+118);
+    ctx.font='52px sans-serif';
+    const snW = (() => { ctx.font='400 88px Bebas Neue, sans-serif'; ctx.letterSpacing='-2px'; return ctx.measureText(streakStr).width; })();
+    ctx.fillText('🔥', cx+22+snW+2, cy+112);
 
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.font = '600 9px Barlow Condensed, sans-serif'; ctx.letterSpacing = '2px';
-    ctx.textAlign = 'left';
-    ctx.fillText('DAY STREAK', bx+16, by+130);
+    ctx.fillStyle='rgba(255,255,255,0.25)';
+    ctx.font='600 9px Barlow Condensed, sans-serif'; ctx.letterSpacing='2.5px';
+    ctx.fillText('DAY STREAK', cx+22, cy+134);
 
-    // Divider
-    ctx.fillStyle = `rgba(${p.accentRgb},0.15)`;
-    ctx.fillRect(bx+16, by+140, blockW-32, 1);
+    // Vertical divider
+    ctx.fillStyle=`rgba(${p.accentRgb},0.2)`; ctx.fillRect(cx+180, cy+16, 1, cardH-32);
 
-    // Bottom stats row
-    const miniStats = [
-      { lbl: 'TOUCHES', val: totalTouches > 0 ? totalTouches.toLocaleString() : '—' },
-      { lbl: 'JUGGLE PR', val: jugglePR > 0 ? String(jugglePR) : '—' },
-      { lbl: '1V1', val: v1Wins + 'W' },
+    // Right side — 3 big stats
+    const statStartX = cx+200;
+    const statW = (cw - 200 - 16) / 3;
+    const stats = [
+      { lbl:'TOUCHES', val: totalTouches>0?totalTouches.toLocaleString():'—' },
+      { lbl:'JUGGLE PR', val: jugglePR>0?String(jugglePR):'—' },
+      { lbl:'1V1 WINS', val: String(v1Wins) },
     ];
-    const miniW = (blockW - 32) / 3;
-    miniStats.forEach((ms, mi) => {
-      const mx = bx + 16 + mi * miniW;
-      ctx.textAlign = 'left';
-      ctx.fillStyle = p.accent;
-      ctx.font = '400 26px Bebas Neue, sans-serif'; ctx.letterSpacing = '1px';
-      ctx.fillText(String(ms.val), mx, by+172);
-      ctx.fillStyle = 'rgba(255,255,255,0.28)';
-      ctx.font = '600 8px Barlow Condensed, sans-serif'; ctx.letterSpacing = '1.5px';
-      ctx.fillText(ms.lbl, mx, by+186);
+    stats.forEach((st, si) => {
+      const sx = statStartX + si * statW;
+      const midY = cy + cardH/2;
+
+      // Stat value — big
+      ctx.textAlign='left'; ctx.fillStyle=p.accent;
+      ctx.font='400 48px Bebas Neue, sans-serif'; ctx.letterSpacing='1px';
+      ctx.fillText(String(st.val), sx, midY+10);
+
+      // Label
+      ctx.fillStyle='rgba(255,255,255,0.28)';
+      ctx.font='600 9px Barlow Condensed, sans-serif'; ctx.letterSpacing='1.5px';
+      ctx.fillText(st.lbl, sx, midY+26);
+
+      // Subtle divider between stats
+      if (si < 2) {
+        ctx.fillStyle=`rgba(${p.accentRgb},0.12)`;
+        ctx.fillRect(sx+statW-8, cy+20, 1, cardH-40);
+      }
     });
 
-    // Juggle sparkline
-    const juggles = dbJuggles.filter(j => j.player === pd.id).sort((a,b)=>a.date.localeCompare(b.date));
-    if (juggles.length > 1) {
-      const sparkH = 28;
-      const sparkY2 = by + bh - 36;
-      const sparkX = bx + 16;
-      const sparkW2 = blockW - 32;
-      const maxJ = Math.max(...juggles.map(j=>j.count), 1);
-      const minJ = Math.min(...juggles.map(j=>j.count), 0);
-      const range = maxJ - minJ || 1;
-      const step = sparkW2 / (juggles.length - 1);
+    // Sparkline at bottom of card
+    const juggles = dbJuggles.filter(j=>j.player===pd.id).sort((a,b)=>a.date.localeCompare(b.date));
+    if (juggles.length > 2) {
+      const spH = 28, spY = cy+cardH-38, spX = statStartX, spW = cw-200-16;
+      const maxJ = Math.max(...juggles.map(j=>j.count),1);
+      const minJ = Math.min(...juggles.map(j=>j.count),0);
+      const range = maxJ-minJ||1;
+      const step = spW/(juggles.length-1);
 
-      // Line
       ctx.beginPath();
-      juggles.forEach((j, ji) => {
-        const jx = sparkX + ji * step;
-        const jy = sparkY2 + sparkH - ((j.count - minJ) / range) * sparkH;
-        if (ji === 0) ctx.moveTo(jx, jy); else ctx.lineTo(jx, jy);
+      juggles.forEach((j,ji)=>{
+        const jx=spX+ji*step;
+        const jy=spY+spH-((j.count-minJ)/range)*spH;
+        if(ji===0) ctx.moveTo(jx,jy); else ctx.lineTo(jx,jy);
       });
-      ctx.strokeStyle = hexToRgba(p.accent, 0.6); ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.strokeStyle=hexToRgba(p.accent,0.5); ctx.lineWidth=1.5; ctx.stroke();
 
-      // Fill under line
-      ctx.lineTo(sparkX + (juggles.length-1)*step, sparkY2 + sparkH);
-      ctx.lineTo(sparkX, sparkY2 + sparkH);
-      ctx.closePath();
-      const grad = ctx.createLinearGradient(0, sparkY2, 0, sparkY2+sparkH);
-      grad.addColorStop(0, hexToRgba(p.accent, 0.2));
-      grad.addColorStop(1, hexToRgba(p.accent, 0));
-      ctx.fillStyle = grad; ctx.fill();
+      // fill under
+      ctx.lineTo(spX+(juggles.length-1)*step,spY+spH);
+      ctx.lineTo(spX,spY+spH); ctx.closePath();
+      const grad=ctx.createLinearGradient(0,spY,0,spY+spH);
+      grad.addColorStop(0,hexToRgba(p.accent,0.15)); grad.addColorStop(1,hexToRgba(p.accent,0));
+      ctx.fillStyle=grad; ctx.fill();
 
       // PR dot
-      const prJ = juggles.reduce((m,j)=>j.count>m.count?j:m, juggles[0]);
-      const prJi = juggles.indexOf(prJ);
-      const prJx = sparkX + prJi * step;
-      const prJy = sparkY2 + sparkH - ((prJ.count - minJ) / range) * sparkH;
-      ctx.beginPath(); ctx.arc(prJx, prJy, 3, 0, Math.PI*2);
-      ctx.fillStyle = p.accent; ctx.fill();
-
-      ctx.fillStyle = 'rgba(255,255,255,0.2)';
-      ctx.font = '600 8px Barlow Condensed, sans-serif'; ctx.letterSpacing='1px'; ctx.textAlign='left';
-      ctx.fillText('JUGGLE TREND', sparkX, sparkY2-4);
+      const prJ=juggles.reduce((m,j)=>j.count>m.count?j:m,juggles[0]);
+      const prJi=juggles.indexOf(prJ);
+      ctx.beginPath(); ctx.arc(spX+prJi*step, spY+spH-((prJ.count-minJ)/range)*spH, 3,0,Math.PI*2);
+      ctx.fillStyle=p.accent; ctx.fill();
     }
   });
 
+  const afterCardsY = card2Y + cardH;
+
   // ── H2H ALL TIME ──
-  const h2hY = blockY + 246;
+  const h2hY = afterCardsY + 28;
   ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(PAD,h2hY,W-PAD*2,1);
   ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.22)';
   ctx.font='700 10px Barlow Condensed, sans-serif'; ctx.letterSpacing='6px';
@@ -6943,45 +6934,39 @@ function drawTotalShareCard() {
   const cPD=playerData[0], ePD=playerData[1];
   const totalH2H=cPD.v1Wins+ePD.v1Wins;
 
-  // Big scores
-  ctx.fillStyle='#4fc3f7'; ctx.font='400 96px Bebas Neue, sans-serif'; ctx.letterSpacing='2px';
-  ctx.textAlign='right'; ctx.fillText(String(cPD.v1Wins), W/2-28, h2hY+108);
-  ctx.fillStyle='rgba(255,255,255,0.15)'; ctx.font='400 28px Bebas Neue, sans-serif';
-  ctx.textAlign='center'; ctx.fillText('VS', W/2, h2hY+72);
-  ctx.fillStyle='#f59e0b'; ctx.font='400 96px Bebas Neue, sans-serif';
-  ctx.textAlign='left'; ctx.fillText(String(ePD.v1Wins), W/2+28, h2hY+108);
+  ctx.fillStyle='#4fc3f7'; ctx.font='400 110px Bebas Neue, sans-serif'; ctx.letterSpacing='2px';
+  ctx.textAlign='right'; ctx.fillText(String(cPD.v1Wins),W/2-36,h2hY+126);
+  ctx.fillStyle='rgba(255,255,255,0.15)'; ctx.font='400 32px Bebas Neue, sans-serif';
+  ctx.textAlign='center'; ctx.fillText('VS',W/2,h2hY+82);
+  ctx.fillStyle='#f59e0b'; ctx.font='400 110px Bebas Neue, sans-serif';
+  ctx.textAlign='left'; ctx.fillText(String(ePD.v1Wins),W/2+36,h2hY+126);
 
-  ctx.fillStyle='rgba(79,195,247,0.55)'; ctx.font='700 9px Barlow Condensed, sans-serif'; ctx.letterSpacing='2px';
-  ctx.textAlign='right'; ctx.fillText('CAYSEN', W/2-28, h2hY+122);
-  ctx.fillStyle='rgba(245,158,11,0.55)'; ctx.textAlign='left'; ctx.fillText('EMMITT', W/2+28, h2hY+122);
+  ctx.fillStyle='rgba(79,195,247,0.6)'; ctx.font='700 10px Barlow Condensed, sans-serif'; ctx.letterSpacing='2px';
+  ctx.textAlign='right'; ctx.fillText('CAYSEN  '+cPD.v1Wins+'W–'+cPD.v1Losses+'L',W/2-36,h2hY+142);
+  ctx.fillStyle='rgba(245,158,11,0.6)'; ctx.textAlign='left';
+  ctx.fillText('EMMITT  '+ePD.v1Wins+'W–'+ePD.v1Losses+'L',W/2+36,h2hY+142);
 
-  // W-L breakdown
-  ctx.fillStyle='rgba(255,255,255,0.18)'; ctx.font='600 10px Barlow Condensed, sans-serif'; ctx.letterSpacing='2px';
-  ctx.textAlign='right';
-  ctx.fillText(cPD.v1Wins+'W–'+cPD.v1Losses+'L', W/2-28, h2hY+138);
-  ctx.textAlign='left';
-  ctx.fillText(ePD.v1Wins+'W–'+ePD.v1Losses+'L', W/2+28, h2hY+138);
-
-  // Bar
-  const bty=h2hY+148;
-  roundRect(ctx,PAD,bty,W-PAD*2,12,6); ctx.fillStyle='rgba(255,255,255,0.06)'; ctx.fill();
+  const bty=h2hY+156;
+  roundRect(ctx,PAD,bty,W-PAD*2,14,7); ctx.fillStyle='rgba(255,255,255,0.06)'; ctx.fill();
   if(totalH2H>0){
     const pct=cPD.v1Wins/totalH2H;
-    if(pct>0){roundRect(ctx,PAD,bty,Math.round((W-PAD*2)*pct),12,[6,0,0,6]);ctx.fillStyle='#4fc3f7';ctx.fill();}
-    if(pct<1){roundRect(ctx,PAD+Math.round((W-PAD*2)*pct),bty,(W-PAD*2)-Math.round((W-PAD*2)*pct),12,[0,6,6,0]);ctx.fillStyle='#f59e0b';ctx.fill();}
+    if(pct>0){roundRect(ctx,PAD,bty,Math.round((W-PAD*2)*pct),14,[7,0,0,7]);ctx.fillStyle='#4fc3f7';ctx.fill();}
+    if(pct<1){roundRect(ctx,PAD+Math.round((W-PAD*2)*pct),bty,(W-PAD*2)-Math.round((W-PAD*2)*pct),14,[0,7,7,0]);ctx.fillStyle='#f59e0b';ctx.fill();}
   }
-  ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(PAD,bty+20,W-PAD*2,1);
+  ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(PAD,bty+22,W-PAD*2,1);
 
   // ── SUMMER DOT TRACKER ──
-  const trackY = h2hY + 190;
+  const trackY = bty + 40;
   ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.22)';
   ctx.font='700 10px Barlow Condensed, sans-serif'; ctx.letterSpacing='6px';
   ctx.fillText('SUMMER PROGRESS', W/2, trackY+16);
+
   const nameW=54; const dotAreaW=W-PAD*2-nameW; const n=allSummerDays.length;
-  const ds2=Math.max(3,Math.min(6,Math.floor((dotAreaW-(n-1))/n)));
+  const ds2=Math.max(3,Math.min(7,Math.floor((dotAreaW)/(n+1))));
   const dStartX=PAD+nameW;
+
   playerData.forEach((pd,ri)=>{
-    const rowy=trackY+30+ri*22;
+    const rowy=trackY+30+ri*24;
     ctx.textAlign='left'; ctx.fillStyle=pd.p.accent;
     ctx.font='700 9px Barlow Condensed, sans-serif'; ctx.letterSpacing='1px';
     ctx.fillText(pd.p.name.slice(0,4).toUpperCase(),PAD,rowy+ds2);
@@ -6994,30 +6979,25 @@ function drawTotalShareCard() {
     });
   });
 
-  // Month labels under dots
-  const monthLabelY = trackY + 30 + 2*22 + 10;
-  ['MAY','JUN','JUL'].forEach((mo,mi)=>{
-    const daysInPrev = [0,31,61][mi];
-    const lx = dStartX + daysInPrev * (ds2+1);
+  // Month labels
+  const moLabelY = trackY+30+2*24+10;
+  [['MAY',0],['JUN',31],['JUL',61]].forEach(([mo,offset])=>{
+    const lx=dStartX+offset*(ds2+1);
     ctx.textAlign='left'; ctx.fillStyle='rgba(255,255,255,0.2)';
     ctx.font='600 8px Barlow Condensed, sans-serif'; ctx.letterSpacing='1px';
-    ctx.fillText(mo, lx, monthLabelY);
+    ctx.fillText(mo,lx,moLabelY);
   });
 
   // ── FOOTER ──
-  const footY = H - 130;
+  const footY = H - 110;
   ctx.fillStyle='rgba(255,255,255,0.07)'; ctx.fillRect(PAD,footY,W-PAD*2,1);
   ctx.textAlign='center';
-  ctx.fillStyle='rgba(255,255,255,0.45)'; ctx.font='400 24px Bebas Neue, sans-serif'; ctx.letterSpacing='6px';
-  ctx.fillText('SYN BROS', W/2, footY+38);
+  ctx.fillStyle='rgba(255,255,255,0.45)'; ctx.font='400 26px Bebas Neue, sans-serif'; ctx.letterSpacing='6px';
+  ctx.fillText('SYN BROS',W/2,footY+36);
   ctx.fillStyle='rgba(255,255,255,0.14)'; ctx.font='500 10px Barlow Condensed, sans-serif'; ctx.letterSpacing='2px';
-  ctx.fillText('#SYNBROS · #SUMMERGRIND · #WORKCOMPETEDOMINATE', W/2, footY+58);
-  ctx.fillStyle='rgba(255,255,255,0.07)';
-  ctx.fillText('SUMMER 2026', W/2, footY+76);
-
-  // Faith anchor
-  ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.font='400 18px Bebas Neue, sans-serif'; ctx.letterSpacing='4px';
-  ctx.fillText("GOD\'S GOT US ✝", W/2, footY+100);
+  ctx.fillText('#SYNBROS · #SUMMERGRIND · #WORKCOMPETEDOMINATE',W/2,footY+54);
+  ctx.fillStyle='rgba(255,255,255,0.1)'; ctx.font='400 16px Bebas Neue, sans-serif'; ctx.letterSpacing='4px';
+  ctx.fillText("GOD\'S GOT US  ✝",W/2,footY+78);
 
   ['#4fc3f7','#f59e0b'].forEach((c,i)=>{ ctx.fillStyle=c; ctx.fillRect(i*barW2,H-6,barW2,6); });
 }
