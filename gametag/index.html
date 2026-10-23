@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Game Tag">
+<meta name="theme-color" content="#0b0d10">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<title>Game Tag</title>
+<style>
+:root{
+  --bg:#0b0d10; --panel:#151920; --panel2:#1d232c; --line:#2a313c;
+  --text:#f2f4f7; --mute:#8a94a3; --good:#22c55e; --bad:#ef4444;
+  --accent:#38bdf8; --warn:#f59e0b; --goal:#facc15;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+body{padding:env(safe-area-inset-top) 12px calc(env(safe-area-inset-bottom) + 12px);min-height:100vh;user-select:none;-webkit-user-select:none}
+h1{font-size:22px;margin:14px 0 10px}
+h2{font-size:16px;margin:18px 0 8px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+button{font:inherit;color:inherit;border:0;border-radius:14px;background:var(--panel2);padding:14px;cursor:pointer}
+button:active{transform:scale(.97);filter:brightness(1.3)}
+button:disabled{opacity:.35}
+input,select,textarea{font:inherit;width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);user-select:text;-webkit-user-select:text}
+label{display:block;color:var(--mute);font-size:13px;margin:12px 0 6px}
+.row{display:flex;gap:8px}
+.row>*{flex:1}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.primary{background:var(--accent);color:#04121c;font-weight:700}
+.muted{color:var(--mute);font-size:13px}
+.hidden{display:none!important}
+.list button{width:100%;text-align:left;margin:6px 0;background:var(--panel)}
+.topbar{position:sticky;top:0;background:var(--bg);padding:8px 0 10px;z-index:5}
+.clock{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.clock .time{font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.clock .score{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums}
+.clock .meta{font-size:12px;color:var(--mute)}
+.phase{width:100%;margin-top:10px;font-size:20px;font-weight:800;padding:16px;background:var(--warn);color:#1a1100}
+.goals{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.goals button{font-size:18px;font-weight:800;padding:20px 8px}
+.gfor{background:var(--goal);color:#1a1600}
+.gag{background:#3b1f24;color:#fecaca}
+.actions{display:grid;gap:8px}
+.act{display:grid;grid-template-columns:1fr 72px 72px;gap:8px;align-items:stretch}
+.act .name{display:flex;align-items:center;padding:0 12px;background:var(--panel);border-radius:14px;font-weight:700;font-size:16px}
+.act .y{background:#123222;color:var(--good);font-size:26px;font-weight:800;padding:16px 0}
+.act .n{background:#3a1717;color:var(--bad);font-size:26px;font-weight:800;padding:16px 0}
+.tools{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-top:10px}
+.flag{background:#1e2a44;color:#bfdbfe;font-weight:800;font-size:18px;padding:18px}
+.undo{background:var(--panel);color:var(--mute);font-weight:700}
+.feed{margin-top:12px}
+.feed div{display:flex;justify-content:space-between;padding:8px 2px;border-bottom:1px solid var(--line);font-size:14px}
+.feed .t{color:var(--mute);font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);background:#fff;color:#000;padding:12px 18px;border-radius:999px;font-weight:800;opacity:0;transition:opacity .15s;pointer-events:none;z-index:50;white-space:nowrap}
+.toast.show{opacity:1}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;z-index:40}
+.sheet{background:var(--panel);width:100%;border-radius:20px 20px 0 0;padding:18px 14px calc(env(safe-area-inset-bottom) + 18px)}
+.sheet h3{margin:0 0 12px}
+.sheet .opts{display:grid;gap:8px}
+.sheet .opts button{font-size:20px;font-weight:800;padding:20px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:8px 4px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mute);font-weight:600}
+td.c{text-align:center;font-weight:800}
+.good{color:var(--good)} .bad{color:var(--bad)}
+.kidpick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kidpick button{padding:22px;font-size:20px;font-weight:800;background:var(--panel)}
+.kidpick button.on{background:var(--accent);color:#04121c}
+.back{background:none;color:var(--accent);padding:10px 0}
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<section id="home">
+  <h1>Game Tag</h1>
+  <button class="primary" style="width:100%;font-size:18px;padding:18px" onclick="showNew()">+ New Game</button>
+  <h2>Games</h2>
+  <div id="gameList" class="list"></div>
+  <button style="width:100%;margin-top:16px" onclick="showSettings()">Settings</button>
+</section>
+
+<!-- NEW GAME -->
+<section id="newgame" class="hidden">
+  <button class="back" onclick="go('home')">‹ Back</button>
+  <h1>New Game</h1>
+  <label>Who are you tracking?</label>
+  <div class="kidpick" id="kidPick"></div>
+  <label>Opponent</label>
+  <input id="ngOpp" placeholder="e.g. Phoenix Rising 2015B">
+  <label>Event / tournament (optional)</label>
+  <input id="ngEvent" placeholder="e.g. Fall Classic">
+  <div class="row">
+    <div><label>Half length (min)</label><input id="ngHalf" type="number" inputmode="numeric"></div>
+    <div><label>Look-back (sec)</label><input id="ngLook" type="number" inputmode="numeric"></div>
+  </div>
+  <p class="muted">Look-back subtracts time from each tag since you tap after the play happens.</p>
+  <button class="primary" style="width:100%;margin-top:10px;font-size:18px;padding:18px" onclick="createGame()">Start</button>
+</section>
+
+<!-- GAME -->
+<section id="game" class="hidden">
+  <div class="topbar">
+    <div class="clock">
+      <div>
+        <div class="time" id="gClock">--:--</div>
+        <div class="meta" id="gMeta"></div>
+      </div>
+      <div style="text-align:right">
+        <div class="score" id="gScore">0-0</div>
+        <div class="meta" id="gOpp"></div>
+      </div>
+    </div>
+    <button class="phase" id="phaseBtn" onclick="phaseTap()">Kickoff</button>
+  </div>
+  <div class="goals">
+    <button class="gfor" onclick="goalFor()">GOAL FOR</button>
+    <button class="gag" onclick="goalAgainst()">Goal Against</button>
+  </div>
+  <div class="actions" id="actGrid"></div>
+  <div class="tools">
+    <button class="flag" onclick="flagTap()">⚑ Flag</button>
+    <button class="undo" onclick="undo()">Undo</button>
+  </div>
+  <div class="feed" id="feed"></div>
+  <button style="width:100%;margin-top:16px" onclick="openSummary(cur.id)">Summary / Export</button>
+  <button class="back" style="width:100%" onclick="leaveGame()">‹ Games</button>
+</section>
+
+<!-- SUMMARY -->
+<section id="summary" class="hidden">
+  <button class="back" onclick="summaryBack()">‹ Back</button>
+  <h1 id="sTitle"></h1>
+  <div class="muted" id="sSub"></div>
+  <div class="card"><div style="font-size:34px;font-weight:800" id="sScore"></div><div id="sGoals" class="muted"></div></div>
+  <h2>Actions <span class="muted" style="text-transform:none">(parent only)</span></h2>
+  <div class="card"><table id="sTable"></table></div>
+  <div id="sFlags"></div>
+  <h2>Export</h2>
+  <div class="card">
+    <button class="primary" style="width:100%" onclick="exportCSV()">Export CSV (for film analysis)</button>
+    <button style="width:100%;margin-top:8px" onclick="exportJSON()">Export JSON</button>
+  </div>
+  <h2>YouTube chapters</h2>
+  <div class="card">
+    <label>Where is kickoff in the video? (mm:ss or h:mm:ss)</label>
+    <input id="ytOffset" placeholder="e.g. 4:12" inputmode="numeric">
+    <textarea id="ytOut" rows="8" readonly style="margin-top:10px"></textarea>
+    <button style="width:100%;margin-top:8px" onclick="copyChapters()">Copy chapters</button>
+    <p class="muted">Halves and goals only. Scout tags stay private.</p>
+  </div>
+  <button style="width:100%;margin-top:8px;background:#3a1717;color:#fecaca" onclick="deleteGame()">Delete game</button>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="hidden">
+  <button class="back" onclick="go('home')">‹ Back</button>
+  <h1>Settings</h1>
+  <label>Caysen actions (one per line)</label>
+  <textarea id="setC" rows="8"></textarea>
+  <label>Emmitt actions (one per line)</label>
+  <textarea id="setE" rows="8"></textarea>
+  <div class="row">
+    <div><label>Default half (min)</label><input id="setHalf" type="number" inputmode="numeric"></div>
+    <div><label>Default look-back (sec)</label><input id="setLook" type="number" inputmode="numeric"></div>
+  </div>
+  <button class="primary" style="width:100%;margin-top:14px" onclick="saveSettings()">Save</button>
+  <h2>Backup</h2>
+  <button style="width:100%" onclick="backupAll()">Export all games</button>
+  <p class="muted">Changes to actions apply to new games only.</p>
+</section>
+
+<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const KEY='gametag_v1';
+const KIDS=['Caysen','Emmitt'];
+const DEFAULTS={
+  actions:{
+    Caysen:['Run','Link-up','Pass','Shot','1v1','Press / Effort','IQ / Decision'],
+    Emmitt:['Width','1v1','Cross / Cut-in','Shot','Track back','IQ / Decision']
+  },
+  half:30, look:10
+};
+const PHASES=['pre','h1','ht','h2','ft'];
+const PHASE_BTN={pre:'Kickoff',h1:'Half Time',ht:'2nd Half',h2:'Full Time',ft:'Game over · Summary'};
+const PHASE_LABEL={h1:'Kickoff',ht:'Half Time',h2:'2nd Half',ft:'Full Time'};
+
+let db=load(); let cur=null; let pickedKid=null; let tick=null; let wake=null; let summaryFrom='home';
+
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.games)return d;}catch(e){}
+  return {settings:JSON.parse(JSON.stringify(DEFAULTS)),games:[]};
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){toast('Save failed: storage full?');}
+}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(id){['home','newgame','game','summary','settings'].forEach(s=>document.getElementById(s).classList.toggle('hidden',s!==id));window.scrollTo(0,0);if(id==='home')renderHome();}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1100);if(navigator.vibrate)navigator.vibrate(30);}
+
+/* ---------- time helpers ---------- */
+function fmt(sec){
+  sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;
+  return h?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`;
+}
+function parseClock(str){
+  if(!str)return 0;const p=str.trim().split(':').map(Number);if(p.some(isNaN))return 0;
+  return p.reduce((a,v)=>a*60+v,0);
+}
+function phaseTime(g,ph){const t=g.tags.find(t=>t.type==='phase'&&t.phase===ph);return t?t.wall:null}
+function phaseOf(g){const ps=g.tags.filter(t=>t.type==='phase');return ps.length?ps[ps.length-1].phase:'pre'}
+function gameClock(g,wall){
+  const k=phaseTime(g,'h1');if(!k)return null;
+  const h2=phaseTime(g,'h2'), ht=phaseTime(g,'ht');
+  if(h2&&wall>=h2)return g.half*60+(wall-h2)/1000;
+  if(ht&&wall>=ht)return (ht-k)/1000;
+  return (wall-k)/1000;
+}
+function halfOf(g,wall){const h2=phaseTime(g,'h2'),ht=phaseTime(g,'ht');if(h2&&wall>=h2)return 2;if(ht&&wall>=ht)return 'HT';if(phaseTime(g,'h1')&&wall>=phaseTime(g,'h1'))return 1;return 'Pre';}
+function sinceKick(g,wall){const k=phaseTime(g,'h1');return k?(wall-k)/1000:null}
+function score(g){let f=0,a=0;g.tags.forEach(t=>{if(t.type==='goal_for')f++;if(t.type==='goal_against')a++;});return [f,a]}
+
+/* ---------- home ---------- */
+function renderHome(){
+  const el=document.getElementById('gameList');
+  if(!db.games.length){el.innerHTML='<p class="muted">No games yet.</p>';return;}
+  el.innerHTML=db.games.slice().sort((a,b)=>b.created-a.created).map(g=>{
+    const [f,a]=score(g);const ph=phaseOf(g);
+    const d=new Date(g.created).toLocaleDateString([], {month:'short',day:'numeric'});
+    return `<button onclick="${ph==='ft'?`openSummary('${g.id}')`:`openGame('${g.id}')`}">
+      <div style="font-weight:800">${esc(g.kid)} vs ${esc(g.opp||'Opponent')} · ${f}-${a}</div>
+      <div class="muted">${d}${g.event?' · '+esc(g.event):''} · ${ph==='ft'?'Final':ph==='pre'?'Not started':'In progress'}</div></button>`;
+  }).join('');
+}
+
+/* ---------- new game ---------- */
+function showNew(){
+  pickedKid=null;
+  document.getElementById('kidPick').innerHTML=KIDS.map(k=>`<button id="kp_${k}" onclick="pickKid('${k}')">${k}</button>`).join('');
+  document.getElementById('ngOpp').value='';document.getElementById('ngEvent').value='';
+  document.getElementById('ngHalf').value=db.settings.half;document.getElementById('ngLook').value=db.settings.look;
+  go('newgame');
+}
+function pickKid(k){pickedKid=k;KIDS.forEach(x=>document.getElementById('kp_'+x).classList.toggle('on',x===k));}
+function createGame(){
+  if(!pickedKid){toast('Pick Caysen or Emmitt');return;}
+  const g={id:uid(),kid:pickedKid,opp:document.getElementById('ngOpp').value.trim(),
+    event:document.getElementById('ngEvent').value.trim(),
+    half:+document.getElementById('ngHalf').value||db.settings.half,
+    look:Math.max(0,+document.getElementById('ngLook').value||0),
+    actions:(db.settings.actions[pickedKid]||[]).slice(),created:Date.now(),tags:[]};
+  db.games.push(g);save();openGame(g.id);
+}
+
+/* ---------- game ---------- */
+function openGame(id){
+  cur=db.games.find(g=>g.id===id);if(!cur)return;
+  document.getElementById('gOpp').textContent=`${cur.kid} vs ${cur.opp||'Opponent'}`;
+  document.getElementById('actGrid').innerHTML=cur.actions.map((a,i)=>
+    `<div class="act"><div class="name">${esc(a)}</div>
+     <button class="y" onclick="actTap(${i},'good')">✓</button>
+     <button class="n" onclick="actTap(${i},'work')">✗</button></div>`).join('');
+  go('game');renderGame();
+  clearInterval(tick);tick=setInterval(renderClock,500);
+  requestWake();
+}
+function leaveGame(){clearInterval(tick);releaseWake();cur=null;go('home');}
+function renderClock(){
+  if(!cur)return;const ph=phaseOf(cur);const c=gameClock(cur,Date.now());
+  document.getElementById('gClock').textContent=ph==='pre'?'--:--':ph==='ht'?'HT':fmt(c);
+  document.getElementById('gMeta').textContent=ph==='pre'?'Tap Kickoff on the whistle':ph==='h1'?'1st half':ph==='h2'?'2nd half':ph==='ht'?'Half time':'Full time';
+}
+function renderGame(){
+  const ph=phaseOf(cur);const [f,a]=score(cur);
+  document.getElementById('gScore').textContent=`${f}-${a}`;
+  document.getElementById('phaseBtn').textContent=PHASE_BTN[ph];
+  renderClock();
+  const recent=cur.tags.slice(-6).reverse();
+  document.getElementById('feed').innerHTML=recent.map(t=>{
+    const c=gameClock(cur,t.wall);
+    return `<div><span>${esc(tagLabel(t))}</span><span class="t">${c==null?'pre':fmt(c)}</span></div>`;}).join('');
+}
+function tagLabel(t){
+  if(t.type==='phase')return PHASE_LABEL[t.phase];
+  if(t.type==='goal_for')return `GOAL ${t.scorer}${t.assist&&t.assist!=='None'?' (A: '+t.assist+')':''}`;
+  if(t.type==='goal_against')return 'Goal against';
+  if(t.type==='flag')return '⚑ '+(t.note||'Flag');
+  return `${t.action} ${t.result==='good'?'✓':'✗'}`;
+}
+function addTag(o,useLook=true){
+  const wall=Date.now()-(useLook?cur.look*1000:0);
+  cur.tags.push(Object.assign({id:uid(),wall,tapped:Date.now(),kid:cur.kid},o));
+  save();renderGame();
+}
+function phaseTap(){
+  const ph=phaseOf(cur);
+  if(ph==='ft'){openSummary(cur.id);return;}
+  const next=PHASES[PHASES.indexOf(ph)+1];
+  addTag({type:'phase',phase:next},false);
+  toast(PHASE_LABEL[next]);
+  if(next==='ft')setTimeout(()=>openSummary(cur.id),600);
+}
+function actTap(i,result){
+  addTag({type:'action',action:cur.actions[i],result});
+  toast(`${cur.actions[i]} ${result==='good'?'✓':'✗'}`);
+}
+function goalAgainst(){addTag({type:'goal_against'});toast('Goal against');}
+function goalFor(){
+  sheet(`<h3>Who scored?</h3><div class="opts">
+    <button class="primary" onclick="pickScorer('${cur.kid}')">${cur.kid}</button>
+    <button onclick="pickScorer('Teammate')">Teammate</button></div>`);
+}
+function pickScorer(s){
+  const opts=(s===cur.kid?['Teammate','None']:[cur.kid,'Teammate','None']);
+  sheet(`<h3>Assist?</h3><div class="opts">${opts.map(o=>
+    `<button ${o===cur.kid?'class="primary"':''} onclick="finishGoal('${s}','${o}')">${o}</button>`).join('')}</div>`);
+}
+function finishGoal(s,a){closeModal();addTag({type:'goal_for',scorer:s,assist:a});toast(`GOAL ${s}`);}
+function flagTap(){
+  const wall=Date.now()-cur.look*1000;
+  sheet(`<h3>Flag</h3><input id="flagNote" placeholder="Quick note (optional)">
+    <div class="row" style="margin-top:10px"><button onclick="saveFlag(${wall},true)">Skip note</button>
+    <button class="primary" onclick="saveFlag(${wall},false)">Save</button></div>`);
+}
+function saveFlag(wall,skip){
+  const note=skip?'':(document.getElementById('flagNote').value||'').trim();
+  closeModal();
+  cur.tags.push({id:uid(),wall,tapped:Date.now(),kid:cur.kid,type:'flag',note});
+  save();renderGame();toast('Flagged');
+}
+function undo(){
+  if(!cur.tags.length)return;
+  const t=cur.tags.pop();save();renderGame();toast('Undid: '+tagLabel(t));
+}
+function sheet(html){document.getElementById('sheet').innerHTML=html;document.getElementById('modal').classList.remove('hidden');}
+function closeModal(){document.getElementById('modal').classList.add('hidden');}
+
+/* ---------- wake lock ---------- */
+async function requestWake(){try{if('wakeLock' in navigator)wake=await navigator.wakeLock.request('screen');}catch(e){}}
+function releaseWake(){try{wake&&wake.release();}catch(e){}wake=null;}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&cur&&!document.getElementById('game').classList.contains('hidden'))requestWake();});
+
+/* ---------- summary ---------- */
+function openSummary(id){
+  const g=db.games.find(x=>x.id===id);if(!g)return;
+  summaryFrom=(cur&&cur.id===id&&phaseOf(g)!=='ft')?'game':'home';
+  if(summaryFrom==='home'){clearInterval(tick);releaseWake();}
+  cur=g;const [f,a]=score(g);
+  document.getElementById('sTitle').textContent=`${g.kid} vs ${g.opp||'Opponent'}`;
+  document.getElementById('sSub').textContent=new Date(g.created).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})+(g.event?' · '+g.event:'');
+  document.getElementById('sScore').textContent=`${f}-${a}`;
+  const goals=g.tags.filter(t=>t.type==='goal_for'||t.type==='goal_against');
+  document.getElementById('sGoals').innerHTML=goals.map(t=>`${fmt(gameClock(g,t.wall)||0)} ${esc(tagLabel(t))}`).join('<br>')||'No goals';
+  const rows=g.actions.map(a=>{
+    const y=g.tags.filter(t=>t.type==='action'&&t.action===a&&t.result==='good').length;
+    const n=g.tags.filter(t=>t.type==='action'&&t.action===a&&t.result==='work').length;
+    return `<tr><td>${esc(a)}</td><td class="c good">${y}</td><td class="c bad">${n}</td></tr>`;}).join('');
+  document.getElementById('sTable').innerHTML=`<tr><th>Action</th><th class="c">✓</th><th class="c">✗</th></tr>${rows}`;
+  const flags=g.tags.filter(t=>t.type==='flag');
+  document.getElementById('sFlags').innerHTML=flags.length?`<h2>Flags</h2><div class="card">${flags.map(t=>`<div style="padding:6px 0">${fmt(gameClock(g,t.wall)||0)} · ${esc(t.note||'(no note)')}</div>`).join('')}</div>`:'';
+  document.getElementById('ytOffset').value=g.ytOffset||'';
+  renderChapters();go('summary');
+}
+function summaryBack(){if(summaryFrom==='game')openGame(cur.id);else{cur=null;go('home');}}
+document.addEventListener('input',e=>{if(e.target.id==='ytOffset'&&cur){cur.ytOffset=e.target.value;save();renderChapters();}});
+function renderChapters(){
+  const g=cur;const off=parseClock(document.getElementById('ytOffset').value);
+  const k=phaseTime(g,'h1');
+  if(!k){document.getElementById('ytOut').value='Kickoff was never tapped.';return;}
+  let f=0,a=0;const lines=['0:00 Pre-game'];
+  g.tags.forEach(t=>{
+    let label=null;
+    if(t.type==='phase')label=PHASE_LABEL[t.phase];
+    if(t.type==='goal_for'){f++;label=`GOAL ${t.scorer}${t.assist&&t.assist!=='None'?' (assist '+t.assist+')':''} ${f}-${a}`;}
+    if(t.type==='goal_against'){a++;label=`Goal against ${f}-${a}`;}
+    if(label)lines.push(`${fmt(off+(t.wall-k)/1000)} ${label}`);
+  });
+  document.getElementById('ytOut').value=lines.join('\n');
+}
+async function copyChapters(){
+  const v=document.getElementById('ytOut').value;
+  try{await navigator.clipboard.writeText(v);toast('Copied');}catch(e){const ta=document.getElementById('ytOut');ta.select();document.execCommand('copy');toast('Copied');}
+}
+function deleteGame(){
+  if(!confirm('Delete this game and all its tags?'))return;
+  db.games=db.games.filter(g=>g.id!==cur.id);save();cur=null;go('home');
+}
+
+/* ---------- export ---------- */
+function slug(g){const d=new Date(g.created);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}_${g.kid}_vs_${(g.opp||'opp').replace(/[^a-z0-9]+/gi,'-')}`;}
+function csvCell(v){v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function buildCSV(g){
+  const head=['game_id','kid','opponent','event','tag_id','type','action','result','scorer','assist','note','half','game_clock','game_clock_sec','sec_from_kickoff','wall_time_iso','local_time','lookback_sec'];
+  const rows=g.tags.map(t=>{
+    const c=gameClock(g,t.wall),sk=sinceKick(g,t.wall);
+    return [g.id,g.kid,g.opp,g.event,t.id,t.type==='phase'?'phase_'+t.phase:t.type,t.action||'',t.result||'',t.scorer||'',t.assist||'',t.note||'',
+      halfOf(g,t.wall),c==null?'':fmt(c),c==null?'':Math.round(c),sk==null?'':Math.round(sk),
+      new Date(t.wall).toISOString(),new Date(t.wall).toLocaleTimeString(),t.type==='phase'?0:g.look].map(csvCell).join(',');
+  });
+  return [head.join(','),...rows].join('\n');
+}
+async function shareFile(name,text,type){
+  const blob=new Blob([text],{type});
+  try{
+    const file=new File([blob],name,{type});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return;}
+  }catch(e){if(e.name==='AbortError')return;}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
+}
+function exportCSV(){shareFile(slug(cur)+'.csv',buildCSV(cur),'text/csv');}
+function exportJSON(){shareFile(slug(cur)+'.json',JSON.stringify(cur,null,2),'application/json');}
+function backupAll(){const d=new Date().toISOString().slice(0,10);shareFile(`gametag_backup_${d}.json`,JSON.stringify(db,null,2),'application/json');}
+
+/* ---------- settings ---------- */
+function showSettings(){
+  document.getElementById('setC').value=db.settings.actions.Caysen.join('\n');
+  document.getElementById('setE').value=db.settings.actions.Emmitt.join('\n');
+  document.getElementById('setHalf').value=db.settings.half;
+  document.getElementById('setLook').value=db.settings.look;
+  go('settings');
+}
+function saveSettings(){
+  const lines=id=>document.getElementById(id).value.split('\n').map(s=>s.trim()).filter(Boolean);
+  db.settings.actions.Caysen=lines('setC');db.settings.actions.Emmitt=lines('setE');
+  db.settings.half=+document.getElementById('setHalf').value||30;
+  db.settings.look=Math.max(0,+document.getElementById('setLook').value||0);
+  save();toast('Saved');go('home');
+}
+
+/* ---------- boot ---------- */
+if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+go('home');
+</script>
+</body>
+</html>
