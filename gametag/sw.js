@@ -1,5 +1,5 @@
 // Offline cache so the tagger loads at fields with no signal.
-const CACHE = 'gametag-v6';
+const CACHE = 'gametag-v7';
 const ASSETS = ['./', './index.html', './manifest.json', './apple-touch-icon.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -18,7 +18,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: 'no-cache' })   // skip GitHub's 10-min HTTP cache so updates land right away
       .then(res => {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, copy));
