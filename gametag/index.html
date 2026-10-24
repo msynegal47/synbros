@@ -111,7 +111,7 @@ td.c{text-align:center;font-weight:800}
   <div class="topbar">
     <div class="clock">
       <div>
-        <div class="time" id="gClock">--:--</div>
+        <div class="time" id="gClock" onclick="clockTap()">--:--</div>
         <div class="meta" id="gMeta"></div>
       </div>
       <div style="text-align:right">
@@ -220,6 +220,7 @@ function fmt(sec){
   sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;
   return h?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`;
 }
+function fmtM(sec){sec=Math.max(0,Math.floor(sec));return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;}
 function parseClock(str){
   if(!str)return 0;const p=str.trim().split(':').map(Number);if(p.some(isNaN))return 0;
   return p.reduce((a,v)=>a*60+v,0);
@@ -290,9 +291,43 @@ function openGame(id){
 }
 function leaveGame(){clearInterval(tick);releaseWake();cur=null;go('home');}
 function renderClock(){
-  if(!cur)return;const ph=phaseOf(cur);const c=gameClock(cur,Date.now());
-  document.getElementById('gClock').textContent=ph==='pre'?'--:--':ph==='ht'?'HT':fmt(c);
-  document.getElementById('gMeta').textContent=ph==='pre'?'Tap Kickoff on the whistle':ph==='h1'?'1st half':ph==='h2'?'2nd half':ph==='ht'?'Half time':'Full time';
+  if(!cur)return;const ph=phaseOf(cur);const now=Date.now();const c=gameClock(cur,now);
+  const el=document.getElementById('gClock'),meta=document.getElementById('gMeta');
+  const limit=ph==='h1'?cur.half*60:ph==='h2'?cur.half*120:null;
+  const over=limit!=null&&c>limit;
+  el.style.color=over?'var(--warn)':'';
+  if(ph==='pre'){el.textContent='--:--';meta.textContent='Kickoff on the whistle · started late? tap clock';}
+  else if(ph==='ht'){el.textContent=fmtM((now-phaseTime(cur,'ht'))/1000);meta.textContent='Half time break';}
+  else if(ph==='ft'){el.textContent=fmtM(c);meta.textContent='Full time';}
+  else{el.textContent=over?fmtM(limit):fmtM(c);
+    meta.textContent=(ph==='h1'?'1st half':'2nd half')+(over?` · +${fmtM(c-limit)} added`:` · of ${fmtM(limit)} · tap to adjust`);}
+}
+function clockTap(){
+  const ph=phaseOf(cur);
+  if(ph==='ht'||ph==='ft'){toast('Clock adjusts during a half');return;}
+  const q=ph==='pre'?'Game already started? What does the game clock read now?':'What does the game clock read right now?';
+  sheet(`<h3>Set clock</h3><p class="muted">${q}</p>
+    <input id="clockIn" placeholder="mm:ss e.g. 8:30" inputmode="numeric">
+    <div class="row" style="margin-top:10px"><button onclick="closeModal()">Cancel</button>
+    <button class="primary" onclick="setClock()">Set</button></div>`);
+  setTimeout(()=>{const i=document.getElementById('clockIn');i&&i.focus();},50);
+}
+function setClock(){
+  const raw=(document.getElementById('clockIn').value||'').trim();
+  const secs=raw.includes(':')?parseClock(raw):(+raw)*60;   // plain number = minutes
+  if(!raw||isNaN(secs)){toast('Enter mm:ss');return;}
+  closeModal();const ph=phaseOf(cur);const now=Date.now();
+  if(ph==='pre'){
+    cur.tags.push({id:uid(),wall:now-secs*1000,tapped:now,kid:cur.kid,type:'phase',phase:'h1'});
+    cur.tags.sort((a,b)=>a.wall-b.wall);
+  }else if(ph==='h1'){
+    cur.tags.find(t=>t.type==='phase'&&t.phase==='h1').wall=now-secs*1000;
+  }else if(ph==='h2'){
+    const into=secs>=cur.half*60?secs-cur.half*60:secs;          // accepts 38:00 or 8:00 for 2nd half
+    const t=cur.tags.find(t=>t.type==='phase'&&t.phase==='h2');
+    t.wall=Math.max(phaseTime(cur,'ht')+1000,now-into*1000);
+  }
+  save();renderGame();toast('Clock set '+fmtM(gameClock(cur,now)));
 }
 function renderGame(){
   const ph=phaseOf(cur);const [f,a]=score(cur);
