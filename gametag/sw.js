@@ -1,5 +1,5 @@
 // Offline cache so the tagger loads at fields with no signal.
-const CACHE = 'gametag-v5';
+const CACHE = 'gametag-v6';
 const ASSETS = ['./', './index.html', './manifest.json', './apple-touch-icon.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

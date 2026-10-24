@@ -82,7 +82,8 @@ td.c{text-align:center;font-weight:800}
   <button class="primary" style="width:100%;font-size:18px;padding:18px" onclick="showNew()">+ New Game</button>
   <h2>Games</h2>
   <div id="gameList" class="list"></div>
-  <button style="width:100%;margin-top:16px" onclick="showSettings()">Settings</button>
+  <button style="width:100%;margin-top:16px;background:#1e2a44;color:#bfdbfe;font-weight:700" onclick="pasteGames()">Paste games</button>
+  <button style="width:100%;margin-top:8px" onclick="showSettings()">Settings</button>
 </section>
 
 <!-- NEW GAME -->
@@ -261,6 +262,30 @@ function showNew(){
   document.getElementById('ngOpp').value='';document.getElementById('ngEvent').value='';document.getElementById('ngWhen').value='';
   document.getElementById('ngHalf').value=db.settings.half;document.getElementById('ngLook').value=db.settings.look;
   go('newgame');
+}
+/* ---------- paste games (bulk schedule) ---------- */
+function pasteGames(){
+  sheet(`<h3>Paste games</h3><p class="muted">Paste the game list Claude gave you.</p>
+    <textarea id="pasteIn" rows="7" placeholder='[{"kid":"Caysen","opp":"...","when":"2026-10-25T09:00"}]'></textarea>
+    <div class="row" style="margin-top:10px"><button onclick="closeModal()">Cancel</button>
+    <button class="primary" onclick="addPasted()">Add games</button></div>`);
+}
+function addPasted(){
+  let list;
+  try{const txt=document.getElementById('pasteIn').value.trim();list=JSON.parse(txt.slice(txt.indexOf('['),txt.lastIndexOf(']')+1));}
+  catch(e){toast('Could not read that');return;}
+  let added=0,skipped=0;
+  list.forEach(x=>{
+    if(!KIDS.includes(x.kid)){skipped++;return;}
+    const when=Date.parse(x.when);const sched=isNaN(when)?null:when;
+    if(db.games.some(g=>g.kid===x.kid&&g.opp===x.opp&&g.sched===sched)){skipped++;return;}
+    db.games.push({id:uid(),kid:x.kid,opp:x.opp||'',event:x.event||'',
+      half:+x.half||db.settings.half,look:db.settings.look,
+      actions:(db.settings.actions[x.kid]||[]).slice(),created:Date.now(),sched,tags:[]});
+    added++;
+  });
+  save();closeModal();renderHome();
+  toast(`Added ${added} game${added===1?'':'s'}${skipped?` · skipped ${skipped}`:''}`);
 }
 function pickKid(k){pickedKid=k;KIDS.forEach(x=>document.getElementById('kp_'+x).classList.toggle('on',x===k));}
 function createGame(){
