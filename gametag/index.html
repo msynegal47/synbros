@@ -146,6 +146,12 @@ td.c{text-align:center;font-weight:800}
     <button class="primary" style="width:100%" onclick="exportCSV()">Export CSV (for film analysis)</button>
     <button style="width:100%;margin-top:8px" onclick="exportJSON()">Export JSON</button>
   </div>
+  <h2>Merge another phone</h2>
+  <div class="card">
+    <button style="width:100%;background:#1e2a44;color:#bfdbfe;font-weight:700" onclick="document.getElementById('importFile').click()">Import tags (CSV or JSON)</button>
+    <input type="file" id="importFile" accept=".csv,.json,text/csv,application/json" class="hidden" onchange="importFile(this)">
+    <p class="muted">Pick the file the other phone exported for this game. Tags line up by time of day. Duplicates are skipped.</p>
+  </div>
   <h2>YouTube chapters</h2>
   <div class="card">
     <label>Where is kickoff in the video? (mm:ss or h:mm:ss)</label>
@@ -226,6 +232,7 @@ function gameClock(g,wall){
 }
 function halfOf(g,wall){const h2=phaseTime(g,'h2'),ht=phaseTime(g,'ht');if(h2&&wall>=h2)return 2;if(ht&&wall>=ht)return 'HT';if(phaseTime(g,'h1')&&wall>=phaseTime(g,'h1'))return 1;return 'Pre';}
 function sinceKick(g,wall){const k=phaseTime(g,'h1');return k?(wall-k)/1000:null}
+function gameDate(g){return phaseTime(g,'h1')||g.created}
 function score(g){let f=0,a=0;g.tags.forEach(t=>{if(t.type==='goal_for')f++;if(t.type==='goal_against')a++;});return [f,a]}
 
 /* ---------- home ---------- */
@@ -234,10 +241,10 @@ function renderHome(){
   if(!db.games.length){el.innerHTML='<p class="muted">No games yet.</p>';return;}
   el.innerHTML=db.games.slice().sort((a,b)=>b.created-a.created).map(g=>{
     const [f,a]=score(g);const ph=phaseOf(g);
-    const d=new Date(g.created).toLocaleDateString([], {month:'short',day:'numeric'});
+    const d=new Date(gameDate(g)).toLocaleDateString([], {month:'short',day:'numeric'});
     return `<button onclick="${ph==='ft'?`openSummary('${g.id}')`:`openGame('${g.id}')`}">
       <div style="font-weight:800">${esc(g.kid)} vs ${esc(g.opp||'Opponent')} · ${f}-${a}</div>
-      <div class="muted">${d}${g.event?' · '+esc(g.event):''} · ${ph==='ft'?'Final':ph==='pre'?'Not started':'In progress'}</div></button>`;
+      <div class="muted">${d}${g.event?' · '+esc(g.event):''} · ${ph==='ft'?'Final':ph==='pre'?'Upcoming':'In progress'}</div></button>`;
   }).join('');
 }
 
@@ -355,7 +362,7 @@ function openSummary(id){
   if(summaryFrom==='home'){clearInterval(tick);releaseWake();}
   cur=g;const [f,a]=score(g);
   document.getElementById('sTitle').textContent=`${g.kid} vs ${g.opp||'Opponent'}`;
-  document.getElementById('sSub').textContent=new Date(g.created).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})+(g.event?' · '+g.event:'');
+  document.getElementById('sSub').textContent=new Date(gameDate(g)).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})+(g.event?' · '+g.event:'');
   document.getElementById('sScore').textContent=`${f}-${a}`;
   const goals=g.tags.filter(t=>t.type==='goal_for'||t.type==='goal_against');
   document.getElementById('sGoals').innerHTML=goals.map(t=>`${fmt(gameClock(g,t.wall)||0)} ${esc(tagLabel(t))}`).join('<br>')||'No goals';
@@ -395,7 +402,7 @@ function deleteGame(){
 }
 
 /* ---------- export ---------- */
-function slug(g){const d=new Date(g.created);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}_${g.kid}_vs_${(g.opp||'opp').replace(/[^a-z0-9]+/gi,'-')}`;}
+function slug(g){const d=new Date(gameDate(g));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}_${g.kid}_vs_${(g.opp||'opp').replace(/[^a-z0-9]+/gi,'-')}`;}
 function csvCell(v){v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
 function buildCSV(g){
   const head=['game_id','kid','opponent','event','tag_id','type','action','result','scorer','assist','note','half','game_clock','game_clock_sec','sec_from_kickoff','wall_time_iso','local_time','lookback_sec'];
@@ -417,6 +424,63 @@ async function shareFile(name,text,type){
 }
 function exportCSV(){shareFile(slug(cur)+'.csv',buildCSV(cur),'text/csv');}
 function exportJSON(){shareFile(slug(cur)+'.json',JSON.stringify(cur,null,2),'application/json');}
+
+/* ---------- import / merge ---------- */
+function parseCSV(text){
+  const rows=[];let row=[],f='',q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++;}else q=false;}else f+=c;}
+    else if(c==='"')q=true;
+    else if(c===','){row.push(f);f='';}
+    else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(f);rows.push(row);row=[];f='';}
+    else f+=c;
+  }
+  if(f!==''||row.length){row.push(f);rows.push(row);}
+  const head=rows.shift()||[];
+  return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(head.map((h,i)=>[h,r[i]??''])));
+}
+function tagsFromCSV(text){
+  return parseCSV(text).map(r=>{
+    const wall=Date.parse(r.wall_time_iso);if(isNaN(wall))return null;
+    const t={id:r.tag_id||uid(),wall,tapped:wall,kid:r.kid};
+    if(r.type.startsWith('phase_')){t.type='phase';t.phase=r.type.slice(6);}
+    else t.type=r.type;
+    if(r.action)t.action=r.action;if(r.result)t.result=r.result;
+    if(r.scorer)t.scorer=r.scorer;if(r.assist)t.assist=r.assist;if(r.note)t.note=r.note;
+    return t;
+  }).filter(Boolean);
+}
+function importFile(input){
+  const file=input.files&&input.files[0];input.value='';if(!file)return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    let tags;
+    try{
+      const txt=String(rd.result);
+      if(/\.json$/i.test(file.name)||txt.trim().startsWith('{')){
+        const j=JSON.parse(txt);tags=(j.tags||(j.games&&j.games.length===1&&j.games[0].tags)||[]).map(t=>Object.assign({},t));
+      }else tags=tagsFromCSV(txt);
+    }catch(e){toast('Could not read that file');return;}
+    toast(mergeTags(cur,tags));openSummary(cur.id);
+  };
+  rd.readAsText(file);
+}
+function mergeTags(g,incoming){
+  const ids=new Set(g.tags.map(t=>t.id));
+  const NEAR=15000; // same goal tapped on both phones within 15s = one goal
+  let added=0,skipped=0;
+  incoming.sort((a,b)=>a.wall-b.wall).forEach(t=>{
+    if(ids.has(t.id)){skipped++;return;}
+    if(t.type==='phase'&&phaseTime(g,t.phase)){skipped++;return;}       // keep my whistle taps
+    if((t.type==='goal_for'||t.type==='goal_against')&&
+       g.tags.some(x=>x.type===t.type&&Math.abs(x.wall-t.wall)<NEAR)){skipped++;return;}
+    if(t.type==='action'&&t.action&&!g.actions.includes(t.action))g.actions.push(t.action);
+    t.kid=g.kid;t.imported=true;g.tags.push(t);ids.add(t.id);added++;
+  });
+  g.tags.sort((a,b)=>a.wall-b.wall);save();
+  return `Merged ${added} tag${added===1?'':'s'}${skipped?` · skipped ${skipped} dupes`:''}`;
+}
 function backupAll(){const d=new Date().toISOString().slice(0,10);shareFile(`gametag_backup_${d}.json`,JSON.stringify(db,null,2),'application/json');}
 
 /* ---------- settings ---------- */
