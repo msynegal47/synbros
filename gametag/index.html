@@ -95,12 +95,15 @@ td.c{text-align:center;font-weight:800}
   <input id="ngOpp" placeholder="e.g. Phoenix Rising 2015B">
   <label>Event / tournament (optional)</label>
   <input id="ngEvent" placeholder="e.g. Fall Classic">
+  <label>Game date & time (optional)</label>
+  <input id="ngWhen" type="datetime-local">
+  <p class="muted">Pick a future time to schedule it. It waits in your list until you tap Kickoff.</p>
   <div class="row">
     <div><label>Half length (min)</label><input id="ngHalf" type="number" inputmode="numeric"></div>
     <div><label>Look-back (sec)</label><input id="ngLook" type="number" inputmode="numeric"></div>
   </div>
   <p class="muted">Look-back subtracts time from each tag since you tap after the play happens.</p>
-  <button class="primary" style="width:100%;margin-top:10px;font-size:18px;padding:18px" onclick="createGame()">Start</button>
+  <button class="primary" style="width:100%;margin-top:10px;font-size:18px;padding:18px" onclick="createGame()">Save game</button>
 </section>
 
 <!-- GAME -->
@@ -232,16 +235,18 @@ function gameClock(g,wall){
 }
 function halfOf(g,wall){const h2=phaseTime(g,'h2'),ht=phaseTime(g,'ht');if(h2&&wall>=h2)return 2;if(ht&&wall>=ht)return 'HT';if(phaseTime(g,'h1')&&wall>=phaseTime(g,'h1'))return 1;return 'Pre';}
 function sinceKick(g,wall){const k=phaseTime(g,'h1');return k?(wall-k)/1000:null}
-function gameDate(g){return phaseTime(g,'h1')||g.created}
+function gameDate(g){return phaseTime(g,'h1')||g.sched||g.created}
 function score(g){let f=0,a=0;g.tags.forEach(t=>{if(t.type==='goal_for')f++;if(t.type==='goal_against')a++;});return [f,a]}
 
 /* ---------- home ---------- */
 function renderHome(){
   const el=document.getElementById('gameList');
   if(!db.games.length){el.innerHTML='<p class="muted">No games yet.</p>';return;}
-  el.innerHTML=db.games.slice().sort((a,b)=>b.created-a.created).map(g=>{
+  const up=db.games.filter(g=>phaseOf(g)==='pre').sort((a,b)=>gameDate(a)-gameDate(b));
+  const rest=db.games.filter(g=>phaseOf(g)!=='pre').sort((a,b)=>gameDate(b)-gameDate(a));
+  el.innerHTML=up.concat(rest).map(g=>{
     const [f,a]=score(g);const ph=phaseOf(g);
-    const d=new Date(gameDate(g)).toLocaleDateString([], {month:'short',day:'numeric'});
+    const d=new Date(gameDate(g)).toLocaleString([], ph==='pre'&&g.sched?{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}:{month:'short',day:'numeric'});
     return `<button onclick="${ph==='ft'?`openSummary('${g.id}')`:`openGame('${g.id}')`}">
       <div style="font-weight:800">${esc(g.kid)} vs ${esc(g.opp||'Opponent')} · ${f}-${a}</div>
       <div class="muted">${d}${g.event?' · '+esc(g.event):''} · ${ph==='ft'?'Final':ph==='pre'?'Upcoming':'In progress'}</div></button>`;
@@ -252,7 +257,7 @@ function renderHome(){
 function showNew(){
   pickedKid=null;
   document.getElementById('kidPick').innerHTML=KIDS.map(k=>`<button id="kp_${k}" onclick="pickKid('${k}')">${k}</button>`).join('');
-  document.getElementById('ngOpp').value='';document.getElementById('ngEvent').value='';
+  document.getElementById('ngOpp').value='';document.getElementById('ngEvent').value='';document.getElementById('ngWhen').value='';
   document.getElementById('ngHalf').value=db.settings.half;document.getElementById('ngLook').value=db.settings.look;
   go('newgame');
 }
@@ -264,7 +269,11 @@ function createGame(){
     half:+document.getElementById('ngHalf').value||db.settings.half,
     look:Math.max(0,+document.getElementById('ngLook').value||0),
     actions:(db.settings.actions[pickedKid]||[]).slice(),created:Date.now(),tags:[]};
-  db.games.push(g);save();openGame(g.id);
+  const when=Date.parse(document.getElementById('ngWhen').value);
+  if(!isNaN(when))g.sched=when;
+  db.games.push(g);save();
+  if(g.sched&&g.sched-Date.now()>30*60*1000){toast('Scheduled');go('home');}
+  else openGame(g.id);
 }
 
 /* ---------- game ---------- */
